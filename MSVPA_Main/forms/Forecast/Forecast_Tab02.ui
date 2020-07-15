@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Forecast_Tab2</class>
+ <widget class="QWidget" name="Forecast_Tab2">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>735</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_65">
+     <item>
+      <widget class="QLabel" name="Forecast_Tab2_GrowthParametersLBL">
+       <property name="text">
+        <string>Enter Growth (Von Bertalanffey) and Length-Weight parameters.  (Weight in kg and Lengths in cm.)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableView" name="Forecast_Tab2_GrowthParametersTV">
+       <property name="toolTip">
+        <string>Von Bertalanffey parameters from table: ForePredVonB</string>
+       </property>
+       <property name="statusTip">
+        <string>Von Bertalanffey parameters from table: ForePredVonB</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_49">
+     <item>
+      <widget class="QPushButton" name="Forecast_Tab2_PrevPB">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Go to previous tab page</string>
+       </property>
+       <property name="statusTip">
+        <string>Go to previous tab page</string>
+       </property>
+       <property name="text">
+        <string>&lt;-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_40">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Forecast_Tab2_LoadPB">
+       <property name="toolTip">
+        <string>Import CSV file for table: ForePredVonB</string>
+       </property>
+       <property name="statusTip">
+        <string>Import CSV file for table: ForePredVonB</string>
+       </property>
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit...&lt;/span&gt;&lt;/p&gt;&lt;p&gt;This button will take the user to the CSV file Import panel with the appropriate table name selected. Once there, the user can then import the CSV file, check that it's correct and save it to the database. Then, by pressing the Back button, the user can return to this page.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Load...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Forecast_Tab2_SavePB">
+       <property name="toolTip">
+        <string>Save Spatial Overlap Data to comma delimited file </string>
+       </property>
+       <property name="statusTip">
+        <string>Save Spatial Overlap Data to comma delimited file </string>
+       </property>
+       <property name="text">
+        <string>Save...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_29">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>48</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Forecast_Tab2_NextPB">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Go to next tab page</string>
+       </property>
+       <property name="statusTip">
+        <string>Go to next tab page</string>
+       </property>
+       <property name="text">
+        <string>-&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

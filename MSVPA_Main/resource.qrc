@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/new.png</file>
+        <file>icons/scrgrb.png</file>
+        <file>icons/whatsthis.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/NOAA.png</file>
+        <file>forms/MSVPA/MSVPA_Tab10.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab11.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab12.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab09.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab08.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab07.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab06.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab05.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab04.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab03.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab02.ui</file>
+        <file>forms/MSVPA/MSVPA_Tab01.ui</file>
+        <file>forms/SSVPA/SSVPA_Tab04.ui</file>
+        <file>forms/SSVPA/SSVPA_Tab03.ui</file>
+        <file>forms/SSVPA/SSVPA_Tab02.ui</file>
+        <file>forms/SSVPA/SSVPA_Tab01.ui</file>
+        <file>forms/Forecast/Forecast_Tab05.ui</file>
+        <file>forms/Forecast/Forecast_Tab04.ui</file>
+        <file>forms/Forecast/Forecast_Tab03.ui</file>
+        <file>forms/Forecast/Forecast_Tab02.ui</file>
+        <file>forms/Forecast/Forecast_Tab01.ui</file>
+        <file>forms/Setup/Setup_Tab03.ui</file>
+        <file>forms/Setup/Setup_Tab02.ui</file>
+        <file>forms/Setup/Setup_Tab01.ui</file>
+        <file>forms/Main/Main_SaveWidget.ui</file>
+        <file>forms/Main/Main_NavigatorTreeWidget.ui</file>
+    </qresource>
+</RCC>

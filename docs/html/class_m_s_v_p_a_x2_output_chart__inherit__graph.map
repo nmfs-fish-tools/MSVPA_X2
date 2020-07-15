@@ -1,0 +1,13 @@
+<map id="MSVPAX2OutputChart" name="MSVPAX2OutputChart">
+<area shape="rect" id="node3" href="$class_chart_bar.html" title="ChartBar" alt="" coords="355,132,429,159"/>
+<area shape="rect" id="node9" href="$class_chart_line.html" title="ChartLine" alt="" coords="353,284,431,311"/>
+<area shape="rect" id="node12" href="$class_chart_stacked_bar.html" title="ChartStackedBar" alt="" coords="331,335,453,361"/>
+<area shape="rect" id="node4" href="$class_chart_bar_consumption_rates.html" title="ChartBarConsumptionRates" alt="" coords="517,5,704,32"/>
+<area shape="rect" id="node5" href="$class_chart_bar_food_availability.html" title="ChartBarFoodAvailability" alt="" coords="527,56,694,83"/>
+<area shape="rect" id="node6" href="$class_chart_bar_growth.html" title="ChartBarGrowth" alt="" coords="553,107,669,133"/>
+<area shape="rect" id="node7" href="$class_chart_bar_mortality_rates.html" title="ChartBarMortalityRates" alt="" coords="531,157,690,184"/>
+<area shape="rect" id="node8" href="$class_chart_bar_population_size.html" title="ChartBarPopulationSize" alt="" coords="530,208,691,235"/>
+<area shape="rect" id="node10" href="$class_chart_line_multispecies_populations.html" title="ChartLineMultispeciesPopulations" alt="" coords="501,259,720,285"/>
+<area shape="rect" id="node11" href="$class_chart_line_yield_per_recruit.html" title="ChartLineYieldPerRecruit" alt="" coords="526,309,695,336"/>
+<area shape="rect" id="node13" href="$class_chart_stacked_bar_diet_composition.html" title="ChartStackedBarDietComposition" alt="" coords="501,360,720,387"/>
+</map>

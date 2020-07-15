@@ -1,0 +1,8 @@
+<map id="ChartBar" name="ChartBar">
+<area shape="rect" id="node4" href="$class_chart_bar_consumption_rates.html" title="ChartBarConsumptionRates" alt="" coords="453,5,640,32"/>
+<area shape="rect" id="node5" href="$class_chart_bar_food_availability.html" title="ChartBarFoodAvailability" alt="" coords="463,56,630,83"/>
+<area shape="rect" id="node6" href="$class_chart_bar_growth.html" title="ChartBarGrowth" alt="" coords="489,107,605,133"/>
+<area shape="rect" id="node7" href="$class_chart_bar_mortality_rates.html" title="ChartBarMortalityRates" alt="" coords="467,157,626,184"/>
+<area shape="rect" id="node8" href="$class_chart_bar_population_size.html" title="ChartBarPopulationSize" alt="" coords="466,208,627,235"/>
+<area shape="rect" id="node2" href="$class_m_s_v_p_a_x2_output_chart.html" title="MSVPAX2OutputChart" alt="" coords="127,107,283,133"/>
+</map>
