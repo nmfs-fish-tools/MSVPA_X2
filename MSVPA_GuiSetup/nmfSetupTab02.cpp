@@ -463,6 +463,8 @@ nmfSetup_Tab2::callback_Setup_Tab2_AddDatabase()
                                          tr("Enter new database name:"),
                                          QLineEdit::Normal,
                                          "", &ok);
+    nmfUtilsQt::checkForAndReplaceInvalidCharacters(enteredName);
+
     if (! ok || enteredName.isEmpty())
         return;
 
@@ -473,16 +475,19 @@ nmfSetup_Tab2::callback_Setup_Tab2_AddDatabase()
         return;
     }
 
-    Setup_Tabs->setCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     // OK to now add the database
     cmd = "CREATE database " + enteredName.toStdString();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
     if (errorMsg != " ") {
-        nmfUtils::printError("Function: callback_Setup_Tab2_AddDatabase ",errorMsg);
-        errorMsg = "\n" + errorMsg;
-        QMessageBox::information(Setup_Tabs, tr("Create Error"),
-                                 tr(errorMsg.c_str()));
+        QApplication::restoreOverrideCursor();
+        QMessageBox::critical(Setup_Tabs,tr("Invalid Database Name"),
+                              tr("\nDatabase exists from another application. Please choose a different name."),
+                              QMessageBox::Ok);
+        msg = "Error: Database " + enteredName.toStdString() + " exists from another application. Please choose a different name.";
+        logger->logMsg(nmfConstants::Error,msg);
+        return;
     } else {
         emit LoadDatabase(enteredName);
         emit CreateTables();
@@ -498,7 +503,7 @@ nmfSetup_Tab2::callback_Setup_Tab2_AddDatabase()
     Setup_Tabs->findChild<QCheckBox *>("Setup_Tab3_SpeciesCB")->setChecked(false);
     Setup_Tabs->findChild<QCheckBox *>("Setup_Tab3_OtherPredatorsCB")->setChecked(false);
 
-    Setup_Tabs->setCursor(Qt::ArrowCursor);
+    QApplication::restoreOverrideCursor();
 
 } // end callback_Setup_Tab2_AddDatabase
 
