@@ -1,3 +1,5 @@
 *.pro
 */*.pro.user
 */*.pro
+MSVPA_Main/nmfMainWindow_OLD.ui
+MSVPA_Main/nmfMainWindow_OLD2.ui
