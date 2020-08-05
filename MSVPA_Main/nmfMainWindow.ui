@@ -139,6 +139,8 @@
     <addaction name="separator"/>
     <addaction name="actionImportDatabase"/>
     <addaction name="actionExportDatabase"/>
+    <addaction name="actionExportAllDatabases"/>
+    <addaction name="separator"/>
     <addaction name="actionReloadCSVFiles"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
@@ -572,13 +574,23 @@
     <string>&amp;Create Tables</string>
    </property>
   </action>
+  <action name="actionExportAllDatabases">
+   <property name="text">
+    <string>Export &amp;All Databases...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export all MSVPA_X2 databases to their respective .sql files</string>
+   </property>
+   <property name="statusTip">
+    <string>Export all MSVPA_X2 databases to their respective .sql files</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>ForecastInputTabWidget</tabstop>
   <tabstop>MSVPAInputTabWidget</tabstop>
   <tabstop>SSVPAInputTabWidget</tabstop>
   <tabstop>SetupInputTabWidget</tabstop>
-  <tabstop>MSVPAOutputTabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>

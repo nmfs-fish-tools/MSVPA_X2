@@ -104,8 +104,8 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     m_UI->setupUi(this);
 
     QString whatsThis;
-    MSVPAProgressDlg    = nullptr;
-    ForecastProgressDlg = nullptr;
+    m_MSVPAProgressDlg    = nullptr;
+    m_ForecastProgressDlg = nullptr;
 
     skipSingleClick = false;
     YMaxFullyRecruitedAge = 0.0;
@@ -117,7 +117,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     vGridLine2d = true;
     //hGridLine3d = true;
     //vGridLine3d = true;
-    CatchDataInitialized  = false;
+    m_CatchDataInitialized  = false;
     SSVPAWidgetsLoaded    = false;
     MSVPAWidgetsLoaded    = false;
     ForecastWidgetsLoaded = false;
@@ -126,12 +126,14 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     SpeciesIndex = 0;
     SpeciesName.clear();
     Hostname.clear();
-    Username.clear();
-    Password.clear();
+    m_Username.clear();
+    m_Password.clear();
     Session.clear();
     m_isStartUpOK = true;
+    m_TableNamesWidget = nullptr;
+    m_TableNamesDlg    = new QDialog(this);
 
-    ProjectDir.clear();
+    m_ProjectDir.clear();
     ProjectDatabase.clear();
     ProjectName.clear();
 
@@ -164,8 +166,8 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
 
     // Initialize the logger
     //nmfLogger::initLogger();
-    logger = new nmfLogger();
-    logger->initLogger("MSVPA_X2");
+    m_logger = new nmfLogger();
+    m_logger->initLogger("MSVPA_X2");
 
     // Setup Log Widget
     setupLogWidget();
@@ -260,6 +262,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     connect(m_UI->actionDeselectAll,       SIGNAL(triggered()),            this,       SLOT(menu_deselectAll()));
     connect(m_UI->actionImportDatabase,    SIGNAL(triggered()),            this,       SLOT(menu_importDatabase()));
     connect(m_UI->actionExportDatabase,    SIGNAL(triggered()),            this,       SLOT(menu_exportDatabase()));
+    connect(m_UI->actionExportAllDatabases,SIGNAL(triggered()),            this,       SLOT(menu_exportAllDatabases()));
     connect(m_UI->actionReloadCSVFiles,    SIGNAL(triggered()),            this,       SLOT(menu_reloadCSVFiles()));
     // connect(actionCreateForecast,       SIGNAL(triggered()),            this,       SLOT(menu_newForecast()));
     // connect(actionMSVPASpecies,         SIGNAL(triggered()),            this,       SLOT(menu_newMSVPASpecies()));
@@ -599,7 +602,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     QHBoxLayout   *maxScaleLayout1     = new QHBoxLayout();
     QHBoxLayout   *maxScaleLayout2     = new QHBoxLayout();
     QHBoxLayout   *themeLayout         = new QHBoxLayout();
-    nmfOutputChart3D *outputChart3D    = new nmfOutputChart3D(graph,logger,ProjectDir);
+    nmfOutputChart3D *outputChart3D    = new nmfOutputChart3D(graph,m_logger,m_ProjectDir);
 
     hLayout->addWidget(container);
 
@@ -905,16 +908,16 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     // the program can't find the libmysql.dll driver.  Not sure why, but moving
     // the following logic from nmfDatabase.dll to here fixes the issue.
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    databasePtr = new nmfDatabase();
-    databasePtr->nmfSetConnectionByName(db.connectionName());
+    m_databasePtr = new nmfDatabase();
+    m_databasePtr->nmfSetConnectionByName(db.connectionName());
 
     // Hide Progress Chart and Log widgets. Show them once user does their first MSVPA run.
     setDefaultDockWidgetsVisibility();
 
     // Prompt user for database login and password
     if (nmfDatabaseUtils::menu_connectToDatabase(
-                this,nmfConstantsMSVPA::SettingsDirWindows,databasePtr,
-                Username,Password))
+                this,nmfConstantsMSVPA::SettingsDirWindows,m_databasePtr,
+                m_Username,m_Password))
     {
         loadLastProject = queryUserPreviousDatabase();
     } else {
@@ -927,6 +930,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
         Setup_Tab2_ptr->clearProjectData();
         enableApplicationFeatures(false);
     }
+    initializeTableNamesDlg();
 
     setInitialNavigatorState(false);
 
@@ -973,8 +977,8 @@ void
 nmfMainWindow::loadDatabase()
 {
     QString msg = QString::fromStdString("-----------Loading database: "+ProjectDatabase);
-    logger->logMsg(nmfConstants::Normal,msg.toStdString());
-    databasePtr->nmfSetDatabase(ProjectDatabase);
+    m_logger->logMsg(nmfConstants::Normal,msg.toStdString());
+    m_databasePtr->nmfSetDatabase(ProjectDatabase);
 }
 
 bool
@@ -991,7 +995,7 @@ nmfMainWindow::queryUserPreviousDatabase()
     showLogo(false);
 
     if (reply == QMessageBox::Yes) {
-        QString filename = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(ProjectName));
+        QString filename = QDir(QString::fromStdString(m_ProjectDir)).filePath(QString::fromStdString(ProjectName));
         Setup_Tab2_ptr->loadProject(filename);
         setNewDatabaseName(ProjectDatabase);
         callback_createTables();
@@ -1225,15 +1229,15 @@ nmfMainWindow::setupOutputDir() {
 void
 nmfMainWindow::startForecastProgressBarTimer()
 {
-    logger->logMsg(nmfConstants::Normal,"startForecastProgressBarTimer");
+    m_logger->logMsg(nmfConstants::Normal,"startForecastProgressBarTimer");
 }
 
 void
 nmfMainWindow::stopForecastProgressBarTimer()
 {
-    logger->logMsg(nmfConstants::Normal,"stopForecastProgressBarTimer");
-    logger->logMsg(nmfConstants::Bold,"Forecast Run - End");
-    logger->logMsg(nmfConstants::Section,"================================================================================");
+    m_logger->logMsg(nmfConstants::Normal,"stopForecastProgressBarTimer");
+    m_logger->logMsg(nmfConstants::Bold,"Forecast Run - End");
+    m_logger->logMsg(nmfConstants::Section,"================================================================================");
 
 }
 
@@ -1301,7 +1305,7 @@ void
 nmfMainWindow::callback_stopMSVPAProgressSetupTimer()
 {
 std::cout << "\n---> callback_stopMSVPAProgressSetupTimer\n" << std::endl;
-        logger->logMsg(nmfConstants::Normal,"Stop MSVPA Progress Setup Timer and Model Run");
+        m_logger->logMsg(nmfConstants::Normal,"Stop MSVPA Progress Setup Timer and Model Run");
         progressSetupTimerMSVPA->stop();
         progressWidgetMSVPA->StopRun();
 
@@ -1311,7 +1315,7 @@ void
 nmfMainWindow::callback_stopMSVPAProgressSetupTimerOnly()
 {
 std::cout << "\n---> callback_stopMSVPAProgressSetupTimerOnly\n" << std::endl;
-        logger->logMsg(nmfConstants::Normal,"Stop only MSVPA Progress Setup Timer");
+        m_logger->logMsg(nmfConstants::Normal,"Stop only MSVPA Progress Setup Timer");
 
         progressSetupTimerMSVPA->stop();
 
@@ -1338,7 +1342,7 @@ void
 nmfMainWindow::callback_stopForecastProgressSetupTimer()
 {
 std::cout << "\n---> callback_stopForecastProgressSetupTimer\n" << std::endl;
-        logger->logMsg(nmfConstants::Normal,"Stop Forecast Progress Setup Timer and Model Run");
+        m_logger->logMsg(nmfConstants::Normal,"Stop Forecast Progress Setup Timer and Model Run");
 
         progressSetupTimerForecast->stop();
 
@@ -1350,7 +1354,7 @@ void
 nmfMainWindow::callback_stopForecastProgressSetupTimerOnly()
 {
 std::cout << "\n---> callback_stopForecastProgressSetupTimerOnly\n" << std::endl;
-        logger->logMsg(nmfConstants::Normal,"Stop only Forecast Progress Setup Timer");
+        m_logger->logMsg(nmfConstants::Normal,"Stop only Forecast Progress Setup Timer");
 
         progressSetupTimerForecast->stop();
 
@@ -1446,32 +1450,32 @@ nmfMainWindow::initGuiPages()
     NavigatorTree = m_UI->NavigatorDockWidget->findChild<QTreeWidget *>("NavigatorTree");
 
     Setup_Tab1_ptr    = new nmfSetup_Tab1(m_UI->SetupInputTabWidget);
-    Setup_Tab2_ptr    = new nmfSetup_Tab2(m_UI->SetupInputTabWidget,logger,SetupOutputTE);
-    Setup_Tab3_ptr    = new nmfSetup_Tab3(m_UI->SetupInputTabWidget,logger,SetupOutputTE,ProjectDir);
+    Setup_Tab2_ptr    = new nmfSetup_Tab2(m_UI->SetupInputTabWidget,m_logger,SetupOutputTE);
+    Setup_Tab3_ptr    = new nmfSetup_Tab3(m_UI->SetupInputTabWidget,m_logger,SetupOutputTE,m_ProjectDir);
 
-    SSVPA_Tab1_ptr    = new nmfSSVPATab1(m_UI->SSVPAInputTabWidget,logger,ProjectDir);
-    SSVPA_Tab2_ptr    = new nmfSSVPATab2(m_UI->SSVPAInputTabWidget,logger,ProjectDir);
-    SSVPA_Tab3_ptr    = new nmfSSVPATab3(m_UI->SSVPAInputTabWidget,logger,ProjectDir);
-    SSVPA_Tab4_ptr    = new nmfSSVPATab4(m_UI->SSVPAInputTabWidget,logger,ProjectDir);
+    SSVPA_Tab1_ptr    = new nmfSSVPATab1(m_UI->SSVPAInputTabWidget,m_logger,m_ProjectDir);
+    SSVPA_Tab2_ptr    = new nmfSSVPATab2(m_UI->SSVPAInputTabWidget,m_logger,m_ProjectDir);
+    SSVPA_Tab3_ptr    = new nmfSSVPATab3(m_UI->SSVPAInputTabWidget,m_logger,m_ProjectDir);
+    SSVPA_Tab4_ptr    = new nmfSSVPATab4(m_UI->SSVPAInputTabWidget,m_logger,m_ProjectDir);
 
-    MSVPA_Tab1_ptr    = new nmfMSVPATab1(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab2_ptr    = new nmfMSVPATab2(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab3_ptr    = new nmfMSVPATab3(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab4_ptr    = new nmfMSVPATab4(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab5_ptr    = new nmfMSVPATab5(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab6_ptr    = new nmfMSVPATab6(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab7_ptr    = new nmfMSVPATab7(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab8_ptr    = new nmfMSVPATab8(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab9_ptr    = new nmfMSVPATab9(m_UI->MSVPAInputTabWidget,logger);
-    MSVPA_Tab10_ptr   = new nmfMSVPATab10(m_UI->MSVPAInputTabWidget,logger);
-    MSVPA_Tab11_ptr   = new nmfMSVPATab11(m_UI->MSVPAInputTabWidget,logger,ProjectDir);
-    MSVPA_Tab12_ptr   = new nmfMSVPATab12(m_UI->MSVPAInputTabWidget,logger);
+    MSVPA_Tab1_ptr    = new nmfMSVPATab1(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab2_ptr    = new nmfMSVPATab2(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab3_ptr    = new nmfMSVPATab3(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab4_ptr    = new nmfMSVPATab4(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab5_ptr    = new nmfMSVPATab5(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab6_ptr    = new nmfMSVPATab6(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab7_ptr    = new nmfMSVPATab7(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab8_ptr    = new nmfMSVPATab8(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab9_ptr    = new nmfMSVPATab9(m_UI->MSVPAInputTabWidget,m_logger);
+    MSVPA_Tab10_ptr   = new nmfMSVPATab10(m_UI->MSVPAInputTabWidget,m_logger);
+    MSVPA_Tab11_ptr   = new nmfMSVPATab11(m_UI->MSVPAInputTabWidget,m_logger,m_ProjectDir);
+    MSVPA_Tab12_ptr   = new nmfMSVPATab12(m_UI->MSVPAInputTabWidget,m_logger);
 
-    Forecast_Tab1_ptr = new nmfForecastTab1(m_UI->ForecastInputTabWidget,logger,ProjectDir);
-    Forecast_Tab2_ptr = new nmfForecastTab2(m_UI->ForecastInputTabWidget,logger,ProjectDir);
-    Forecast_Tab3_ptr = new nmfForecastTab3(m_UI->ForecastInputTabWidget,logger,ProjectDir);
-    Forecast_Tab4_ptr = new nmfForecastTab4(m_UI->ForecastInputTabWidget,logger,ScenarioListLV,ProjectDir);
-    Forecast_Tab5_ptr = new nmfForecastTab5(m_UI->ForecastInputTabWidget,logger);
+    Forecast_Tab1_ptr = new nmfForecastTab1(m_UI->ForecastInputTabWidget,m_logger,m_ProjectDir);
+    Forecast_Tab2_ptr = new nmfForecastTab2(m_UI->ForecastInputTabWidget,m_logger,m_ProjectDir);
+    Forecast_Tab3_ptr = new nmfForecastTab3(m_UI->ForecastInputTabWidget,m_logger,m_ProjectDir);
+    Forecast_Tab4_ptr = new nmfForecastTab4(m_UI->ForecastInputTabWidget,m_logger,ScenarioListLV,m_ProjectDir);
+    Forecast_Tab5_ptr = new nmfForecastTab5(m_UI->ForecastInputTabWidget,m_logger);
 
 } // end initGuiPages
 
@@ -1481,7 +1485,7 @@ nmfMainWindow::nmfMainWindowComplete()
 {
     if (! Session.empty())
         Session = " - " + Session;
-    logger->logMsg(nmfConstants::Bold,"MSVPA_X2 Start"+Session);
+    m_logger->logMsg(nmfConstants::Bold,"MSVPA_X2 Start"+Session);
 
     // Set some SSVPA_Tab4 class variables here
     SelectConfigurationCMB    = m_UI->SSVPAInputTabWidget->findChild<QComboBox *>("SelectConfigurationCMB");
@@ -1782,7 +1786,7 @@ void
 nmfMainWindow::setInitialNavigatorState(bool initialState)
 {
     std::vector<std::string> species;
-    databasePtr->getAllSpecies(logger,species);
+    m_databasePtr->getAllSpecies(m_logger,species);
     if (species.size() == 0) {
         enableNavigatorTopLevelItems(initialState);
     }
@@ -1791,14 +1795,14 @@ nmfMainWindow::setInitialNavigatorState(bool initialState)
 void
 nmfMainWindow::setupLogWidget()
 {
-    logWidget = new nmfLogWidget(logger,nmfConstantsMSVPA::LogDir);
+    logWidget = new nmfLogWidget(m_logger,nmfConstantsMSVPA::LogDir);
     m_UI->LogWidget->setLayout(logWidget->vMainLayt);
 }
 
 void
 nmfMainWindow::setupOutputWidget()
 {
-    outputWidget = new MSVPAVisualizationNode(logger);
+    outputWidget = new MSVPAVisualizationNode(m_logger);
     m_UI->OutputWidget->setLayout(outputWidget->mainLayout());
     mainGUILayt = qobject_cast<QHBoxLayout *>(m_UI->OutputWidget->layout());
 
@@ -1845,7 +1849,7 @@ nmfMainWindow::setupMSVPAProgressChart()
     // The main progress chart view was created in designer.  Get it and the
     // chart to be customized.
     progressWidgetMSVPA = new nmfMSVPAProgressWidget(progressChartTimerMSVPA,
-                                           logger,
+                                           m_logger,
                                            "MSVPA",
                                            "<b>Convergence Values as a Function of Iteration</b>",
                                            "Iterations",
@@ -1860,7 +1864,7 @@ nmfMainWindow::setupForecastProgressChart()
     // The main progress chart view was created in designer.  Get it and the
     // chart to be customized.
     progressWidgetForecast = new nmfMSVPAProgressWidget(progressChartTimerForecast,
-                                            logger,
+                                            m_logger,
                                            "Forecast",
                                            "<b>Total Biomass per Forecast Year</b>",
                                            "Forecast Year",
@@ -1903,7 +1907,7 @@ nmfMainWindow::~nmfMainWindow() {
 
     //progressTimer->stop();
     //delete progressTimer;
-    logger->logMsg(nmfConstants::Normal,"MSVPA_X2 Exited Normally.");
+    m_logger->logMsg(nmfConstants::Normal,"MSVPA_X2 Exited Normally.");
 }
 
 void
@@ -1924,16 +1928,16 @@ nmfMainWindow::callback_createTables()
     for (int i = 0; i < NumTables; ++i) {
         progress.setValue(i);
 
-        databasePtr->checkForTableAndCreate(QString::fromStdString(nmfConstantsMSVPA::AllTables[i]));
+        m_databasePtr->checkForTableAndCreate(QString::fromStdString(nmfConstantsMSVPA::AllTables[i]));
 
         if (progress.wasCanceled())
             break;
     }
     progress.setValue(NumTables);
 
-    if (! databasePtr->nmfGetCurrentDatabase().empty()) {
+    if (! m_databasePtr->nmfGetCurrentDatabase().empty()) {
         // Populate the Application database
-        databasePtr->saveApplicationTable(this,logger,tableName);
+        m_databasePtr->saveApplicationTable(this,m_logger,tableName);
     }
 
 }
@@ -1960,7 +1964,7 @@ nmfMainWindow::loadOtherPredSpecies()
 
     fields = {"SpeIndex","SpeName"};
     queryStr = "SELECT SpeIndex,SpeName FROM OtherPredSpecies;";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
 
     for (unsigned int i=0; i<dataMap["SpeName"].size(); i++) {
         item = std::make_pair(
@@ -1991,36 +1995,36 @@ nmfMainWindow::callback_LoadDatabase(QString database)
 
     ProjectDatabase = findChild<QComboBox *>("Setup_Tab2_ProjectDatabaseCMB")->currentText().toStdString();
     ProjectName     = findChild<QLineEdit *>("Setup_Tab2_ProjectNameLE")->text().toStdString();
-    ProjectDir      = findChild<QLineEdit *>("Setup_Tab2_ProjectDirLE")->text().toStdString();
+    m_ProjectDir      = findChild<QLineEdit *>("Setup_Tab2_ProjectDirLE")->text().toStdString();
     //ProjectDatabase = Setup_Tab2_ProjectDatabaseCMB->currentText().toStdString();
     //ProjectName     = Setup_Tab2_ProjectNameLE->text().toStdString();
     //ProjectDir      = Setup_Tab2_ProjectDirLE->text().toStdString();
-std::cout << "*** new project dir: " << ProjectDir << std::endl;
+std::cout << "*** new project dir: " << m_ProjectDir << std::endl;
 
     // RSK - create base classes for these tabs and then iterate
 
     // Update ProjectDir
-    SSVPA_Tab1_ptr->updateProjectDir(ProjectDir);
-    SSVPA_Tab2_ptr->updateProjectDir(ProjectDir);
-    SSVPA_Tab3_ptr->updateProjectDir(ProjectDir);
-    SSVPA_Tab4_ptr->updateProjectDir(ProjectDir);
+    SSVPA_Tab1_ptr->updateProjectDir(m_ProjectDir);
+    SSVPA_Tab2_ptr->updateProjectDir(m_ProjectDir);
+    SSVPA_Tab3_ptr->updateProjectDir(m_ProjectDir);
+    SSVPA_Tab4_ptr->updateProjectDir(m_ProjectDir);
 
-    MSVPA_Tab1_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab2_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab3_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab4_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab5_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab6_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab7_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab8_ptr->updateProjectDir(ProjectDir);
+    MSVPA_Tab1_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab2_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab3_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab4_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab5_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab6_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab7_ptr->updateProjectDir(m_ProjectDir);
+    MSVPA_Tab8_ptr->updateProjectDir(m_ProjectDir);
     //MSVPA_Tab9_ptr->updateProjectDir(ProjectDir);
     //MSVPA_Tab10_ptr->updateProjectDir(ProjectDir);
-    MSVPA_Tab11_ptr->updateProjectDir(ProjectDir);
+    MSVPA_Tab11_ptr->updateProjectDir(m_ProjectDir);
 
-    Forecast_Tab1_ptr->updateProjectDir(ProjectDir);
-    Forecast_Tab2_ptr->updateProjectDir(ProjectDir);
-    Forecast_Tab3_ptr->updateProjectDir(ProjectDir);
-    Forecast_Tab4_ptr->updateProjectDir(ProjectDir);
+    Forecast_Tab1_ptr->updateProjectDir(m_ProjectDir);
+    Forecast_Tab2_ptr->updateProjectDir(m_ProjectDir);
+    Forecast_Tab3_ptr->updateProjectDir(m_ProjectDir);
+    Forecast_Tab4_ptr->updateProjectDir(m_ProjectDir);
 
     setNewDatabaseName(database.toStdString());
 
@@ -2038,11 +2042,11 @@ nmfMainWindow::callback_ExportTableToCSVFile(std::string table, std::string csvF
 {
     std::string cmd = "mysql ";
 
-    cmd += "-u" + Username + " -p" + Password + " -e " +
+    cmd += "-u" + m_Username + " -p" + m_Password + " -e " +
             "' select * from " + DatabaseName + "." + table + "' " +
             "| sed 's/\\t/,/g' > " + csvFile;
 std::cout << "CMD: " << cmd << std::endl;
-    logger->logMsg(nmfConstants::Error,"Export Table To CSV File is TBD");
+    m_logger->logMsg(nmfConstants::Error,"Export Table To CSV File is TBD");
     //system(cmd);
     // mysql -uroot -p -e 'select * from Sept_10.Scenarios' |
     //        sed 's/\t/,/g' > ronScenarios.csv;
@@ -2112,7 +2116,7 @@ nmfMainWindow::callback_ReloadForecast(std::string tab)
     std::string queryStr;
 
     if (tab == "Tab4") {
-        Forecast_Tab4_ptr->load(databasePtr,
+        Forecast_Tab4_ptr->load(m_databasePtr,
                                 MSVPAName, forecastName(),
                                 forecastFirstYear(), forecastNYears(),
                                 FirstYear, LastYear);
@@ -2123,7 +2127,7 @@ nmfMainWindow::callback_ReloadForecast(std::string tab)
         fields = {"MSVPAName","ForeName","InitYear","NYears","Growth"};
         queryStr = "SELECT MSVPAName,ForeName,InitYear,NYears,Growth FROM Forecasts WHERE MSVPAName='" + MSVPAName + "'" +
                 " AND ForeName='" + forecastName() + "'";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["MSVPAName"].size() > 0) {
             Forecast_Tab5_ptr->loadWidgets(MSVPAName,
                                            forecastName(),
@@ -2178,7 +2182,7 @@ nmfMainWindow::callback_UpdateScenarioList(std::string scenarioToSelect)
     queryStr = "SELECT Scenario FROM Scenarios WHERE MSVPAName='" + entityName() + "'" +
             " AND ForeName='" + forecastName() + "'";
 
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (std::string name : dataMap[fields[0]]) {
         ++row;
         scenario_model.append( QString::fromStdString(name));
@@ -2406,10 +2410,10 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
             outputChart = NULL;
         }
 
-        outputChart = new nmfOutputChartStackedBar(logger);
+        outputChart = new nmfOutputChartStackedBar(m_logger);
 
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                     forecastFirstYear(), forecastNYears(),
@@ -2435,9 +2439,9 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
             delete outputChart;
             outputChart = NULL;
         }
-        outputChart = new nmfOutputChartBar(logger);
+        outputChart = new nmfOutputChartBar(m_logger);
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                     forecastFirstYear(), forecastNYears(),
@@ -2470,9 +2474,9 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
             delete outputChart;
             outputChart = NULL;
         }
-        outputChart = new nmfOutputChartBar(logger);
+        outputChart = new nmfOutputChartBar(m_logger);
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                      forecastFirstYear(), forecastNYears(),
@@ -2508,12 +2512,12 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
 
         std::string selVar = selectVariableCMB->currentText().toStdString();
         if (selVar == "Food Availability by Prey Type") {
-            outputChart = new nmfOutputChartStackedBar(logger);
+            outputChart = new nmfOutputChartStackedBar(m_logger);
         } else {
-            outputChart = new nmfOutputChartBar(logger);
+            outputChart = new nmfOutputChartBar(m_logger);
         }
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                      forecastFirstYear(), forecastNYears(),
@@ -2541,9 +2545,9 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
             delete outputChart;
             outputChart = NULL;
         }
-        outputChart = new nmfOutputChartLine(logger);
+        outputChart = new nmfOutputChartLine(m_logger);
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -2573,9 +2577,9 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
             delete outputChart;
             outputChart = NULL;
         }
-        outputChart = new nmfOutputChartLine(logger);
+        outputChart = new nmfOutputChartLine(m_logger);
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -2606,9 +2610,9 @@ void nmfMainWindow::callback_selectDataTypeChanged(QString dataType)
              outputChart = NULL;
          }
 
-        outputChart = new nmfOutputChartBar(logger);
+        outputChart = new nmfOutputChartBar(m_logger);
         outputChart->redrawChart("dataType",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     MSVPAName, forecastName(), scenarioName(),
                     forecastFirstYear(), forecastNYears(),
@@ -3061,7 +3065,7 @@ void nmfMainWindow::callback_selectSpeciesChanged(QString species)
     }
 
     outputChart->redrawChart("species",
-                databasePtr, modelName(),
+                m_databasePtr, modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 entityName(),  forecastName(), scenarioName(),
                              forecastFirstYear(), forecastNYears(),
@@ -3110,7 +3114,7 @@ void nmfMainWindow::reloadPreySpecies(std::string species, int PredAgeVal)
                 " ORDER BY PreyName";
     }
 
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["PreyName"].size(); ++i) {
         selectPreySpeciesCMB->addItem(QString::fromStdString(dataMap["PreyName"][i]));
     }
@@ -3169,15 +3173,15 @@ void nmfMainWindow::callback_selectVariableChanged(QString variable)
     std::string selDataType = selectDataTypeCMB->currentText().toStdString();
     std::string selVar      = variable.toStdString();
     if (selDataType == "Multispecies Populations") {
-        outputChart = new nmfOutputChartLine(logger);
+        outputChart = new nmfOutputChartLine(m_logger);
     } else if ((selVar == "Food Availability by Prey Type") ||
                (selVar == "Food Availability by Prey Age")) {
-        outputChart = new nmfOutputChartStackedBar(logger);
+        outputChart = new nmfOutputChartStackedBar(m_logger);
     } else {
-        outputChart = new nmfOutputChartBar(logger);
+        outputChart = new nmfOutputChartBar(m_logger);
     }
     outputChart->redrawChart("variable",
-                databasePtr,  modelName(),
+                m_databasePtr,  modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 MSVPAName, forecastName(), scenarioName(),
                              forecastFirstYear(), forecastNYears(),
@@ -3222,7 +3226,7 @@ void nmfMainWindow::callback_selectByVariablesChanged(QString byVariables)
     }
 
     outputChart->redrawChart("byVariables",
-                databasePtr,  modelName(),
+                m_databasePtr,  modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 MSVPAName,  forecastName(), scenarioName(),
                              forecastFirstYear(), forecastNYears(),
@@ -3260,7 +3264,7 @@ void nmfMainWindow::callback_selectSeasonCMBChanged(QString season)
                   selectSeasonLE->text().toDouble() : 0.0;
 
     outputChart->redrawChart("season",
-                databasePtr,  modelName(),
+                m_databasePtr,  modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 MSVPAName,  forecastName(), scenarioName(),
                              forecastFirstYear(), forecastNYears(),
@@ -3300,7 +3304,7 @@ void nmfMainWindow::callback_selectSeasonLEChanged(QString text)
 
     if (outputChart) {
         outputChart->redrawChart("season",
-             databasePtr,  modelName(),
+             m_databasePtr,  modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName, forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3333,7 +3337,7 @@ void nmfMainWindow::callback_selectSeasonCBChanged(int state)
 
     if (outputChart) {
         outputChart->redrawChart("season",
-                                 databasePtr,  modelName(),
+                                 m_databasePtr,  modelName(),
                                  chart, AllLabels,  AllComboBoxes, AllButtons, AllCheckBoxes,
                                  MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3416,7 +3420,7 @@ nmfMainWindow::callback_selectFullyRecruitedAgeCheckboxChanged(int state)
 
     if (outputChart) {
         outputChart->redrawChart("fullyRecruitedAge",
-             databasePtr,  modelName(),
+             m_databasePtr,  modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3483,7 +3487,7 @@ void nmfMainWindow::callback_selectSpeciesAgeSizeLEChanged(QString text)
 
     if (outputChart) {
         outputChart->redrawChart("speciesAgeSizeClass",
-             databasePtr,  modelName(),
+             m_databasePtr,  modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3534,7 +3538,7 @@ void nmfMainWindow::callback_selectFullyRecruitedAgeLEChanged(QString text)
 
     if (outputChart) {
         outputChart->redrawChart("fullyRecruitedAge",
-             databasePtr,  modelName(),
+             m_databasePtr,  modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName, forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3571,7 +3575,7 @@ void nmfMainWindow::callback_selectSpeciesAgeSizeCBChanged(int state)
 
     if (outputChart) {
         outputChart->redrawChart("speciesAgeSizeClass",
-             databasePtr,  modelName(),
+             m_databasePtr,  modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3603,7 +3607,7 @@ void nmfMainWindow::callback_selectPreySpeciesCMBChanged(QString preyName)
                         selectSpeciesAgeSizeClassLE->text().toDouble() : 0.0;
 
     outputChart->redrawChart("speciesAgeSizeClass",
-                databasePtr, modelName(),
+                m_databasePtr, modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 MSVPAName, forecastName(), scenarioName(),
                 forecastFirstYear(), forecastNYears(), FirstYear,
@@ -3642,7 +3646,7 @@ void nmfMainWindow::callback_selectSpeciesAgeSizeCMBChanged(QString speciesAgeSi
     reloadPreySpecies(selectSpeciesCMB->currentText().toStdString(),PredAgeVal);
     selectPreySpeciesCMB->blockSignals(false);
     outputChart->redrawChart("speciesAgeSizeClass",
-                databasePtr, modelName(),
+                m_databasePtr, modelName(),
                 chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                 MSVPAName, forecastName(), scenarioName(),
                 forecastFirstYear(), forecastNYears(), FirstYear,
@@ -3699,7 +3703,7 @@ void nmfMainWindow::callback_selectYPRAnalysisTypeChanged(QString type)
 
     if (outputChart) {
         outputChart->redrawChart("YPRAnalysisType",
-             databasePtr, modelName(),
+             m_databasePtr, modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName, forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3739,7 +3743,7 @@ void nmfMainWindow::callback_selectYearsChanged()
 
     if (outputChart) {
         outputChart->redrawChart("years",
-             databasePtr, modelName(),
+             m_databasePtr, modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3799,14 +3803,14 @@ void nmfMainWindow::callback_SSVPAChartTypeChanged(QString chartType)
     std::vector<std::string> chartNames = { "Abundance (millions) ", "Fishing Mortality", "Natural Mortality" };
 
     std::string SpeciesName = entityName();
-    int SpeciesIndex = databasePtr->getSpeciesIndex(SpeciesName);
+    int SpeciesIndex = m_databasePtr->getSpeciesIndex(SpeciesName);
     if (SpeciesIndex < 0) {
         return;
     }
 
     // Get data needed for SVPA
     std::tie(MaxAge, FirstCatchAge, LastCatchAge, isPlusClass) =
-            databasePtr->nmfQueryAgeFields("Species",SpeciesIndex);
+            m_databasePtr->nmfQueryAgeFields("Species",SpeciesIndex);
 
     // Find max value in matrix for vertical scaling
     maxMatrixValue = nmfUtils::getMatrixMax(SSVPATables[chartNum],nmfConstants::RoundOff);
@@ -3826,10 +3830,10 @@ void nmfMainWindow::callback_SSVPAChartTypeChanged(QString chartType)
     // LastCatchYear  = model->data(model->index(nrows-1, 0), Qt::DisplayRole).toDouble();
     fields   = {"SpeName","FirstYear","LastYear"};
     queryStr = "SELECT SpeName,FirstYear,LastYear FROM Species WHERE SpeIndex = " + std::to_string(SpeciesIndex);
-    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["SpeName"].size();
     if (NumRecords == 0) {
-        logger->logMsg(nmfConstants::Error,"Error nmfMainWindow::callback_SSVPAChartTypeChanged: Couldn't find SpeIndex: "+std::to_string(SpeciesIndex));
+        m_logger->logMsg(nmfConstants::Error,"Error nmfMainWindow::callback_SSVPAChartTypeChanged: Couldn't find SpeIndex: "+std::to_string(SpeciesIndex));
     }
     FirstCatchYear = std::stoi(dataMap["FirstYear"][0]);
     LastCatchYear  = std::stoi(dataMap["LastYear"][0]);
@@ -3878,7 +3882,7 @@ void nmfMainWindow::callback_selectFullyRecruitedAgeCMBChanged(QString age)
 
     if (outputChart) {
         outputChart->redrawChart("fullyRecruitedAge",
-             databasePtr, modelName(),
+             m_databasePtr, modelName(),
              chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
              MSVPAName,  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -3942,7 +3946,7 @@ void nmfMainWindow::reloadFullyRecruitedAgeComboBox(std::string MSVPAName)
     fields = {"Age"};
     queryStr = "SELECT DISTINCT(Age) FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
             "' and SpeName='" + selectSpeciesCMB->currentText().toStdString() + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     NumAges = dataMap["Age"].size();
     selectFullyRecruitedAgeCMB->clear();
     //selectFullyRecruitedAgeLE->clear();
@@ -3972,7 +3976,7 @@ void nmfMainWindow::reloadSpeciesAgeSizeComboBox(std::string MSVPAName)
     fields = {"SpeName"};
     queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName +
                "' and SpeName='" + selectedSpecies + "' and Type=3";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["SpeName"].size() > 0) {
         if (dataMap["SpeName"][0] == selectedSpecies) {
             ageSizePrefix = "Size";
@@ -3983,13 +3987,13 @@ void nmfMainWindow::reloadSpeciesAgeSizeComboBox(std::string MSVPAName)
         fields = {"NumAges"};
         queryStr = "SELECT count(DISTINCT(Age)) as NumAges FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
                 "' and SpeName='" + selectSpeciesCMB->currentText().toStdString() + "'";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         NageOrSizeCategories  = std::stoi(dataMap["NumAges"][0]);
 
     } else {
         fields = {"SpeName","NumSizeCats"};
         queryStr = "SELECT SpeName,NumSizeCats from OtherPredSpecies WHERE SpeName='" + selectedSpecies + "'";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeName"].size() > 0) {
             if (dataMap["SpeName"][0] == selectedSpecies) {
                 sizeOffset = 1;
@@ -4043,7 +4047,7 @@ nmfMainWindow::loadForecastInputWidgets()
 //    Forecast_Tab2_GrowthParametersTV->scrollToTop();
 
     Forecast_Tab2_ptr->loadWidgets(
-                databasePtr,
+                m_databasePtr,
                 vonBert_model,
                 MSVPAName,
                 forecastName());
@@ -4052,7 +4056,7 @@ nmfMainWindow::loadForecastInputWidgets()
     // Get MSVPA info
     fields = {"FirstYear","LastYear"};
     queryStr = "SELECT FirstYear,LastYear FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     int FirstYear = std::stod(dataMap["FirstYear"][0]);
     int LastYear  = std::stod(dataMap["LastYear"][0]);
     int NYears = LastYear - FirstYear;
@@ -4076,12 +4080,12 @@ nmfMainWindow::loadForecastInputWidgets()
         Forecast_Tab3_DataTbW->setItem(i,0,new QTableWidgetItem(QString::number(FirstYear+i)));
     }
     Forecast_Tab3_DataTbW->resizeColumnsToContents();
-    Forecast_Tab3_ptr->loadWidgets(databasePtr,
+    Forecast_Tab3_ptr->loadWidgets(m_databasePtr,
                                    MSVPAName,
                                    forecastName(),
                                    NYears,
                                    FirstYear);
-    Forecast_Tab4_ptr->load(databasePtr,
+    Forecast_Tab4_ptr->load(m_databasePtr,
                             MSVPAName,
                             forecastName(),
                             forecastFirstYear(),
@@ -4094,7 +4098,7 @@ nmfMainWindow::loadForecastInputWidgets()
     fields = {"MSVPAName","ForeName","InitYear","NYears","Growth"};
     queryStr = "SELECT MSVPAName,ForeName,InitYear,NYears,Growth FROM Forecasts WHERE MSVPAName='" + MSVPAName + "'" +
             " AND ForeName='" + forecastName() + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["MSVPAName"].size() > 0) {
         Forecast_Tab5_ptr->loadWidgets(MSVPAName,
                                        forecastName(),
@@ -4144,7 +4148,7 @@ void nmfMainWindow::loadForecastChartWidgets() {
         fields = {"SpeName"};
         queryStr = "SELECT SpeName FROM MSVPAspecies where MSVPAName='" + MSVPAName +
                    "' and Type = 0";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         selectSpeciesCMB->setInsertPolicy(QComboBox::InsertAlphabetically);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
             speciesList << QString::fromStdString(dataMap["SpeName"][i]);
@@ -4152,7 +4156,7 @@ void nmfMainWindow::loadForecastChartWidgets() {
 
         // Then also load species from OtherPredSpecies
         queryStr = "SELECT SpeName FROM OtherPredSpecies";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
             speciesList << QString::fromStdString(dataMap["SpeName"][i]);
         }
@@ -4164,7 +4168,7 @@ void nmfMainWindow::loadForecastChartWidgets() {
     {
         fields = {"SpeName"};
         queryStr = "SELECT SpeName FROM Species";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
             selectSpeciesCMB->addItem(QString::fromStdString((dataMap["SpeName"][i])));
         }
@@ -4250,7 +4254,7 @@ void nmfMainWindow::loadForecastChartWidgets() {
     // Load Select Season combo box
     selectSeasonCMB->clear();
     std::map<std::string,int> initMap =
-            databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
+            m_databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
     int NumSeasons = initMap["NSeasons"];
     std::string seasonText;
     for (int i=0; i<NumSeasons; ++i) {
@@ -4319,14 +4323,14 @@ void nmfMainWindow::loadMSVPAChartWidgets() {
         fields = {"SpeName"};
         queryStr = "SELECT SpeName FROM MSVPAspecies where MSVPAName='" + MSVPAName +
                    "' and Type = 0";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
            speciesList << QString::fromStdString(dataMap["SpeName"][i]);
         }
 
         // Then also load species from OtherPredSpecies
         queryStr = "SELECT SpeName FROM OtherPredSpecies";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
           speciesList << QString::fromStdString(dataMap["SpeName"][i]);
         }
@@ -4338,7 +4342,7 @@ void nmfMainWindow::loadMSVPAChartWidgets() {
     {
         fields = {"SpeName"};
         queryStr = "SELECT SpeName FROM Species";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
             selectSpeciesCMB->addItem(QString::fromStdString((dataMap["SpeName"][i])));
         }
@@ -4417,7 +4421,7 @@ void nmfMainWindow::loadMSVPAChartWidgets() {
     // Load Select Season combo box
     selectSeasonCMB->clear();
     std::map<std::string,int> initMap =
-            databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
+            m_databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
     int NumSeasons = initMap["NSeasons"];
 
     std::string seasonText;
@@ -4647,8 +4651,8 @@ void nmfMainWindow::callback_scenarioSingleClicked(const QModelIndex &curr)
     Forecast_Tab1_ptr->refresh(MSVPAName,forecastName(),scenarioName());
 
     // Initialize the output gui controls and chart with db ptr and MSVPA name
-    outputWidget->setDatabaseVars(databasePtr,
-                                  logger, entityName(), "Forecast",
+    outputWidget->setDatabaseVars(m_databasePtr,
+                                  m_logger, entityName(), "Forecast",
                                   forecastName(), scenarioName());
 }
 
@@ -4677,7 +4681,7 @@ void nmfMainWindow::reloadForecastWidgets(std::string Forecast)
     fields = {"Scenario"};
     queryStr = "SELECT Scenario FROM Scenarios WHERE MSVPAName='" + entityName() + "'" +
             " AND ForeName='" + Forecast + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (auto name : dataMap[fields[0]]) {
         scenario_model.append( QString::fromStdString(name));
     }
@@ -4686,19 +4690,19 @@ void nmfMainWindow::reloadForecastWidgets(std::string Forecast)
     if (! queryAndLoadInitFields())
         return;
 
-    Forecast_Tab1_ptr->loadWidgets(databasePtr,
+    Forecast_Tab1_ptr->loadWidgets(m_databasePtr,
                                    entityName(),
                                    Forecast,
                                    FirstYear,
                                    LastYear);
 
     Forecast_Tab2_ptr->loadWidgets(
-                databasePtr,
+                m_databasePtr,
                 vonBert_model,
                 MSVPAName,
                 Forecast);
 
-    Forecast_Tab4_ptr->load(databasePtr,
+    Forecast_Tab4_ptr->load(m_databasePtr,
                             MSVPAName,
                             Forecast,
                             forecastFirstYear(),
@@ -4712,7 +4716,7 @@ void nmfMainWindow::reloadForecastWidgets(std::string Forecast)
     fields = {"MSVPAName","ForeName","InitYear","NYears","Growth"};
     queryStr = "SELECT MSVPAName,ForeName,InitYear,NYears,Growth FROM Forecasts WHERE MSVPAName='" + MSVPAName + "'" +
             " AND ForeName='" + Forecast + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["MSVPAName"].size() > 0) {
         Forecast_Tab5_ptr->loadWidgets(MSVPAName,
                                        Forecast,
@@ -4738,8 +4742,8 @@ void nmfMainWindow::callback_MSVPASingleClickedGUI(const QModelIndex &curr)
 std::cout << "callback_MSVPASingleClickedGUI" << std::endl;
 
     MSVPAName = curr.data(Qt::DisplayRole).toString().toStdString();
-    outputWidget->setDatabaseVars(databasePtr,
-                                  logger, MSVPAName, "MSVPA",
+    outputWidget->setDatabaseVars(m_databasePtr,
+                                  m_logger, MSVPAName, "MSVPA",
                                   forecastName(), scenarioName());
 
     updateMainWindowTitle("MSVPA: " + MSVPAName);
@@ -4757,7 +4761,7 @@ std::cout << "callback_MSVPASingleClickedGUI" << std::endl;
     m_UI->MSVPAInputTabWidget->setTabEnabled(0,true);
     m_UI->MSVPAInputTabWidget->setCurrentIndex(0);
 
-    MSVPA_Tab1_ptr->loadWidgets( databasePtr,
+    MSVPA_Tab1_ptr->loadWidgets( m_databasePtr,
                                  MSVPAName );
 
     // Enable the appropriate Tab pages per the MSVPA config just selected.
@@ -4817,7 +4821,7 @@ void nmfMainWindow::callback_msvpaForecastSingleClicked(const QModelIndex &curr)
         forecast_model.removeRows(0, forecast_model.count(), QModelIndex());
         fields = {"ForeName"};
         queryStr = "SELECT ForeName FROM Forecasts WHERE MSVPAName='" + currMSVPA + "';";
-        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
         for (auto name : dataMap[fields[0]]) {
             forecast_model.append( QString::fromStdString(name));
         }
@@ -4836,7 +4840,7 @@ void nmfMainWindow::loadForecastListWidget()
     forecast_model.removeRows(0, forecast_model.count(), QModelIndex());
     fields = {"ForeName"};
     queryStr = "SELECT ForeName FROM Forecasts WHERE MSVPAName='" + MSVPAName + "';";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (auto name : dataMap[fields[0]]) {
         forecast_model.append( QString::fromStdString(name));
     }
@@ -4855,7 +4859,7 @@ nmfMainWindow::queryAndLoadInitFields()
     MSVPAName = entityName();
 
     std::map<std::string,int> initMap =
-            databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
+            m_databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
     FirstYear     = initMap["FirstYear"];
     LastYear      = initMap["LastYear"];
     NumSeasons    = initMap["NSeasons"];
@@ -4891,7 +4895,7 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     bool pageEnabled;
     int page=0;
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::MSVPAFindStoreAndSetPageStates");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::MSVPAFindStoreAndSetPageStates");
 
     std::vector<std::string> fields,fields1,fields2;
     std::map<std::string, std::vector<std::string> > dataMap,dataMap1,dataMap2;
@@ -4907,24 +4911,24 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     fields    = {"MSVPAName", "SpeName"};
     queryStr  = "SELECT MSVPAName,SpeName FROM MSVPAspecies ";
     queryStr += "WHERE MSVPAName = '" + MSVPAName + "'";
-    dataMap   = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap   = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     MSVPAPageEnabled[page++] = (dataMap["MSVPAName"].size() > 0);
 
     // Tab 2
     fields     = {"MSVPAName", "NSeasons"};
     queryStr   =  "SELECT MSVPAName,NSeasons FROM MSVPAlist ";
     queryStr  +=  "WHERE MSVPAName = '" + MSVPAName + "'";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     fields1    = {"MSVPAName", "Variable"};
     queryStr1  =  "SELECT MSVPAName,Variable FROM MSVPASeasInfo ";
     queryStr1 +=  "WHERE MSVPAName = '" + MSVPAName + "' ";
     queryStr1 +=  "AND Variable = 'SeasLen'";
-    dataMap1   = databasePtr->nmfQueryDatabase(queryStr1,fields1);
+    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
     fields2    = {"MSVPAName", "Variable"};
     queryStr2  =  "SELECT MSVPAName,Variable FROM MSVPASeasInfo ";
     queryStr2 +=  "WHERE MSVPAName = '" + MSVPAName + "' ";
     queryStr2 +=  "AND Variable = 'SeasTemp'";
-    dataMap2   = databasePtr->nmfQueryDatabase(queryStr2,fields2);
+    dataMap2   = m_databasePtr->nmfQueryDatabase(queryStr2,fields2);
     MSVPAPageEnabled[page++] = ((dataMap["MSVPAName"].size() > 0) &&
                                 (dataMap1["MSVPAName"].size() > 0) &&
                                 (dataMap2["MSVPAName"].size() > 0));
@@ -4932,10 +4936,10 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     // Tab 3
     fields     = {"SpeName", "Biomass"};
     queryStr   = "SELECT SpeName,Biomass FROM OtherPredBM ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     fields1    = {"SpeName", "SizeCat"};
     queryStr1  = "SELECT SpeName,SizeCat FROM OthPredSizeData ";
-    dataMap1   = databasePtr->nmfQueryDatabase(queryStr1,fields1);
+    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
     MSVPAPageEnabled[page++] = ((dataMap["SpeName"].size() > 0) &&
                                 (dataMap1["SpeName"].size() > 0));
 
@@ -4943,11 +4947,11 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     fields     = {"MSVPAName", "OthPreyName"};
     queryStr   = "SELECT MSVPAName,OthPreyName FROM MSVPAOthPrey ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     fields1    = {"MSVPAName", "OthPreyName"};
     queryStr1  = "SELECT MSVPAName,OthPreyName FROM MSVPAOthPrey ";
     queryStr1 += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap1   = databasePtr->nmfQueryDatabase(queryStr1,fields1);
+    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
     MSVPAPageEnabled[page++] = ((dataMap["MSVPAName"].size() > 0) &&
                                 (dataMap1["MSVPAName"].size() > 0));
 
@@ -4955,28 +4959,28 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     fields     = {"MSVPAName", "PrefVal"};
     queryStr   = "SELECT MSVPAName,PrefVal FROM MSVPAprefs ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     MSVPAPageEnabled[page++] = (dataMap["MSVPAName"].size() > 0);
 
     // Tab 6
     fields     = {"MSVPAName", "SpOverlap"};
     queryStr   = "SELECT MSVPAName,SpOverlap FROM MSVPASpaceO ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     MSVPAPageEnabled[page++] = (dataMap["MSVPAName"].size() > 0);
 
     // Tab 7
     fields     = {"MSVPAName", "SpeIndex"};
     queryStr   = "SELECT MSVPAName,SpeIndex FROM MSVPASizePref ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     MSVPAPageEnabled[page++] = (dataMap["MSVPAName"].size() > 0);
 
     // Tab 8
     fields     = {"MSVPAName", "SpeIndex"};
     queryStr   = "SELECT MSVPAName,SpeIndex FROM MSVPAStomCont ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     MSVPAPageEnabled[page++] = (dataMap["MSVPAName"].size() > 0);
 
     // Tab 9 [Energy Density]       TBD
@@ -4991,7 +4995,7 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     queryStr   = "SELECT MSVPAName,Type,SSVPAindex FROM MSVPAspecies ";
     queryStr  += "WHERE MSVPAName = '" + MSVPAName + "' ";
     queryStr  += "AND (Type = 0 OR Type = 1)";
-    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     int NumRecords = dataMap["MSVPAName"].size();
     for (int i=0; i<NumRecords; ++i) {
         if (std::stoi(dataMap["SSVPAindex"][i]) < 1) {
@@ -5037,7 +5041,7 @@ nmfMainWindow::MSVPAFindStoreAndSetPageStates()
     MSVPA_Tab11_ptr->enableNextButton(m_UI->MSVPAInputTabWidget->isTabEnabled(10));
 
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::MSVPAFindAndStorePageStates Complete");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::MSVPAFindAndStorePageStates Complete");
 
 } // end MSVPAFindStoreAndSetPageStates
 
@@ -5048,40 +5052,40 @@ nmfMainWindow::callback_MSVPALoadWidgets(int TabNum)
 
     m_UI->MSVPAInputTabWidget->setTabEnabled(TabNum,true); // RSK
 
-    logger->logMsg(nmfConstants::Normal,"Loading MSVPA Tab "+std::to_string(TabNum+1)+"...");
+    m_logger->logMsg(nmfConstants::Normal,"Loading MSVPA Tab "+std::to_string(TabNum+1)+"...");
 
     MSVPAPageEnabled[TabNum] = true;
 
     switch (TabNum) {
         case 0:
-            okToProceed = MSVPA_Tab1_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab1_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 1:
-            okToProceed = MSVPA_Tab2_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab2_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 2:
-            okToProceed = MSVPA_Tab3_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab3_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 3:
-            okToProceed = MSVPA_Tab4_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab4_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 4:
-            okToProceed = MSVPA_Tab5_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab5_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 5:
-            okToProceed = MSVPA_Tab6_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab6_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 6:
-            okToProceed = MSVPA_Tab7_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab7_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 7:
-            okToProceed = MSVPA_Tab8_ptr->loadWidgets( databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab8_ptr->loadWidgets( m_databasePtr, MSVPAName);
             break;
         case 10:
-            okToProceed = MSVPA_Tab11_ptr->loadWidgets(databasePtr, MSVPAName);
+            okToProceed = MSVPA_Tab11_ptr->loadWidgets(m_databasePtr, MSVPAName);
             break;
         case 11:
-            okToProceed = MSVPA_Tab12_ptr->loadWidgets(databasePtr, MSVPAName, ProjectDir);
+            okToProceed = MSVPA_Tab12_ptr->loadWidgets(m_databasePtr, MSVPAName, m_ProjectDir);
 //            if (okToProceed) {
 //                RunMSVPAPB->setEnabled(true);
 //            }
@@ -5112,10 +5116,10 @@ void nmfMainWindow::loadMSVPAInputWidgets()
         NavigatorTree->topLevelItem(2)->child(i)->setDisabled(true);
     }
 
-    logger->logMsg(nmfConstants::Normal,"Loading MSVPA configuration: "+MSVPAName);
+    m_logger->logMsg(nmfConstants::Normal,"Loading MSVPA configuration: "+MSVPAName);
     NavigatorTree->topLevelItem(2)->child(0)->setDisabled(false);
 
-    okToProceed = MSVPA_Tab1_ptr->loadWidgets(databasePtr,
+    okToProceed = MSVPA_Tab1_ptr->loadWidgets(m_databasePtr,
                                               MSVPAName);
     if (! okToProceed)
         return;
@@ -5126,8 +5130,8 @@ void nmfMainWindow::loadMSVPAInputWidgets()
 return;
 
     // RSK - Implement 8 and 9 when you do the Growth algorithm
-    MSVPA_Tab9_ptr->loadWidgets(databasePtr, MSVPAName);
-    MSVPA_Tab10_ptr->loadWidgets(databasePtr, MSVPAName);
+    MSVPA_Tab9_ptr->loadWidgets(m_databasePtr, MSVPAName);
+    MSVPA_Tab10_ptr->loadWidgets(m_databasePtr, MSVPAName);
 
 }
 
@@ -5160,7 +5164,7 @@ void nmfMainWindow::getYearsAndAges(const std::string &MSVPAName, const std::str
     fields = {"NumYears","NumAges"};
     queryStr = "SELECT count(DISTINCT(Year)) as NumYears, count(DISTINCT(Age)) as NumAges FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
             "' and SpeName='" + species + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     NumYears = std::stoi(dataMap["NumYears"][0]);
     NumAges  = std::stoi(dataMap["NumAges"][0]);
 }
@@ -5181,7 +5185,7 @@ void nmfMainWindow::getMaturityData(
                "' and Year >= " + std::to_string(FirstYear) + " and Year <= " + std::to_string(LastYear) +
                " ORDER By Age,Year";
 
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["PMature"].size() > 0) {
         for (int i=0; i<Nage; ++i) {
             for (int j=0; j<NumYears; ++j) {
@@ -5204,7 +5208,7 @@ void nmfMainWindow::loadMsvpaCharts(std::string selectedSpecies) {
     // Find all species
     fields = {"SpeName"};
     queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     for (int i=0;i<NumSpecies;++i) {
         species.push_back(dataMap["SpeName"][i]);
@@ -5222,7 +5226,7 @@ void nmfMainWindow::loadMsvpaCharts(std::string selectedSpecies) {
     queryStr = "SELECT Year,Age,Sum(SeasM2) as M2 FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +"'" +
                " and SpeName='" + selectedSpecies + "'" +
                " GROUP BY Year, Age";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);  // RSK - error message here if queried table is empty
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);  // RSK - error message here if queried table is empty
     if (dataMap["Year"].size() > 0) {
         // Check for data in table (it may be empty if model not run).
         nmfUtils::initialize(M2Matrix, NumYears, NumAges);
@@ -5255,7 +5259,7 @@ nmfMainWindow::callback_ResetSpeciesList()
 void
 nmfMainWindow::callback_ReselectSpecies(std::string Species, bool withCallback)
 {
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_ReselectSpecies");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_ReselectSpecies");
 
     QModelIndex mindex;
 
@@ -5274,7 +5278,7 @@ nmfMainWindow::callback_ReselectSpecies(std::string Species, bool withCallback)
 
     NavigatorTree->clearFocus(); // Just to clean up Nav Tree
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_ReselectSpecies Complete");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_ReselectSpecies Complete");
 
 } // end callback_ReselectSpecies
 
@@ -5291,7 +5295,7 @@ nmfMainWindow::callback_SSVPAInputTabChanged(int tab)
 void
 nmfMainWindow::callback_InitializePage(std::string model, int page, bool withCallback)
 {
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_InitializePage: " + std::to_string(page));
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_InitializePage: " + std::to_string(page));
 
     // Load all Species into CatchAtAge tableView model array.
     std::vector<QString> AllSpecies;
@@ -5317,25 +5321,25 @@ nmfMainWindow::callback_InitializePage(std::string model, int page, bool withCal
         switch (page) {
             // Loading deselects the currently selected species
             case 0:
-                CatchDataInitialized = true;
-                SSVPA_Tab1_ptr->loadAllSpeciesFromTableOrFile(databasePtr,
+                m_CatchDataInitialized = true;
+                SSVPA_Tab1_ptr->loadAllSpeciesFromTableOrFile(m_databasePtr,
                                                               SpeciesIndex, SpeciesName,
                                                               AllSpecies, "FromTable");
                 break;
             case 1:
-                SSVPA_Tab2_ptr->loadAllSpeciesFromTableOrFile(databasePtr,
+                SSVPA_Tab2_ptr->loadAllSpeciesFromTableOrFile(m_databasePtr,
                                                               SpeciesIndex, SpeciesName,
                                                               AllSpecies, "FromTable");
                 break;
             case 2:
-                SSVPA_Tab3_ptr->loadAllSpeciesFromTableOrFile(databasePtr,
+                SSVPA_Tab3_ptr->loadAllSpeciesFromTableOrFile(m_databasePtr,
                                                               SpeciesIndex, SpeciesName,
                                                               AllSpecies,  "FromTable");
                 break;
             case 3:
                 SSVPA_Tab1_ptr->loadSpecies(SpeciesIndex);
                 //callback_EnableRunSSVPAPB(true);
-                SSVPA_Tab4_ptr->loadDefaultWidgets(databasePtr,
+                SSVPA_Tab4_ptr->loadDefaultWidgets(m_databasePtr,
                                                    AllSpecies,
                                                    SpeciesIndex);
                 break;
@@ -5344,7 +5348,7 @@ nmfMainWindow::callback_InitializePage(std::string model, int page, bool withCal
         }
     }
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_InitializePage Complete");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_InitializePage Complete");
 
 } // end callback_InitializePage
 
@@ -5375,7 +5379,7 @@ nmfMainWindow::clearSSVPAOutputWindow()
     fields   = {"SpeName","FirstYear","LastYear","MinCatAge","MaxCatAge"};
     queryStr = "SELECT SpeName,FirstYear,LastYear,MinCatAge,MaxCatAge FROM Species WHERE SpeIndex = " +
                 std::to_string(SpeciesIndex);
-    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr,fields);
     int NumRecords = dataMap["SpeName"].size();
     if (NumRecords == 0) {
         //logger->logMsg(nmfConstants::Normal,"Error(nmfMainWindow::clearSSVPAOutputWindow): Couldn't find SpeIndex: " +
@@ -5453,7 +5457,7 @@ std::cout << "curr: " << curr.data().toString().toStdString() << std::endl;
     QModelIndex mindex;
     SpeciesName = curr.data().toString().toStdString();
 
-    logger->logMsg(nmfConstants::Normal,"callback_SSVPASingleClickedDo - Species: " + SpeciesName);
+    m_logger->logMsg(nmfConstants::Normal,"callback_SSVPASingleClickedDo - Species: " + SpeciesName);
 
     for (int i=0;i<EntityListLV->model()->rowCount();++i) {
         mindex = EntityListLV->model()->index(i,0);
@@ -5476,7 +5480,7 @@ std::cout << "curr: " << curr.data().toString().toStdString() << std::endl;
     // from the item in the table (i.e., its position). It may not always be.
     fields   = {"SpeIndex"};
     queryStr = "SELECT SpeIndex FROM Species WHERE SpeName = '" + species + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["SpeIndex"].size() == 0) {
         std::cout << "query: " << queryStr << std::endl;
         QMessageBox::information(this,
@@ -5505,7 +5509,7 @@ std::cout << "curr: " << curr.data().toString().toStdString() << std::endl;
         case 3:
             //callback_EnableRunSSVPAPB(true);
             SSVPA_Tab4_ptr->clearModels();
-            SSVPA_Tab4_ptr->loadDefaultWidgets(databasePtr,
+            SSVPA_Tab4_ptr->loadDefaultWidgets(m_databasePtr,
                                                AllSpecies,
                                                SpeciesIndex);
             break;
@@ -5515,7 +5519,7 @@ std::cout << "curr: " << curr.data().toString().toStdString() << std::endl;
 
     this->setCursor(Qt::ArrowCursor);
 
-    logger->logMsg(nmfConstants::Normal,"callback_SSVPASingleClickedDo Complete - Species: " + SpeciesName);
+    m_logger->logMsg(nmfConstants::Normal,"callback_SSVPASingleClickedDo Complete - Species: " + SpeciesName);
 
 } // end callback_SSVPASingleClickedDo
 
@@ -5747,8 +5751,8 @@ void nmfMainWindow::activateSetupWidgets()
 //    m_UI->SetupOutputW->show();
 
     // Load Setup widgets
-    Setup_Tab2_ptr->loadWidgets(databasePtr);
-    Setup_Tab3_ptr->loadWidgets(databasePtr);
+    Setup_Tab2_ptr->loadWidgets(m_databasePtr);
+    Setup_Tab3_ptr->loadWidgets(m_databasePtr);
 
 } // end activateSetupWidgets
 
@@ -5825,7 +5829,7 @@ void nmfMainWindow::activateSSVPAWidgets()
     entity_model.removeRows(0, entity_model.count(), QModelIndex());
     fields = {"SpeName"};
     queryStr = "SELECT SpeName FROM Species;";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (auto name : dataMap[fields[0]]) {
         entity_model.append( nmfEntity{ QString::fromStdString(name) });
     }
@@ -5887,7 +5891,7 @@ void nmfMainWindow::activateMSVPAWidgets()
     entity_model.removeRows(0, entity_model.count(), QModelIndex());
     fields = {"MSVPAName"};
     queryStr = "SELECT MSVPAName FROM MSVPAlist;";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (auto name : dataMap[fields[0]]) {
         entity_model.append( nmfEntity{ QString::fromStdString(name) });
     }
@@ -5952,7 +5956,7 @@ void nmfMainWindow::activateForecastWidgets()
     entity_model.removeRows(0, entity_model.count(), QModelIndex());
     fields = {"MSVPAName"};
     queryStr = "SELECT MSVPAName FROM MSVPAlist;";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     for (auto name : dataMap[fields[0]]) {
         entity_model.append( nmfEntity{ QString::fromStdString(name) });
     }
@@ -6060,7 +6064,7 @@ void nmfMainWindow::callback_NavigatorSelectionChanged()
     int tab = 0;
 
     std::vector<std::string> species;
-    databasePtr->getAllSpecies(logger,species);
+    m_databasePtr->getAllSpecies(m_logger,species);
     bool thereAreSpecies = (species.size() > 0);
 
     updateMainWindowTitle("");
@@ -6120,8 +6124,8 @@ void nmfMainWindow::callback_NavigatorSelectionChanged()
             MSVPAFindStoreAndSetPageStates();
 
             // Initialize the output gui controls and chart with db ptr and MSVPA name
-            outputWidget->setDatabaseVars(databasePtr,
-                                          logger, entityName(), "MSVPA",
+            outputWidget->setDatabaseVars(m_databasePtr,
+                                          m_logger, entityName(), "MSVPA",
                                           forecastName(), scenarioName());
 
         } else if (thereAreSpecies && ((itemSelected == "Forecast") || (parentStr == "Forecast"))) {
@@ -6139,8 +6143,8 @@ void nmfMainWindow::callback_NavigatorSelectionChanged()
             }
 
             // Initialize the output gui controls and chart with db ptr and MSVPA name
-            outputWidget->setDatabaseVars(databasePtr,
-                                          logger, entityName(), "Forecast",
+            outputWidget->setDatabaseVars(m_databasePtr,
+                                          m_logger, entityName(), "Forecast",
                                           forecastName(), scenarioName());
         } else {
             SetupOutputTE->show();
@@ -6191,34 +6195,34 @@ nmfMainWindow::menu_reloadCSVFiles()
     if (reply == QMessageBox::No)
         return;
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::menu_reloadCSVFiles Restoring data from database into CSV files...");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::menu_reloadCSVFiles Restoring data from database into CSV files...");
 
     Setup_Tab3_ptr->createTheTemplates(nmfConstantsMSVPA::AllTables,false);
 
     this->setCursor(Qt::WaitCursor);
-    Setup_Tab3_ptr->restoreCSVFromDatabase(databasePtr);
+    Setup_Tab3_ptr->restoreCSVFromDatabase(m_databasePtr);
     SSVPA_Tab1_ptr->restoreCSVFromDatabase();
     SSVPA_Tab2_ptr->restoreCSVFromDatabase();
     SSVPA_Tab3_ptr->restoreCSVFromDatabase();
-    SSVPA_Tab4_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab1_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab2_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab3_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab4_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab5_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab6_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab7_ptr->restoreCSVFromDatabase(databasePtr);
-    MSVPA_Tab8_ptr->restoreCSVFromDatabase(databasePtr);
+    SSVPA_Tab4_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab1_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab2_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab3_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab4_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab5_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab6_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab7_ptr->restoreCSVFromDatabase(m_databasePtr);
+    MSVPA_Tab8_ptr->restoreCSVFromDatabase(m_databasePtr);
     //MSVPA_Tab9_ptr->restoreCSVFromDatabase(databasePtr);  // tbd
     //MSVPA_Tab10_ptr->restoreCSVFromDatabase(databasePtr); // tbd
-    MSVPA_Tab11_ptr->restoreCSVFromDatabase(databasePtr);
-    Forecast_Tab1_ptr->restoreCSVFromDatabase(databasePtr);
-    Forecast_Tab2_ptr->restoreCSVFromDatabase(databasePtr);
-    Forecast_Tab3_ptr->restoreCSVFromDatabase(databasePtr);
-    Forecast_Tab4_ptr->restoreCSVFromDatabase(databasePtr);
+    MSVPA_Tab11_ptr->restoreCSVFromDatabase(m_databasePtr);
+    Forecast_Tab1_ptr->restoreCSVFromDatabase(m_databasePtr);
+    Forecast_Tab2_ptr->restoreCSVFromDatabase(m_databasePtr);
+    Forecast_Tab3_ptr->restoreCSVFromDatabase(m_databasePtr);
+    Forecast_Tab4_ptr->restoreCSVFromDatabase(m_databasePtr);
     this->setCursor(Qt::ArrowCursor);
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::menu_reloadCSVFiles Restoring data from database into CSV files...complete.");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::menu_reloadCSVFiles Restoring data from database into CSV files...complete.");
 
 } // end createNewCSVFilesFromDatabase
 
@@ -6299,8 +6303,8 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     m_UI->ProgressDockWidget->show();
     m_UI->LogDockWidget->show();
 
-    logger->logMsg(nmfConstants::Section,"================================================================================");
-    logger->logMsg(nmfConstants::Bold,"Forecast Run - Begin");
+    m_logger->logMsg(nmfConstants::Section,"================================================================================");
+    m_logger->logMsg(nmfConstants::Bold,"Forecast Run - Begin");
 
     // Update Forecasts table
     cmd  = "REPLACE INTO Forecasts ";
@@ -6314,9 +6318,9 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     cmd = updateCmd(cmd,outputFields);
     // Remove last comma and space from string
     cmd = cmd.substr(0, cmd.size() - 2);
-    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+    errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
     if (errorMsg != " ") {
-        logger->logMsg(nmfConstants::Error,"Function: callback_RunForecastClicked: " + errorMsg);
+        m_logger->logMsg(nmfConstants::Error,"Function: callback_RunForecastClicked: " + errorMsg);
     }
 
 
@@ -6328,7 +6332,7 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     queryStr = "SELECT FishAsF,VarF,VarOthPred,VarOthPrey,VarRec FROM Scenarios WHERE MSVPAName='" + MSVPAName + "'" +
                " AND ForeName='" + ForecastName +"'" +
                " AND Scenario='" + ScenarioName + "'";
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
 
     if (std::stoi(dataMap["FishAsF"][0]))
         configInfo += "Fishery removals entered as Fishing Mortality Rates<br>";
@@ -6378,7 +6382,7 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     MSVPAProgressWidget->hide();
     ForecastProgressWidget->show();
 
-    argStruct.databasePtr  = databasePtr;
+    argStruct.databasePtr  = m_databasePtr;
     argStruct.MSVPAName    = MSVPAName;
     argStruct.ForecastName = ForecastName;
     argStruct.ScenarioName = ScenarioName;
@@ -6398,14 +6402,14 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     //std::unique_ptr<nmfForecast> forecast(new nmfForecast(databasePtr,logger));
 
     int MaxNum = 200;  // Just an appoximation as to how many progress updates there are for a Forecast
-    if (ForecastProgressDlg == nullptr) {
-        ForecastProgressDlg = new QProgressDialog(
+    if (m_ForecastProgressDlg == nullptr) {
+        m_ForecastProgressDlg = new QProgressDialog(
                     "Running Forecast...",
                     "Abort Forecast", 0, MaxNum, this);
     }
-    ForecastProgressDlg->show();
+    m_ForecastProgressDlg->show();
 
-    nmfForecast forecast(databasePtr,logger);
+    nmfForecast forecast(m_databasePtr,m_logger);
 
     QObject::disconnect(&forecast,0,0,0);
     QObject::connect(&forecast, SIGNAL(UpdateForecastProgressDialog(int,QString)),
@@ -6458,15 +6462,15 @@ void nmfMainWindow::callback_RunMSVPAClicked(bool checked)
     m_UI->ProgressDockWidget->show();
     m_UI->LogDockWidget->show();
 
-    logger->logMsg(nmfConstants::Section,"================================================================================");
-    logger->logMsg(nmfConstants::Bold,"MSVPA Run - Begin");
+    m_logger->logMsg(nmfConstants::Section,"================================================================================");
+    m_logger->logMsg(nmfConstants::Bold,"MSVPA Run - Begin");
 
     // Force current page to set and update widgets
     m_UI->MSVPAInputTabWidget->setCurrentIndex(m_UI->MSVPAInputTabWidget->count()-1);
 
     // Find vectors of predators and prey
     std::map<std::string,std::vector<std::string> > predPreyMap =
-            databasePtr->nmfQueryPredatorPreyFields("MSVPAspecies", MSVPAName);
+            m_databasePtr->nmfQueryPredatorPreyFields("MSVPAspecies", MSVPAName);
 
     // Update text window on Tab 12 - Output Page
     MSVPA_Tab12_ptr->outputCurrentConfiguration(
@@ -6521,10 +6525,10 @@ void nmfMainWindow::callback_RunMSVPAClicked(bool checked)
 //            &nmfMSVPA::dummyFunc);
 
 
-        argStruct.Username                 = Username;
+        argStruct.Username                 = m_Username;
         argStruct.Hostname                 = Hostname;
-        argStruct.Password                 = Password;
-        argStruct.databasePtr              = databasePtr;
+        argStruct.Password                 = m_Password;
+        argStruct.databasePtr              = m_databasePtr;
         argStruct.MSVPAName                = MSVPAName;
         argStruct.CohortAnalysisGuiData    = CohortAnalysisGuiData;
         argStruct.EffortTunedGuiData       = EffortTunedGuiData;
@@ -6548,16 +6552,16 @@ void nmfMainWindow::callback_RunMSVPAClicked(bool checked)
 
 
         int MaxNum = 14+4+4+nmfConstantsMSVPA::MaxMSVPALoops+10;  // This is a worst case guestimate...don't really know NumLoops a prioi
-        if (MSVPAProgressDlg == nullptr) {
-            MSVPAProgressDlg = new QProgressDialog(
+        if (m_MSVPAProgressDlg == nullptr) {
+            m_MSVPAProgressDlg = new QProgressDialog(
                         "Running MSVPA...",
                         "Abort MSVPA", 0, MaxNum, this);
         }
-        MSVPAProgressDlg->show();
+        m_MSVPAProgressDlg->show();
 
         // Run an MSVPA here and wait until it finishes before continuing.
         //std::unique_ptr<nmfMSVPA> msvpa(new nmfMSVPA(logger));
-        nmfMSVPA msvpa(logger);
+        nmfMSVPA msvpa(m_logger);
 
         QObject::disconnect(&msvpa,0,0,0);
         QObject::connect(&msvpa, SIGNAL(UpdateMSVPAProgressDialog(int,QString)),
@@ -6579,27 +6583,27 @@ void
 nmfMainWindow::callback_UpdateMSVPAProgressDialog(int value,
                                             QString text)
 {
-    if (MSVPAProgressDlg == nullptr) {
+    if (m_MSVPAProgressDlg == nullptr) {
         return;
     }
 
-    bool UserHitCancel = MSVPAProgressDlg->wasCanceled();
+    bool UserHitCancel = m_MSVPAProgressDlg->wasCanceled();
 
     if (UserHitCancel) {
         StopTheRun("MSVPA");
     }
 
     if (UserHitCancel || (value == -1)) {
-        MSVPAProgressDlg->close();
-        delete MSVPAProgressDlg;
-        MSVPAProgressDlg = nullptr;
+        m_MSVPAProgressDlg->close();
+        delete m_MSVPAProgressDlg;
+        m_MSVPAProgressDlg = nullptr;
     }
 
-    if (MSVPAProgressDlg != nullptr) {
+    if (m_MSVPAProgressDlg != nullptr) {
         // Update the dialog's text and percent completed
         text = "\n\n" + text + "\n";
-        MSVPAProgressDlg->setLabelText(text);
-        MSVPAProgressDlg->setValue(value);
+        m_MSVPAProgressDlg->setLabelText(text);
+        m_MSVPAProgressDlg->setValue(value);
     }
 
 }
@@ -6608,26 +6612,26 @@ void
 nmfMainWindow::callback_UpdateForecastProgressDialog(int value,
                                                QString text)
 {
-    if (ForecastProgressDlg == nullptr) {
+    if (m_ForecastProgressDlg == nullptr) {
         return;
     }
 
-    bool UserHitCancel = ForecastProgressDlg->wasCanceled();
+    bool UserHitCancel = m_ForecastProgressDlg->wasCanceled();
     if (UserHitCancel) {
         StopTheRun("Forecast");
     }
 
     if (UserHitCancel || (value == -1)) {
-        ForecastProgressDlg->close();
-        delete ForecastProgressDlg;
-        ForecastProgressDlg = nullptr;
+        m_ForecastProgressDlg->close();
+        delete m_ForecastProgressDlg;
+        m_ForecastProgressDlg = nullptr;
     }
 
-    if (ForecastProgressDlg != nullptr) {
+    if (m_ForecastProgressDlg != nullptr) {
         // Update the dialog's text and percent completed
         text = "\n\n" + text + "\n";
-        ForecastProgressDlg->setLabelText(text);
-        ForecastProgressDlg->setValue(value);
+        m_ForecastProgressDlg->setLabelText(text);
+        m_ForecastProgressDlg->setValue(value);
     }
 }
 
@@ -6644,8 +6648,8 @@ nmfMainWindow::StopTheRun(std::string RunType)
         outputFile.close();
     }
 
-    logger->logMsg(nmfConstants::Bold,RunType + " Run - End");
-    logger->logMsg(nmfConstants::Section,"================================================================================");
+    m_logger->logMsg(nmfConstants::Bold,RunType + " Run - End");
+    m_logger->logMsg(nmfConstants::Section,"================================================================================");
 }
 
 void
@@ -6712,7 +6716,7 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
              ", Species: " << SpeciesName << ", SpeciesIndex: " << SpeciesIndex <<
              std::endl;
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA: " + SpeciesName);
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA: " + SpeciesName);
 
     bool ok;
     int LastCatchYear;
@@ -6738,7 +6742,7 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
     if (SpeciesIndex == 0)
     {
         std::string Species = entityName();
-        SpeciesIndex = databasePtr->getSpeciesIndex(Species);
+        SpeciesIndex = m_databasePtr->getSpeciesIndex(Species);
         if (SpeciesIndex < 0) {
             return;
         }
@@ -6755,7 +6759,7 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
     int MaxAge,isPlusClass;
     int MinCatchAge, MaxCatchAge;
     std::tie(MaxAge, MinCatchAge, MaxCatchAge, isPlusClass) =
-            databasePtr->nmfQueryAgeFields("Species", SpeciesIndex);
+            m_databasePtr->nmfQueryAgeFields("Species", SpeciesIndex);
     //int NumCatchAges = LastCatchAge - FirstCatchAge + 1;
     int NumCatchAges = MaxAge + 1   +1; // RSK - fix this extra +1.
 
@@ -6767,9 +6771,9 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
                 MinCatchAge + (MaxCatchAge - MinCatchAge) - 1); // -1 since starts with 0th element
 
     // Load Catch matrix from table view
-    if (! CatchDataInitialized) {
+    if (! m_CatchDataInitialized) {
         callback_InitializePage("SSVPA",0,true);
-        CatchDataInitialized = true;
+        m_CatchDataInitialized = true;
     }
     model = m_UI->SSVPAInputTabWidget->findChild<QTableView *>("SSVPACatchAtAgeTV")->model();
     int nrows = model->rowCount();
@@ -6777,10 +6781,10 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
 
     fields   = {"SpeName","FirstYear","LastYear"};
     queryStr = "SELECT SpeName,FirstYear,LastYear FROM Species WHERE SpeIndex = " + std::to_string(SpeciesIndex);
-    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["SpeName"].size();
     if (NumRecords == 0) {
-        logger->logMsg(nmfConstants::Error,"Error nmfMainWindow::callback_RunSSVPA: Couldn't find SpeIndex: "+std::to_string(SpeciesIndex));
+        m_logger->logMsg(nmfConstants::Error,"Error nmfMainWindow::callback_RunSSVPA: Couldn't find SpeIndex: "+std::to_string(SpeciesIndex));
     }
     FirstCatchYear = std::stoi(dataMap["FirstYear"][0]);
     LastCatchYear  = std::stoi(dataMap["LastYear"][0]);
@@ -6808,7 +6812,7 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
     //nmfUtils::initialize(InitialSelectivity, NumCatchAges);
 
 
-    logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA Loading M_NaturalMortality...");
+    m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA Loading M_NaturalMortality...");
 
 
     // Load Natural Mortality table (M)
@@ -6965,7 +6969,7 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
 
    this->setCursor(Qt::ArrowCursor);
 
-   logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA Complete");
+   m_logger->logMsg(nmfConstants::Normal,"nmfMainWindow::callback_RunSSVPA Complete");
 
 } // end callback_RunSSVPA
 
@@ -7093,7 +7097,7 @@ nmfMainWindow::getDarkPalette()
 void nmfMainWindow::menu_preferences()
 {
 
-    PreferencesDialog* PreferencesDlg = new PreferencesDialog(this,databasePtr);
+    PreferencesDialog* PreferencesDlg = new PreferencesDialog(this,m_databasePtr);
 
     disconnect(PreferencesDlg,0,0,0);
     connect(PreferencesDlg, SIGNAL(SetStyleSheet(QString)),
@@ -7111,36 +7115,89 @@ void nmfMainWindow::menu_preferences()
 void
 nmfMainWindow::menu_showTableNames()
 {
+//    std::vector<std::string> fields;
+//    std::map<std::string, std::vector<std::string> > dataMap;
+//    std::string queryStr;
+//    std::string msg="";
+//    int NumTables=0;
+//    fields = {"table_name"};
+//    queryStr  = "SELECT table_name FROM information_schema.tables WHERE ";
+//    queryStr += "table_schema = '" + ProjectDatabase + "'";
+//    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+//    NumTables = dataMap["table_name"].size();
+//    if (NumTables <= 0) {
+//        msg = "\nNo tables found in database: " + ProjectDatabase;
+//        QMessageBox::information(this,
+//                                 tr("Database Tables"),
+//                                 tr(msg.c_str()),
+//                                 QMessageBox::Ok);
+//    } else {
+//        for (int i=0; i<NumTables; ++i) {
+//            msg += std::to_string(i+1) + ". " + dataMap["table_name"][i] + "\n";
+//        }
+//        msg = "\nTables in database: " + ProjectDatabase + "\n\n" + msg;
+//        QMessageBox::information(this,
+//                                 tr("Database Tables"),
+//                                 tr(msg.c_str()),
+//                                 QMessageBox::Ok);
+//    }
+    QLabel* DatabaseNameLB = m_TableNamesWidget->findChild<QLabel*>("DatabaseNameLB");
+    DatabaseNameLB->setText(QString::fromStdString(ProjectDatabase));
+    m_TableNamesDlg->show();
+} // end menu_showTableNames
+
+void
+nmfMainWindow::initializeTableNamesDlg()
+{
+
+    QUiLoader loader;
+    QFile file(":/forms/Main/TableNamesDlg.ui");
+    file.open(QFile::ReadOnly);
+    m_TableNamesWidget = loader.load(&file,this);
+    file.close();
+
+    QPushButton* TableNamesOkPB = m_TableNamesWidget->findChild<QPushButton*>("TableNamesOkPB");
+    QListWidget* TableNamesLW   = m_TableNamesWidget->findChild<QListWidget*>("TableNamesLW");
+    QLabel*      DatabaseNameLB = m_TableNamesWidget->findChild<QLabel*>("DatabaseNameLB");
+
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
     std::string queryStr;
-    std::string msg="";
     int NumTables=0;
 
-    fields = {"table_name"};
+    fields    = {"table_name"};
     queryStr  = "SELECT table_name FROM information_schema.tables WHERE ";
     queryStr += "table_schema = '" + ProjectDatabase + "'";
-    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap   = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     NumTables = dataMap["table_name"].size();
+
     if (NumTables <= 0) {
-        msg = "\nNo tables found in database: " + ProjectDatabase;
-        QMessageBox::information(this,
-                                 tr("Database Tables"),
-                                 tr(msg.c_str()),
-                                 QMessageBox::Ok);
+        TableNamesLW->addItem(QString::fromStdString("No tables found in database: " + ProjectDatabase));
     } else {
+        DatabaseNameLB->setText(QString::fromStdString(ProjectDatabase));
         for (int i=0; i<NumTables; ++i) {
-            msg += std::to_string(i+1) + ". " + dataMap["table_name"][i] + "\n";
+            TableNamesLW->addItem(QString::fromStdString(std::to_string(i+1) + ". " + dataMap["table_name"][i]));
         }
-        msg = "\nTables in database: " + ProjectDatabase + "\n\n" + msg;
-        QMessageBox::information(this,
-                                 tr("Database Tables"),
-                                 tr(msg.c_str()),
-                                 QMessageBox::Ok);
     }
+std::cout << 4 << std::endl;
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(m_TableNamesWidget);
+std::cout << 4.5 << std::endl;
+    m_TableNamesDlg->adjustSize();
+    m_TableNamesDlg->setMinimumWidth(400);
+    m_TableNamesDlg->setMinimumHeight(300);
+    m_TableNamesDlg->setLayout(layout);
+    m_TableNamesDlg->setWindowTitle("Table Names");
+std::cout << 5 << std::endl;
+    connect(TableNamesOkPB, SIGNAL(clicked()),
+            this,           SLOT(callback_TableNamesOkPB()));
+}
 
-} // end menu_showTableNames
-
+void
+nmfMainWindow::callback_TableNamesOkPB()
+{
+    m_TableNamesDlg->hide();
+}
 
 void
 nmfMainWindow::menu_clearSSVPANonSpeciesTables()
@@ -7331,7 +7388,7 @@ nmfMainWindow::clearDatabaseTables(std::string type,
 
             // Clear database table
             qcmd = "TRUNCATE TABLE " + QString::fromStdString(tableToClear);
-            errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+            errorMsg = m_databasePtr->nmfUpdateDatabase(qcmd.toStdString());
             if (errorMsg != " ") {
                 nmfUtils::printError("menu_clear"+type+"Tables: Clearing table error: ",
                                      errorMsg+": "+tableToClear);
@@ -7341,7 +7398,7 @@ nmfMainWindow::clearDatabaseTables(std::string type,
 
             // Clear CSV file
             errorMsg.clear();
-            clearedOK = nmfUtilsQt::clearCSVFile(tableToClear,ProjectDir,errorMsg);
+            clearedOK = nmfUtilsQt::clearCSVFile(tableToClear,m_ProjectDir,errorMsg);
             if (clearedOK) {
                 ++NumCSVFilesCleared;
             } else {
@@ -7494,7 +7551,7 @@ void nmfMainWindow::callback_schemeLight() {
 void nmfMainWindow::menu_about()
 {
     QString name = "Multi-Species Virtual Population Analysis 2nd Version";
-    QString version = QString("MSVPA_X2 v0.9.0 (beta)"); // + "&alpha;";
+    QString version = QString("MSVPA_X2 v0.9.1 (beta)"); // + "&alpha;";
     QString specialAcknowledgement = "<br><br>This code is a C++ implementation of the Visual Basic code written by Dr. Lance Garrison.";
     QString msg = "";
     QString cppVersion = "C++??";
@@ -7524,7 +7581,7 @@ void nmfMainWindow::menu_about()
     // MySQL version and link
     fields   = {"version()"};
     queryStr = "SELECT version()";
-    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["version()"].size() > 0) {
         mysqlVersion = QString::fromStdString(dataMap["version()"][0]);
     }
@@ -7585,7 +7642,7 @@ nmfMainWindow::menu_newMSVPA()
     // Get list of all MSVPA names and see if configuration already exists.
     fields   = {"MSVPAName"};
     queryStr = "SELECT MSVPAName FROM MSVPAlist";
-    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["MSVPAName"].size();
     for (int i=0; i< NumRecords; ++i) {
         if (NewMSVPAName == QString::fromStdString(dataMap["MSVPAName"][i])) {
@@ -7609,10 +7666,10 @@ nmfMainWindow::menu_newMSVPA()
         cmd += "(MSVPAName,NSpe,NPreyOnly,NOther,NOtherPred,FirstYear,LastYear,NSeasons,AnnTemps,SeasSpaceO,GrowthModel,Complete) values ";
         cmd += "(\"" + NewMSVPAName.toStdString() + "\", " +
                 "0,0,0,0,0,0,0,0,0,0,0)";
-        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+        errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
         if (errorMsg != " ") {
             std::cout << cmd << std::endl;
-            logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAlist: " + errorMsg);
+            m_logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAlist: " + errorMsg);
         }
 
         // Next add the species from Species,OtherPredSpecies to MSVPAspecies
@@ -7621,7 +7678,7 @@ nmfMainWindow::menu_newMSVPA()
         for (std::string table : {"Species","OtherPredSpecies"})
         {
             queryStr = "SELECT SpeIndex,SpeName FROM " + table ;
-            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+            dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
             for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
                 SpeIndex = std::stoi(dataMap["SpeIndex"][i]);
                 SpeName  = dataMap["SpeName"][i];
@@ -7633,17 +7690,17 @@ nmfMainWindow::menu_newMSVPA()
                         std::to_string(SpeIndex) + ") ";
                 cmd += "ON DUPLICATE KEY UPDATE ";
                 cmd += "SpeIndex=values(SpeIndex); ";
-                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+                errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
                 if (errorMsg != " ") {
                     std::cout << cmd << std::endl;
-                    logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAspecies: "+errorMsg);
+                    m_logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAspecies: "+errorMsg);
                 }
             }
 
         } // end for
 
 
-        MSVPA_Tab1_ptr->loadWidgets(databasePtr,
+        MSVPA_Tab1_ptr->loadWidgets(m_databasePtr,
                                     NewMSVPAName.toStdString());
 
 
@@ -7687,7 +7744,7 @@ void nmfMainWindow::menu_newForecast()
     ScenarioListLV->selectionModel()->clearSelection();
     ForecastListLV->clearFocus();
     ScenarioListLV->clearFocus();
-    Forecast_Tab1_ptr->setupNewForecast(databasePtr,
+    Forecast_Tab1_ptr->setupNewForecast(m_databasePtr,
                                         entityName());
 
 std::cout << "menu_newForecast" << std::endl;
@@ -7752,9 +7809,9 @@ void nmfMainWindow::menu_deleteSpecies()
                                           tr(msg.c_str()),QMessageBox::No|QMessageBox::Yes);
             if (reply == QMessageBox::Yes) {
                 cmd = "DELETE FROM Species WHERE SpeName='" + currentSpecies + "'";
-                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+                errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
                 if (errorMsg != " ") {
-                    logger->logMsg(nmfConstants::Error,"menu_deleteSpecies: DELETE FROM Species: " + errorMsg);
+                    m_logger->logMsg(nmfConstants::Error,"menu_deleteSpecies: DELETE FROM Species: " + errorMsg);
                 }
             } else {
                 return;
@@ -7822,10 +7879,10 @@ void nmfMainWindow::deleteTheMSVPA()
         for (std::string table : nmfConstantsMSVPA::MSVPATables) {
             cmd  = "DELETE FROM " + table;
             cmd += " WHERE MSVPAName = '" + MSVPAName + "' ";
-            errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+            errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
             if (errorMsg != " ") {
                 msg = "deleteTheMSVPA: DELETE FROM " + table + ": ";
-                logger->logMsg(nmfConstants::Error,msg+errorMsg);
+                m_logger->logMsg(nmfConstants::Error,msg+errorMsg);
             }
         }
     } // end if
@@ -7917,9 +7974,9 @@ void nmfMainWindow::clearForecastTables(std::string MSVPAName, std::string Forec
             cmd  = "DELETE FROM " + table;
             cmd += " WHERE MSVPAName = '" + MSVPAName + "' " +
                     "AND ForeName = '" + Forecast + "' ";
-            errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+            errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
             if (errorMsg != " ") {
-                logger->logMsg(nmfConstants::Error,"clearForecastTables: DELETE FROM Scenarios: "+errorMsg);
+                m_logger->logMsg(nmfConstants::Error,"clearForecastTables: DELETE FROM Scenarios: "+errorMsg);
             }
         }
     } // end if
@@ -7952,9 +8009,9 @@ void nmfMainWindow::deleteTheForecast(std::string Forecast,
            "AND ForeName = '" + Forecast + "' " +
            "AND Scenario = '" + Scenario + "'";
 //std::cout << "cmd1: " << cmd << std::endl;
-    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+    errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
     if (errorMsg != " ") {
-        logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Scenarios: "+errorMsg);
+        m_logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Scenarios: "+errorMsg);
     }
 
     // And if there was only 1 scenario, delete the forecast
@@ -7963,9 +8020,9 @@ void nmfMainWindow::deleteTheForecast(std::string Forecast,
         cmd += "WHERE MSVPAName = '" + MSVPAName + "' " +
                 "AND ForeName = '" + Forecast + "' ";
 //std::cout << "cmd2: " << cmd << std::endl;
-        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+        errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
         if (errorMsg != " ") {
-            logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Forecasts..."+errorMsg);
+            m_logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Forecasts..."+errorMsg);
         }
         clearForecastTables(MSVPAName,Forecast);
     }
@@ -8189,22 +8246,22 @@ void nmfMainWindow::setNewDatabaseName(std::string newDatabaseName)
     try {
 
         std::vector<std::string> selectedYears = {};
-        databasePtr->nmfSetDatabase(newDatabaseName);
+        m_databasePtr->nmfSetDatabase(newDatabaseName);
         updateMainWindowTitle("");
         callback_NavigatorSelectionChanged();
         // Update any chart GUIs that require access to database tables
         loadMSVPAChartWidgets();
 
-        logger->logMsg(nmfConstants::Normal,"Database: "+newDatabaseName);
+        m_logger->logMsg(nmfConstants::Normal,"Database: "+newDatabaseName);
 
         // Start out with Diet Composition.
         if (nullptr != outputChart) {
             delete outputChart;
             outputChart = nullptr;
         }
-        outputChart = new nmfOutputChartStackedBar(logger);
+        outputChart = new nmfOutputChartStackedBar(m_logger);
         outputChart->redrawChart("",
-                    databasePtr, theModelName,
+                    m_databasePtr, theModelName,
                     chart, AllLabels, AllComboBoxes, AllButtons, AllCheckBoxes,
                     entityName(),  forecastName(), scenarioName(),
                                  forecastFirstYear(), forecastNYears(),
@@ -8315,7 +8372,7 @@ void nmfMainWindow::callback_updateNavigatorSelection(int tabIndex)
             AllSpecies.push_back(EntityListLV->model()->data(mindex).toString());
         } // end for
         SSVPA_Tab1_ptr->loadAllSpeciesFromTableOrFile(
-                    databasePtr,
+                    m_databasePtr,
                     SpeciesIndex, SpeciesName,
                     AllSpecies,  "FromTable");
         ResetSpeciesList(false);
@@ -8468,13 +8525,13 @@ QString nmfMainWindow::getOutputFilename(QString type, QString filenameEntered)
     QMessageBox::StandardButton reply;
 
     // Make images sub dir in the project dir if it's not already there.
-    path = QDir(QString::fromStdString(ProjectDir)).filePath(type);
+    path = QDir(QString::fromStdString(m_ProjectDir)).filePath(type);
     if (! QDir(path).exists()) {
         ok = QDir().mkdir(path);
         if (! ok) {
-            logger->logMsg(nmfConstants::Error,"getOutputFilename: Couldn't create path: "+path.toStdString());
+            m_logger->logMsg(nmfConstants::Error,"getOutputFilename: Couldn't create path: "+path.toStdString());
         } else {
-            logger->logMsg(nmfConstants::Normal,"getOutputFilename: Created directory: "+ path.toStdString());
+            m_logger->logMsg(nmfConstants::Normal,"getOutputFilename: Created directory: "+ path.toStdString());
         }
     }
 
@@ -8544,7 +8601,7 @@ void nmfMainWindow::menu_saveOutputChart()
         pm = chartView->grab();
     }
 
-    path = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::OutputImagesDir));
+    path = QDir(QString::fromStdString(m_ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::OutputImagesDir));
     // If path doesn't exist make it
     QDir pathDir(path);
     if (! pathDir.exists()) {
@@ -8559,7 +8616,7 @@ void nmfMainWindow::menu_saveOutputChart()
                              tr(msg.toLatin1()),
                              QMessageBox::Ok);
 
-    logger->logMsg(nmfConstants::Normal,"menu_saveOutputChart: Image saved: "+ outputFile.toStdString());
+    m_logger->logMsg(nmfConstants::Normal,"menu_saveOutputChart: Image saved: "+ outputFile.toStdString());
 
 } // end menu_saveOutputChart
 
@@ -8773,14 +8830,14 @@ nmfMainWindow::menu_importDatabase()
 
     // Do the import
     this->setCursor(Qt::WaitCursor);
-    QString dbName = databasePtr->importDatabase(this,
-                                                 logger,
-                                                 ProjectDir,
-                                                 Username,
-                                                 Password);
+    QString dbName = m_databasePtr->importDatabase(this,
+                                                 m_logger,
+                                                 m_ProjectDir,
+                                                 m_Username,
+                                                 m_Password);
     if (!dbName.isEmpty()) {
-        Setup_Tab2_ptr->loadWidgets(databasePtr);
-        Setup_Tab3_ptr->loadWidgets(databasePtr);
+        Setup_Tab2_ptr->loadWidgets(m_databasePtr);
+        Setup_Tab3_ptr->loadWidgets(m_databasePtr);
 
         msg  = "\n[] After importing a database, you may want to regenerate new ";
         msg += "CSV files for the database's project.  To regenerate new CSV files:\n\n";
@@ -8807,12 +8864,31 @@ void
 nmfMainWindow::menu_exportDatabase()
 {
     this->setCursor(Qt::WaitCursor);
-    databasePtr->exportDatabase(this,ProjectDir,
-                                             Username,Password,
+    m_databasePtr->exportDatabase(this,m_ProjectDir,
+                                             m_Username,m_Password,
                                              ProjectDatabase);
     this->setCursor(Qt::ArrowCursor);
 }
 
+void
+nmfMainWindow::menu_exportAllDatabases()
+{
+    QList<QString> authDBs = {};
+    m_databasePtr->getListOfAuthenticatedDatabaseNames(authDBs);
+
+    QList<QString>::iterator authDBsIterator;
+    std::string projectDatabase;
+    for (authDBsIterator = authDBs.begin(); authDBsIterator != authDBs.end(); authDBsIterator++)
+    {
+        projectDatabase = authDBsIterator->toStdString();
+
+        m_databasePtr->exportDatabase(this,
+                                      m_ProjectDir,
+                                      m_Username,
+                                      m_Password,
+                                      projectDatabase);
+    }
+}
 
 void
 nmfMainWindow::ReadSettings(QString Name)
@@ -8838,7 +8914,7 @@ void nmfMainWindow::ReadSettings() {
 
     settings->beginGroup("SetupTab");
     ProjectName     = settings->value("ProjectName","").toString().toStdString();
-    ProjectDir      = settings->value("ProjectDir","").toString().toStdString();
+    m_ProjectDir      = settings->value("ProjectDir","").toString().toStdString();
     ProjectDatabase = settings->value("ProjectDatabase","").toString().toStdString();
     settings->endGroup();
 
@@ -8903,7 +8979,7 @@ std::string nmfMainWindow::getDatabaseName() {
     std::vector<std::string> fields = { "database()" };
     std::string queryStr = "SELECT database()";
     std::map<std::string, std::vector<std::string> > dataMap;
-    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
 
     if (dataMap["database()"].size() > 0)
         return dataMap["database()"][0];
@@ -9102,14 +9178,14 @@ nmfMainWindow::closeEvent(QCloseEvent *event)
 
     if (SaveDlg->exec()) {
         if (QuitPB->underMouse()) {
-            logger->logMsg(nmfConstants::Bold,"MSVPA_X2 End");
+            m_logger->logMsg(nmfConstants::Bold,"MSVPA_X2 End");
         }
         if (CancelPB->underMouse()) {
             event->ignore();
         }
         if (SaveQuitPB->underMouse()) {
             SaveTables();
-            logger->logMsg(nmfConstants::Bold,"MSVPA_X2 End");
+            m_logger->logMsg(nmfConstants::Bold,"MSVPA_X2 End");
         }
         if (SaveDontQuitPB->underMouse()) {
             SaveTables();

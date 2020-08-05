@@ -127,19 +127,13 @@ class nmfMainWindow: public QMainWindow
     Q_OBJECT
 
 private:
-    Ui::nmfMainWindow *m_UI;
-    nmfLogger*     logger;
-    nmfDatabase*   databasePtr;
-    QProgressDialog* MSVPAProgressDlg;
-    QProgressDialog* ForecastProgressDlg;
-
 
 //    nmfSSVPA     ssvpaApi;
 //    nmfMSVPA    *msvpaApi;
 //    nmfForecast *forecastApi;
 
     std::map<std::string, void(*)(
-            nmfDatabase* databasePtr,
+            nmfDatabase* m_databasePtr,
             QChart* chart,
             std::string MSVPAName,
             std::string ForecastName,
@@ -151,20 +145,29 @@ private:
             std::string selectedSpeciesAgeSizeClass,
             QTableWidget *chartDataTbW
             )> FunctionMap;
-    bool CatchDataInitialized;
-    bool m_isStartUpOK;
+
+    bool               m_CatchDataInitialized;
+    bool               m_isStartUpOK;
+    Ui::nmfMainWindow* m_UI;
+    nmfLogger*         m_logger;
+    nmfDatabase*       m_databasePtr;
+    QProgressDialog*   m_MSVPAProgressDlg;
+    QProgressDialog*   m_ForecastProgressDlg;
+    QDialog*           m_TableNamesDlg;
+    QWidget*           m_TableNamesWidget;
+
 
     int timerVal;
     int MSVPALoopsBeforeChecking;
     double YMaxFullyRecruitedAge;
     double YMaxAgeSizeClass;
     double YMaxSeason;
-    std::string ProjectDir;
+    std::string m_ProjectDir;
     std::string ProjectDatabase;
     std::string ProjectName;
     std::string Hostname;
-    std::string Username;
-    std::string Password;
+    std::string m_Username;
+    std::string m_Password;
     std::string Session;
     std::string lastPauseCmd;
     QDialog *prefDlg;
@@ -172,9 +175,6 @@ private:
     QChartView *chartView;
     QHBoxLayout *hMainLayout;
     QHBoxLayout *hProgressLayout;
-    //QHBoxLayout *hMainLayout2;
-//    QProgressDialog *progressDlgMSVPA;
-//    QProgressDialog *progressDlgForecast;
     QTreeWidget *NavigatorTree;
     QWidget *NavigatorTreeWidget;
 
@@ -191,15 +191,15 @@ private:
     nmfData* data;
 
     nmfMortalityModel mortality_model;
-    nmfVonBertModel vonBert_model;
-    nmfEntityModel entity_model;
-    nmfEntityModel forecast_model;
-    nmfEntityModel scenario_model;
-    nmfMaturityModel maturity_model;
+    nmfVonBertModel   vonBert_model;
+    nmfEntityModel    entity_model;
+    nmfEntityModel    forecast_model;
+    nmfEntityModel    scenario_model;
+    nmfMaturityModel  maturity_model;
     nmfInitialSelectivityModel selectivity_model;
     std::vector<nmfOutputChart3D *> outputCharts3D;
     nmfOutputChart3DBarModifier *m_modifier;
-    QLabel    *selectDataTypeLBL;
+    QLabel* selectDataTypeLBL;
     QLabel* selectSpeciesLBL;
     QLabel* selectVariableLBL;
     QLabel* selectByVariablesLBL;
@@ -279,12 +279,9 @@ private:
     QGroupBox  *Configure_XSA_GB;
     QLineEdit  *Configure_XSA_LE1;
     QComboBox  *SSVPAExtendedIndicesCMB;
-
-
     QListView *EntityListLV;
     QListView *ForecastListLV;
     QListView *ScenarioListLV;
-
     QWidget *entityDockWidget;
     QVBoxLayout *vLayout1;
     QLabel *ForecastListLBL;
@@ -526,7 +523,7 @@ public:
             boost::numeric::ublas::matrix<double> &ChartData);
 
     static void MSVPA_DietComposition(
-            nmfDatabase* databasePtr,
+            nmfDatabase* m_databasePtr,
             QChart* chart,
             std::string MSVPAName,
             std::string unused1,
@@ -539,7 +536,7 @@ public:
             QTableWidget *chartDataTbW);
 
     static void Forecast_DietComposition(
-            nmfDatabase* databasePtr,
+            nmfDatabase* m_databasePtr,
             QChart* chart,
             std::string MSVPAName,
             std::string ForecastName,
@@ -578,6 +575,7 @@ public:
                            int numScenarios);
     void deleteTheForecast(std::string forecast);
     void deleteTheMSVPA();
+    void initializeTableNamesDlg();
     void loadForecastListWidget();
     void loadScenarioListWidget(std::string scenarioToSelect);
     void enableNavigatorTopLevelItems(bool enable);
@@ -616,10 +614,10 @@ signals:
     void LoadDatabase(QString database);
 
 public slots:
-    //void callback_ShowPauseDlg();
-//    void callback_connectToDatabase();
+//  void callback_ShowPauseDlg();
+//  void callback_connectToDatabase();
     void callback_createTables();
-//    void callback_resetGUI();
+//  void callback_resetGUI();
     void callback_chartThemeChanged(int newTheme);
     void callback_databaseSelected(QListWidgetItem *item);
     void callback_databaseSelectedAndClose(QListWidgetItem *item);
@@ -630,15 +628,16 @@ public slots:
     void callback_forecastDoubleClicked(const QModelIndex &curr);
     void callback_MSVPASingleClicked(const QModelIndex &curr);
     void callback_MSVPASingleClickedGUI(const QModelIndex &curr);
-    //void callback_MSVPADoubleClicked(const QModelIndex &index);
+//  void callback_MSVPADoubleClicked(const QModelIndex &index);
     void callback_msvpaForecastSingleClicked(const QModelIndex &curr);
     void callback_NavigatorSelectionChanged();
     void callback_okDatabase();
+    void callback_ProjectSet();
     void callback_RunForecastClicked(bool checked);
     void callback_RunMSVPAClicked(bool checked);
-    //void callback_RunSSVPAPBClicked(bool checked);
+//  void callback_RunSSVPAPBClicked(bool checked);
     void callback_scenarioSingleClicked(const QModelIndex &curr);
-//    void callback_schemeDark();
+//  void callback_schemeDark();
     void callback_schemeLight();
     void callback_selectByVariablesChanged(QString byVariables);
     void callback_selectDataTypeChanged(QString dataType);
@@ -658,16 +657,16 @@ public slots:
     void callback_selectYearsChanged();
     void callback_SSVPAChartTypeChanged(QString chartType);
     void callback_SSVPASingleClicked(const QModelIndex &curr);
+    void callback_SetStyleSheet(QString style);
+    void callback_TableNamesOkPB();
     void callback_updateNavigatorSelection(int tabIndex);
     void callback_updateNavigatorSelection2(std::string type,int tabIndex);
-    void callback_SetStyleSheet(QString style);
-    void callback_ProjectSet();
 
     void menu_about();
     void menu_new();
     void menu_clear();
     void menu_clearAll();
-//    void menu_clearSelection(QModelIndexList &indexes);
+//  void menu_clearSelection(QModelIndexList &indexes);
     void menu_copy();
     void menu_paste();
     void menu_pasteAll();
@@ -675,15 +674,16 @@ public slots:
     void menu_deselectAll();
     void menu_importDatabase();
     void menu_exportDatabase();
+    void menu_exportAllDatabases();
     void menu_reloadCSVFiles();
-    //void menu_newMSVPASpecies();
+//  void menu_newMSVPASpecies();
     void menu_newForecast();
     void menu_deleteSpecies();
     void menu_deleteMSVPA();
     void menu_deleteForecast();
     void menu_delete();
     void menu_openProject();
-//    void menu_connectToDatabase();
+//  void menu_connectToDatabase();
     void menu_createTables();
     void menu_preferences();
     void menu_saveToDatabase();
@@ -697,6 +697,7 @@ public slots:
     void menu_clearAllNonSpeciesTables();
     void menu_clearAllTables();
     void menu_newMSVPA();
+
     void readMSVPAProgressChartDataFile();
     void readForecastProgressChartDataFile();
     void readMSVPAProgressSetupDataFile(std::string progressDataFile);
@@ -705,7 +706,6 @@ public slots:
     void ReadSettings(QString name);
     void ReadSettings();
     void saveSettings();
-
     void update();
     void updateModel();
     void updateModel(int value);
@@ -728,7 +728,7 @@ public slots:
                                        std::string csvFile);
     void callback_LoadDatabase(QString database);
     void callback_ReloadForecast(std::string tab);
-    //void callback_deactivateRunButtons();
+//  void callback_deactivateRunButtons();
     void callback_closePrefDlg();
     void callback_MSVPALoadWidgets(int TabNum);
     void callback_WaitCursor();
@@ -738,7 +738,7 @@ public slots:
     void callback_SSVPAInputTabChanged(int tab);
     void ResetMSVPAConfigList(bool withCallback);
     void callback_ReselectSpecies(std::string Species, bool withCallback);
-//    void callback_EnableRunSSVPAPB(bool toggle);
+//  void callback_EnableRunSSVPAPB(bool toggle);
     void callback_horzGridLine2dCheckboxChanged(int state);
     void callback_vertGridLine2dCheckboxChanged(int state);
     void callback_stopMSVPAProgressSetupTimer();
@@ -754,8 +754,6 @@ public slots:
     void callback_RunMSVPA();
     void callback_RunForecast();
     void callback_NavigatorItemExpanded(QTreeWidgetItem *item);
-
-
     void callback_UpdateMSVPAProgressDialog(int value, QString msg);
     void callback_UpdateMSVPAProgressWidget();
     void callback_UpdateForecastProgressDialog(int value, QString msg);

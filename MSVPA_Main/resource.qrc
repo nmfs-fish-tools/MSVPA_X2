@@ -31,5 +31,6 @@
         <file>forms/Setup/Setup_Tab01.ui</file>
         <file>forms/Main/Main_SaveWidget.ui</file>
         <file>forms/Main/Main_NavigatorTreeWidget.ui</file>
+        <file>forms/Main/TableNamesDlg.ui</file>
     </qresource>
 </RCC>

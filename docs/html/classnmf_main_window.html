@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -97,15 +98,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Inheritance diagram for nmfMainWindow:</div>
 <div class="dyncontent">
 <div class="center"><img src="classnmf_main_window__inherit__graph.png" border="0" usemap="#nmf_main_window_inherit__map" alt="Inheritance graph"/></div>
-<map name="nmf_main_window_inherit__map" id="nmf_main_window_inherit__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for nmfMainWindow:</div>
 <div class="dyncontent">
 <div class="center"><img src="classnmf_main_window__coll__graph.png" border="0" usemap="#nmf_main_window_coll__map" alt="Collaboration graph"/></div>
-<map name="nmf_main_window_coll__map" id="nmf_main_window_coll__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
@@ -152,6 +149,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_NavigatorSel
 <tr class="memitem:a1b10881d1e126e057323d0d75e9edbbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b10881d1e126e057323d0d75e9edbbc"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_okDatabase</b> ()</td></tr>
 <tr class="separator:a1b10881d1e126e057323d0d75e9edbbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ffd3a5fa7317ed3e39fb66b26a21bdf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ffd3a5fa7317ed3e39fb66b26a21bdf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_ProjectSet</b> ()</td></tr>
+<tr class="separator:a9ffd3a5fa7317ed3e39fb66b26a21bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee0e4c41c8b9ee019641abb1459d6d2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee0e4c41c8b9ee019641abb1459d6d2c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_RunForecastClicked</b> (bool checked)</td></tr>
 <tr class="separator:aee0e4c41c8b9ee019641abb1459d6d2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,18 +218,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_SSVPAChartTy
 <tr class="memitem:a41d25670597185afd95f0e8f142be973"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41d25670597185afd95f0e8f142be973"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_SSVPASingleClicked</b> (const QModelIndex &amp;curr)</td></tr>
 <tr class="separator:a41d25670597185afd95f0e8f142be973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1340f64784bb02831e77b29c77e31d81"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1340f64784bb02831e77b29c77e31d81"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_SetStyleSheet</b> (QString style)</td></tr>
+<tr class="separator:a1340f64784bb02831e77b29c77e31d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba0ef02945b35e9c445ba43151d2fb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acba0ef02945b35e9c445ba43151d2fb9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_TableNamesOkPB</b> ()</td></tr>
+<tr class="separator:acba0ef02945b35e9c445ba43151d2fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa46c93a4f51a993b65ea6118b78e6be2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa46c93a4f51a993b65ea6118b78e6be2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_updateNavigatorSelection</b> (int tabIndex)</td></tr>
 <tr class="separator:aa46c93a4f51a993b65ea6118b78e6be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f3a532fe5bac5841927657bc8b8519"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0f3a532fe5bac5841927657bc8b8519"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_updateNavigatorSelection2</b> (std::string type, int tabIndex)</td></tr>
 <tr class="separator:ac0f3a532fe5bac5841927657bc8b8519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1340f64784bb02831e77b29c77e31d81"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1340f64784bb02831e77b29c77e31d81"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_SetStyleSheet</b> (QString style)</td></tr>
-<tr class="separator:a1340f64784bb02831e77b29c77e31d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ffd3a5fa7317ed3e39fb66b26a21bdf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ffd3a5fa7317ed3e39fb66b26a21bdf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>callback_ProjectSet</b> ()</td></tr>
-<tr class="separator:a9ffd3a5fa7317ed3e39fb66b26a21bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3060c0d740270bfac32d8f326602e009"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3060c0d740270bfac32d8f326602e009"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>menu_about</b> ()</td></tr>
 <tr class="separator:a3060c0d740270bfac32d8f326602e009"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,6 +263,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>menu_importDatabase</
 <tr class="memitem:a029a6abc2292440d65c7a61900a6e6a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a029a6abc2292440d65c7a61900a6e6a8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>menu_exportDatabase</b> ()</td></tr>
 <tr class="separator:a029a6abc2292440d65c7a61900a6e6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f64e7a3f46e7e0ecfb6beb3d790cbae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f64e7a3f46e7e0ecfb6beb3d790cbae"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>menu_exportAllDatabases</b> ()</td></tr>
+<tr class="separator:a4f64e7a3f46e7e0ecfb6beb3d790cbae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bbc2d0f7362aba7d1c698612b908d08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0bbc2d0f7362aba7d1c698612b908d08"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>menu_reloadCSVFiles</b> ()</td></tr>
 <tr class="separator:a0bbc2d0f7362aba7d1c698612b908d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -488,6 +491,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aefe5bb508825258a6007abfc6ed0b777"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefe5bb508825258a6007abfc6ed0b777"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>nmfMainWindow</b> (QWidget *parent=0)</td></tr>
 <tr class="separator:aefe5bb508825258a6007abfc6ed0b777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19bc4c57733ca92f5ce0166ef2ec4eda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmf_main_window.html#a19bc4c57733ca92f5ce0166ef2ec4eda">isStartUpOK</a> ()</td></tr>
+<tr class="memdesc:a19bc4c57733ca92f5ce0166ef2ec4eda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies main routine if MainWindow has been started correctly with MySQL active.  <a href="#a19bc4c57733ca92f5ce0166ef2ec4eda">More...</a><br /></td></tr>
+<tr class="separator:a19bc4c57733ca92f5ce0166ef2ec4eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89b2b9fcc741aaae7bd25a1dee65e4ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89b2b9fcc741aaae7bd25a1dee65e4ba"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>nmfMainWindowComplete</b> ()</td></tr>
 <tr class="separator:a89b2b9fcc741aaae7bd25a1dee65e4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -740,6 +746,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteTheForecast</b>
 <tr class="memitem:ab0254e2b9bf434f3f678fc59f58afb2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0254e2b9bf434f3f678fc59f58afb2e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteTheMSVPA</b> ()</td></tr>
 <tr class="separator:ab0254e2b9bf434f3f678fc59f58afb2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85b6fe8c0e61f18bc8dd7942f1189e49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85b6fe8c0e61f18bc8dd7942f1189e49"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeTableNamesDlg</b> ()</td></tr>
+<tr class="separator:a85b6fe8c0e61f18bc8dd7942f1189e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a519aab2133c330c1b71dd4f6f057b1b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a519aab2133c330c1b71dd4f6f057b1b2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>loadForecastListWidget</b> ()</td></tr>
 <tr class="separator:a519aab2133c330c1b71dd4f6f057b1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -755,15 +764,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>clearForecastTables</
 <tr class="memitem:aa12ebd38a5212fb2ead6f0bf85124147"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa12ebd38a5212fb2ead6f0bf85124147"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reloadForecastWidgets</b> (std::string currForecast)</td></tr>
 <tr class="separator:aa12ebd38a5212fb2ead6f0bf85124147"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ed82696c39507b04cfe4be5627a2373"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ed82696c39507b04cfe4be5627a2373"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>checkForAndDeleteLogFiles</b> ()</td></tr>
-<tr class="separator:a7ed82696c39507b04cfe4be5627a2373"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb3a769a4ef5d90b027bff72f70802ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb3a769a4ef5d90b027bff72f70802ed"></a>
 QTableView *&#160;</td><td class="memItemRight" valign="bottom"><b>findTableInFocus</b> ()</td></tr>
 <tr class="separator:afb3a769a4ef5d90b027bff72f70802ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3d987fe846d9874e4de26d54ef9df98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3d987fe846d9874e4de26d54ef9df98"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>checkForAndCreateDirectories</b> ()</td></tr>
-<tr class="separator:af3d987fe846d9874e4de26d54ef9df98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc1cd434be97a2188aa0333ee58ebc1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc1cd434be97a2188aa0333ee58ebc1b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clearNavigationTreeParent</b> (int topLevelItem, int tabIndex)</td></tr>
 <tr class="separator:abc1cd434be97a2188aa0333ee58ebc1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -845,12 +848,12 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>setTitles</b> 
 <tr class="memitem:ad95f34e4189c6507b31befae2966848e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad95f34e4189c6507b31befae2966848e"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>loadChartWithData</b> (QChart *chart, QStackedBarSeries *series, QStringList &amp;PreyList, boost::numeric::ublas::matrix&lt; double &gt; &amp;ChartData)</td></tr>
 <tr class="separator:ad95f34e4189c6507b31befae2966848e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1feb37e6e56c035199cbb6c4c7d1ca0b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1feb37e6e56c035199cbb6c4c7d1ca0b"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>MSVPA_DietComposition</b> (nmfDatabase *databasePtr, QChart *chart, std::string MSVPAName, std::string unused1, std::string unused2, int unusedInt1, int unusedInt2, std::string selectedSpecies, int unusedInt3, std::string selectedSpeciesAgeSizeClass, QTableWidget *chartDataTbW)</td></tr>
-<tr class="separator:a1feb37e6e56c035199cbb6c4c7d1ca0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b94d8152b26705e8ec935fe8a545ebe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b94d8152b26705e8ec935fe8a545ebe"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>Forecast_DietComposition</b> (nmfDatabase *databasePtr, QChart *chart, std::string MSVPAName, std::string ForecastName, std::string ScenarioName, int Forecast_FirstYear, int Forecast_NYears, std::string selectedSpecies, int PredNum, std::string selectedSpeciesAgeSizeClass, QTableWidget *chartDataTbW)</td></tr>
-<tr class="separator:a8b94d8152b26705e8ec935fe8a545ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0b4b6f53628989ab047c2418e4f4500"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0b4b6f53628989ab047c2418e4f4500"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>MSVPA_DietComposition</b> (nmfDatabase *m_databasePtr, QChart *chart, std::string MSVPAName, std::string unused1, std::string unused2, int unusedInt1, int unusedInt2, std::string selectedSpecies, int unusedInt3, std::string selectedSpeciesAgeSizeClass, QTableWidget *chartDataTbW)</td></tr>
+<tr class="separator:ad0b4b6f53628989ab047c2418e4f4500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47e0081cec33dd71963294848be8208b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47e0081cec33dd71963294848be8208b"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>Forecast_DietComposition</b> (nmfDatabase *m_databasePtr, QChart *chart, std::string MSVPAName, std::string ForecastName, std::string ScenarioName, int Forecast_FirstYear, int Forecast_NYears, std::string selectedSpecies, int PredNum, std::string selectedSpeciesAgeSizeClass, QTableWidget *chartDataTbW)</td></tr>
+<tr class="separator:a47e0081cec33dd71963294848be8208b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -921,6 +924,25 @@ std::vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>
 std::vector&lt; std::pair&lt; int, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>OtherPredSpecies</b></td></tr>
 <tr class="separator:adad013aad2182feb54bf84ab62b20251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a19bc4c57733ca92f5ce0166ef2ec4eda"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmfMainWindow::isStartUpOK </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Notifies main routine if MainWindow has been started correctly with MySQL active. </p>
+<dl class="section return"><dt>Returns</dt><dd>true/false signifying the state of the application start </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>MSVPA_Main/<a class="el" href="nmf_main_window_8h_source.html">nmfMainWindow.h</a></li>
 <li>MSVPA_Main/<a class="el" href="nmf_main_window_8cpp.html">nmfMainWindow.cpp</a></li>

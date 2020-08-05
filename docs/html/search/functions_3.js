@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['setprojectauthor',['setProjectAuthor',['../classnmf_setup___tab2.html#a57e096308e992572dd27eb7210d6cc65',1,'nmfSetup_Tab2']]],
-  ['setprojectdescription',['setProjectDescription',['../classnmf_setup___tab2.html#ab660067a37336f997d5491c1924ae000',1,'nmfSetup_Tab2']]],
-  ['setprojectdirectory',['setProjectDirectory',['../classnmf_setup___tab2.html#a6ef979291c2d0b7230d54a29fa3526be',1,'nmfSetup_Tab2']]],
-  ['setprojectname',['setProjectName',['../classnmf_setup___tab2.html#aa410387de137c4c014c7ea875787c83f',1,'nmfSetup_Tab2']]]
+  ['nmfmsvpa',['nmfMSVPA',['../classnmf_m_s_v_p_a.html#aa4b4b6aa20d0fb64a66a884b2bbac172',1,'nmfMSVPA']]],
+  ['nmfssvpa',['nmfSSVPA',['../classnmf_s_s_v_p_a.html#ae32ec92ee7cd7b2b68e788bed2c5d6d7',1,'nmfSSVPA']]]
 ];
