@@ -7179,16 +7179,16 @@ nmfMainWindow::initializeTableNamesDlg()
             TableNamesLW->addItem(QString::fromStdString(std::to_string(i+1) + ". " + dataMap["table_name"][i]));
         }
     }
-std::cout << 4 << std::endl;
+
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget(m_TableNamesWidget);
-std::cout << 4.5 << std::endl;
+
     m_TableNamesDlg->adjustSize();
     m_TableNamesDlg->setMinimumWidth(400);
     m_TableNamesDlg->setMinimumHeight(300);
     m_TableNamesDlg->setLayout(layout);
     m_TableNamesDlg->setWindowTitle("Table Names");
-std::cout << 5 << std::endl;
+
     connect(TableNamesOkPB, SIGNAL(clicked()),
             this,           SLOT(callback_TableNamesOkPB()));
 }
@@ -7551,7 +7551,7 @@ void nmfMainWindow::callback_schemeLight() {
 void nmfMainWindow::menu_about()
 {
     QString name = "Multi-Species Virtual Population Analysis 2nd Version";
-    QString version = QString("MSVPA_X2 v0.9.1 (beta)"); // + "&alpha;";
+    QString version = QString("MSVPA_X2 v0.9.2 (beta)"); // + "&alpha;";
     QString specialAcknowledgement = "<br><br>This code is a C++ implementation of the Visual Basic code written by Dr. Lance Garrison.";
     QString msg = "";
     QString cppVersion = "C++??";
