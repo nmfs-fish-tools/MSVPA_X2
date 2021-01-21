@@ -360,7 +360,7 @@ void
 nmfSSVPATab4::callback_Configure_XSA_CMB4(int Type)
 {
 
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -372,7 +372,7 @@ void
 nmfSSVPATab4::callback_Configure_XSA_CMB5(QString Year)
 {
 
-    if (! Year.isEmpty() && ! SelectVPATypeCMB->count() == 0 ) {
+    if ((! Year.isEmpty()) && (SelectVPATypeCMB->count() != 0)) {
         emit RunSSVPA(SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -385,7 +385,7 @@ nmfSSVPATab4::callback_Configure_XSA_CMB5(QString Year)
 void
 nmfSSVPATab4::callback_Configure_Downweight_GB(bool checked)
 {
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(""); //SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -397,7 +397,7 @@ void
 nmfSSVPATab4::callback_Configure_Shrinkage_GB(bool checked)
 {
 
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(""); // SelectVPATypeCMB->currentText().toStdString());
     }
     MarkAsDirty("SpeSSVPA");
@@ -503,7 +503,7 @@ nmfSSVPATab4::Save_SpeMaturity()
             " WHERE SpeIndex = "  + std::to_string(SpeciesIndex) +
             " AND SpeName  = '" + SpeciesName + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_SpeMaturity: Delete error: ", errorMsg);
         return "\nMaturity Data:     Failed. Check data entered.";
     }
@@ -543,7 +543,7 @@ nmfSSVPATab4::Save_SpeMaturity()
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_SpeMaturity: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return "\nMaturity Data:     Failed. Check data entered.";
@@ -743,7 +743,7 @@ nmfSSVPATab4::Save_SpeMaturityOLD()
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Maturity: Clearing table error: ", errorMsg);
         return "\nMaturity Data:     Failed. Check data entered.";
     }
@@ -786,7 +786,7 @@ nmfSSVPATab4::Save_SpeMaturityOLD()
     fin2.close();
 
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Maturity: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         std::cout << "csv file: " << fileNameWithPath.toStdString() << std::endl;
@@ -920,7 +920,7 @@ nmfSSVPATab4::callback_Configure_XSA_LE1()
 {
     Configure_XSA_LE1->setText(Configure_XSA_LE1->text().trimmed());
 
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -933,7 +933,7 @@ nmfSSVPATab4::callback_Configure_XSA_NYears_SB(int value)
 {
     //Configure_XSA_LE2->setText(Configure_XSA_LE2->text().trimmed());
 
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(""); //SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -946,7 +946,7 @@ nmfSSVPATab4::callback_Configure_XSA_NAges_SB(int value)
 {
     //Configure_XSA_LE3->setText(Configure_XSA_LE3->text().trimmed());
 
-    if (! SelectVPATypeCMB->count() == 0) {
+    if (SelectVPATypeCMB->count() != 0) {
         emit RunSSVPA(SelectVPATypeCMB->currentText().toStdString());
     }
 
@@ -1091,7 +1091,7 @@ nmfSSVPATab4::removeFromTableAndCSVFile(QString SSVPAName, QString TableName)
           " AND SSVPAIndex = "  + std::to_string(SSVPAIndex);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
 std::cout << "Del Cmd: " << cmd << std::endl;
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error removeFromTableAndCSVFile: Delete error: ", errorMsg);
         return false;
     }
@@ -1643,7 +1643,7 @@ nmfSSVPATab4::Save_SSVPAAgeM_DB_Table()
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5c): Clearing table error: ", errorMsg);
         return false;
     }
@@ -1701,7 +1701,7 @@ nmfSSVPATab4::Save_SSVPAAgeM_DB_Table()
     fin2.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5a): Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -1725,6 +1725,8 @@ nmfSSVPATab4::displayMsg(std::string msg)
                              tr("Warning"),
                              tr(msg.c_str()),
                              QMessageBox::Ok);
+
+    return true;
 
 } // end displayMsg
 
@@ -1776,7 +1778,8 @@ nmfSSVPATab4::Load_FleetEffortData(QString filename)
     QStringList NameFilters;
     QString SpeFleetEffortCSVFile;
     QString FileSpeName,FileSSVPAName;
-    int FileSpeIndex,FileFleet,FileYear;
+    //int FileSpeIndex;
+    int FileFleet,FileYear;
     double FileEffort;
     bool readFirstLine = false;
     QFileDialog *fileDlg;
@@ -1817,7 +1820,7 @@ nmfSSVPATab4::Load_FleetEffortData(QString filename)
         if (readFirstLine) { // skip row=0 as it's the header
             fields = line.split(",");
             FileSpeName   = fields[0];
-            FileSpeIndex  = fields[1].toInt();
+            //FileSpeIndex  = fields[1].toInt();
             FileSSVPAName = fields[2];
             FileFleet     = fields[3].toInt();
             FileYear      = fields[4].toInt();
@@ -1841,7 +1844,7 @@ nmfSSVPATab4::Load_FleetEffortData(QString filename)
 void
 nmfSSVPATab4::Load_CatchData(QString filename)
 {
-    int numAgeCols;
+    //int numAgeCols;
     int SpeciesIndex;
     std::string SpeciesName;
     QString line;
@@ -1850,7 +1853,7 @@ nmfSSVPATab4::Load_CatchData(QString filename)
     QStringList NameFilters;
     QString SpeCatchCSVFile;
     QString FileSpeName,FileSSVPAName;
-    int FileSpeIndex,FileFleet,FileYear,FileAge;
+    int FileYear;
     double FileCatch;
     bool readFirstLine = false;
     QFileDialog *fileDlg;
@@ -1886,7 +1889,7 @@ std::cout << "Opening: " << SpeCatchCSVFile.toStdString() << std::endl;
     QTextStream inStream(&file);
 
     // Load the model from the data in the csv file
-    numAgeCols = MaxCatchAge-MinCatchAge+1;
+    //numAgeCols = MaxCatchAge-MinCatchAge+1;
     int i=0;
     int m;
     QString theField;
@@ -1931,7 +1934,8 @@ nmfSSVPATab4::Load_FleetCatchData(QString filename)
     QStringList NameFilters;
     QString SpeFleetCatchCSVFile;
     QString FileSpeName,FileSSVPAName;
-    int FileSpeIndex,FileFleet,FileYear,FileAge;
+    //int FileSpeIndex;
+    int FileFleet,FileYear,FileAge;
     double FileCatch;
     bool readFirstLine = false;
     QFileDialog *fileDlg;
@@ -1971,7 +1975,7 @@ nmfSSVPATab4::Load_FleetCatchData(QString filename)
         if (readFirstLine) { // skip row=0 as it's the header
             fields = line.split(",");
             FileSpeName   = fields[0];
-            FileSpeIndex  = fields[1].toInt();
+            //FileSpeIndex  = fields[1].toInt();
             FileSSVPAName = fields[2];
             FileFleet     = fields[3].toInt();
             FileYear      = fields[4].toInt();
@@ -2052,7 +2056,7 @@ nmfSSVPATab4::Save_FleetNumData(int NumFleets, int SpeciesIndex)
     cmd += " ON DUPLICATE KEY UPDATE ";
     cmd += " NFleets=values(NFleets); ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         logger->logMsg(nmfConstants::Normal,"Error Save_FleetNumData: INSERT INTO SpeSSVPA: " + errorMsg);
         return false;
     }
@@ -2219,7 +2223,7 @@ std::cout << tmpFileNameWithPath.toStdString() << std::endl;
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         saveOK = false;
         nmfUtils::printError("SSVPA Save(5C): Clearing table error: ", errorMsg);
     }
@@ -2257,7 +2261,7 @@ std::cout << tmpFileNameWithPath.toStdString() << std::endl;
     fin2.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5C): Write table error: ", errorMsg);
         return false;
     }
@@ -2300,7 +2304,7 @@ nmfSSVPATab4::Save_FleetEffortData(int NumFleets, std::string SpeciesName, int S
           " AND SpeIndex = "   + std::to_string(SpeciesIndex) +
           " AND SSVPAName = '" + SSVPAName + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Tab4_SaveFleetCatchData: Delete error: ", errorMsg);
         return false;
     }
@@ -2322,7 +2326,7 @@ nmfSSVPATab4::Save_FleetEffortData(int NumFleets, std::string SpeciesName, int S
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Tab4_SaveFleetEffortData: Write table error: ", errorMsg);
         return false;
     }
@@ -2364,7 +2368,7 @@ nmfSSVPATab4::Save_SpeSSVPA(int SpeciesIndex)
           " AND SSVPAName  = '" + SSVPAName + "'" +
           " AND SSVPAIndex = "  + std::to_string(SSVPAIndex);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_SpeSSVPA: Delete error: ", errorMsg);
         return false;
     }
@@ -2432,7 +2436,7 @@ std::cout << "Save_SpeSSVPA: NXSAIndex: " << NXSAIndex << std::endl;
     // Remove last two characters of cmd string since we have an extra ", "
     //cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_SpeSSVPA: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -2486,7 +2490,7 @@ nmfSSVPATab4::Save_InitialSelectivityAndMortality(int SpeciesIndex)
                 //" AND Age = "        + std::to_string(age) + "; ";
     }
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_InitialSelectivityAndMortality: Delete error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -2530,7 +2534,7 @@ nmfSSVPATab4::Save_InitialSelectivityAndMortality(int SpeciesIndex)
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_InitialSelectivityAndMortality: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -2583,7 +2587,7 @@ nmfSSVPATab4::Save_XSAIndex(int Index)
           " AND SSVPAName = '" + SSVPAName + "'" +
           " AND `Index` = " + std::to_string(Index);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_XSAIndex: Delete error: ", errorMsg);
         return false;
     }
@@ -2605,7 +2609,7 @@ nmfSSVPATab4::Save_XSAIndex(int Index)
     // Remove last two characters of cmd string since we have an extra ", "
     //cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_XSAIndex: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -2649,7 +2653,7 @@ nmfSSVPATab4::Save_FleetCatchData(int NumFleets, std::string SpeciesName, int Sp
           " AND SpeIndex = "   + std::to_string(SpeciesIndex) +
           " AND SSVPAName = '" + SSVPAName + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Tab4_SaveFleetCatchData: Delete error: ", errorMsg);
         return false;
     }
@@ -2675,7 +2679,7 @@ nmfSSVPATab4::Save_FleetCatchData(int NumFleets, std::string SpeciesName, int Sp
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_Tab4_SaveFleetCatchData: Write table error: ", errorMsg);
         return false;
     }
@@ -2845,7 +2849,7 @@ std::cout << "tableLine2: " << tableLine.toStdString() << std::endl;
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         saveOK = false;
         nmfUtils::printError("SSVPA Save(5F): Clearing table error: ", errorMsg);
         return false;
@@ -2884,7 +2888,7 @@ std::cout << "line: " << line.toStdString() << std::endl;
     cmd = cmd.substr(0,cmd.size()-2);
     fin2.close();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5F): Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -3053,7 +3057,7 @@ nmfSSVPATab4::SaveToSpeXSAIndicesDatabaseTable(QString TableName,
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5E1): Clearing table error: ", errorMsg);
         return false;
     }
@@ -3092,7 +3096,7 @@ nmfSSVPATab4::SaveToSpeXSAIndicesDatabaseTable(QString TableName,
     fin.close();
 //std::cout << "cmd: \n" << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5E1): Write table error: ", errorMsg);
         return false;
     }
@@ -3155,7 +3159,7 @@ nmfSSVPATab4::Save_XSAIndexData()
                 " WHERE SpeIndex = "  + std::to_string(SpeciesIndex) +
                 " AND `Index` = "     + std::to_string(index);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             nmfUtils::printError("Error Save_XSAIndexData: Delete error: ", errorMsg);
             return retv;
         }
@@ -3182,7 +3186,7 @@ nmfSSVPATab4::Save_XSAIndexData()
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_XSAIndexData: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return retv;
@@ -3212,7 +3216,7 @@ nmfSSVPATab4::Save_XSAIndexData()
     // Remove last two characters of cmd string since we have an extra ", "
     cmd = cmd.substr(0,cmd.size()-2);
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Save_XSAIndexData Alpha/Beta: Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return retv;
@@ -3380,7 +3384,7 @@ nmfSSVPATab4::Save_SpeXSAData(std::string SpeciesName, int SpeciesIndex)
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         saveOK = false;
         nmfUtils::printError("SSVPA Save(5E2): Clearing table error: ", errorMsg);
         return false;
@@ -3418,7 +3422,7 @@ nmfSSVPATab4::Save_SpeXSAData(std::string SpeciesName, int SpeciesIndex)
     fin2.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("SSVPA Save(5E2): Write table error: ", errorMsg);
         return false;
     }
@@ -3597,7 +3601,7 @@ nmfSSVPATab4::Load_SpeXSAData()
 bool
 nmfSSVPATab4::Load_XSAIndices(QString filename)
 {
-    int index;
+//    int index;
     int SpeciesIndex;
     QString line;
     QStringList qfields;
@@ -3605,7 +3609,7 @@ nmfSSVPATab4::Load_XSAIndices(QString filename)
     QStringList NameFilters;
     QString SpeXSAIndicesCSVFile;
     QString FileSSVPAName,FileIndexName;
-    int FileSpeIndex,FileIndex;
+    int FileSpeIndex; // ,FileIndex;
     double FileAlpha,FileBeta;
     bool readFirstLine = false;
     QFileDialog *fileDlg;
@@ -3649,7 +3653,7 @@ nmfSSVPATab4::Load_XSAIndices(QString filename)
     QTextStream inStream(&file);
 
     // Load the model from the data in the csv file
-    index = 0;
+//    index = 0;
     SSVPAExtendedIndicesCMB->clear();
     while (! inStream.atEnd()) {
         line = inStream.readLine();
@@ -3657,7 +3661,7 @@ nmfSSVPATab4::Load_XSAIndices(QString filename)
             qfields = line.split(",");
             FileSpeIndex  = qfields[0].trimmed().toInt();
             FileSSVPAName = qfields[1].trimmed();
-            FileIndex     = qfields[2].trimmed().toInt();
+//            FileIndex     = qfields[2].trimmed().toInt();
             FileIndexName = qfields[3].trimmed();
             FileAlpha     = qfields[4].trimmed().toDouble();
             FileBeta      = qfields[5].trimmed().toDouble();
@@ -4223,7 +4227,7 @@ nmfSSVPATab4::Delete_SpeXSAIndices(int &indexInGUI)
           " WHERE SpeIndex = "  + std::to_string(SpeciesIndex) +
           " AND SSVPAName  = '" + SSVPAName.toStdString() + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Delete_SpeXSAIndices: Delete error: ", errorMsg);
         return false;
     }
@@ -4249,7 +4253,7 @@ nmfSSVPATab4::Delete_SpeXSAIndices(int &indexInGUI)
             cmd +=         std::to_string(Beta[i]) + ");";
         }
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             nmfUtils::printError("Error Delete_SpeXSAIndices: Re-index error: ", errorMsg);
             return false;
         }
@@ -4307,7 +4311,7 @@ nmfSSVPATab4::Delete_SpeXSAData(int indexToDelete)
           " WHERE SpeIndex = "  + std::to_string(SpeciesIndex) +
           " AND SSVPAName  = '" + SSVPAName.toStdString() + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Error Delete_SpeXSAData: Delete error: ", errorMsg);
         return;
     }
@@ -4337,7 +4341,7 @@ nmfSSVPATab4::Delete_SpeXSAData(int indexToDelete)
         // Remove last two characters of cmd string since we have an extra ", "
         cmd = cmd.substr(0,cmd.size()-2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             nmfUtils::printError("Error Delete_SpeXSAData: Re-index error: ", errorMsg);
             return;
         }
@@ -4892,7 +4896,7 @@ nmfSSVPATab4::callback_EffortTuned_SelectAFleetCMB(int fleet)
 {
     QStringList strList;
     std::string suffix;
-    QStandardItem *item;
+//    QStandardItem *item;
     std::string SpeciesName;
     int SpeciesIndex;
 
@@ -5047,7 +5051,7 @@ nmfSSVPATab4::loadDefaultWidgets(nmfDatabase *theDatabasePtr,
     int NCatchYears = 0;
     int NumRecords = 0;
     int SSVPAIndex;
-    int FullRecAge,RefAge,val2,val3,val4;
+    int FullRecAge=0,RefAge=0,val2,val3,val4;
     int NFleets=0;
     int Downweight=0;
     int DownweightType=0;
@@ -5310,8 +5314,9 @@ nmfSSVPATab4::loadDefaultWidgets(nmfDatabase *theDatabasePtr,
         offset = 2;
     ReferenceAgeSB->setRange(0, MaxCatchAge - offset);
     ReferenceAgeSB->setValue(nmfConstants::DefaultReferenceAge);
-    if (RefAge != 0)
+    if (RefAge != 0) {
         ReferenceAgeSB->setValue(RefAge);
+    }
     ReferenceAgeSB->blockSignals(false);
 
     logger->logMsg(nmfConstants::Normal,"loading XSA Data...");
@@ -5692,14 +5697,11 @@ nmfSSVPATab4::callback_SelectConfigurationCMB(QString SSVPAName)
 bool
 nmfSSVPATab4::loadSSVPAIndexFields(int SpeciesIndex, QString SSVPAName)
 {
-    int m;
     int defaultVal;
-    double val;
     std::string SpeciesIndexStr = std::to_string(SpeciesIndex);
     std::string queryStr;
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
-    QModelIndex index;
     int NumRecords;
     QString csvPath = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::InputDataDir));
 
@@ -5776,11 +5778,11 @@ nmfSSVPATab4::loadSSVPAIndexFields(int SpeciesIndex, QString SSVPAName)
     int pSVPANMortYrs  = std::stoi(dataMap["pSVPANMortYrs"][0]);
     int pSVPARefAge    = std::stoi(dataMap["pSVPARefAge"][0]);
     int NFleets        = std::stoi(dataMap["NFleets"][0]);
-    int Shrink         = std::stoi(dataMap["Shrink"][0]);
+    //int Shrink         = std::stoi(dataMap["Shrink"][0]);
     double ShrinkCV    = std::stod(dataMap["ShrinkCV"][0]);
     int ShrinkYears    = std::stoi(dataMap["ShrinkYears"][0]);
     int ShrinkAge      = std::stoi(dataMap["ShrinkAge"][0]);
-    int Downweight     = std::stoi(dataMap["Downweight"][0]);
+    //int Downweight     = std::stoi(dataMap["Downweight"][0]);
     int DownweightType = std::stoi(dataMap["DownweightType"][0]);
     int DownweightYear = std::stoi(dataMap["DownweightYear"][0]);
 

@@ -104,11 +104,13 @@ nmfMSVPAProgressWidget::nmfMSVPAProgressWidget(QTimer *theTimer,
     // Show empty grid
     QValueAxis *newXAxis = new QValueAxis();
     QValueAxis *newYAxis = new QValueAxis();
-    chart->setAxisX(newXAxis, new QLineSeries());
-    chart->setAxisY(newYAxis, new QLineSeries());
+    //chart->setAxisX(newXAxis, new QLineSeries());
+    //chart->setAxisY(newYAxis, new QLineSeries());
+    nmfUtilsQt::setAxisX(chart,newXAxis,new QLineSeries());
+    nmfUtilsQt::setAxisY(chart,newYAxis,new QLineSeries());
     newXAxis->setTickCount(5);
-    chart->axisX()->setRange(0, 20);
-    chart->axisY()->setRange(0, 200);
+    chart->axes(Qt::Horizontal).back()->setRange(0, 20);
+    chart->axes(Qt::Vertical).back()->setRange(0, 200);
     newXAxis->applyNiceNumbers();
     newYAxis->applyNiceNumbers();
     newXAxis->setLabelFormat("%d");
@@ -232,7 +234,7 @@ void
 nmfMSVPAProgressWidget::callback_minSB(int value) {
 
     if (isStopped()) {
-        chart->axisX()->setMin(value);
+        chart->axes(Qt::Horizontal).back()->setMin(value);
         chart->update();
     }
 
@@ -242,7 +244,7 @@ void
 nmfMSVPAProgressWidget::callback_maxSB(int value) {
 
     if (isStopped()) {
-        chart->axisX()->setMax(value);
+        chart->axes(Qt::Horizontal).back()->setMax(value);
         chart->update();
     }
 
@@ -536,12 +538,13 @@ nmfMSVPAProgressWidget::readChartDataFile(std::string type,
         lineSeries->setPointLabelsVisible(labelsCB->isChecked());
         lineSeries->setPen(QPen(whichColor,2));
         lineSeries->setColor(whichColor);
-
         //scatterSeries = sseriesList[i];
         //chart->setAxisX(newXAxis, scatterSeries);
-        chart->setAxisX(newXAxis, lineSeries);
+        //chart->setAxisX(newXAxis, lineSeries);
+        nmfUtilsQt::setAxisX(chart,newXAxis,lineSeries);
         //chart->setAxisY(newYAxis, scatterSeries);
-        chart->setAxisY(newYAxis, lineSeries);
+        //chart->setAxisY(newYAxis, lineSeries);
+        nmfUtilsQt::setAxisY(chart,newYAxis,lineSeries);
     }
 
 
@@ -573,9 +576,9 @@ nmfMSVPAProgressWidget::readChartDataFile(std::string type,
 //        maxXRange = minXRange+20;
 //        ProgressLastIterationSB->setValue(maxXRange);
 //    }
-    chart->axisX()->setRange(minXRange, maxXRange);
-    chart->axisY()->setRange(0, maxY);
-    //chart->axisY()->setMin(0);
+    chart->axes(Qt::Horizontal).back()->setRange(minXRange, maxXRange);
+    chart->axes(Qt::Vertical).back()->setRange(0, maxY);
+    //chart->axes(Qt::Vertical).back()->setMin(0);
     newYAxis->applyNiceNumbers();
     newXAxis->applyNiceNumbers();
     newXAxis->setLabelFormat("%d");

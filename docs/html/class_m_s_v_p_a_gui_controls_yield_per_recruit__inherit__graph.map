@@ -1,6 +1,8 @@
 <map id="MSVPAGuiControlsYieldPerRecruit" name="MSVPAGuiControlsYieldPerRecruit">
-<area shape="rect" id="node5" href="$class_gui_controls_yield_per_recruit.html" title="GuiControlsYieldPerRecruit" alt="" coords="5,326,188,353"/>
-<area shape="rect" id="node6" href="$class_gui_controls_yield_per_recruit_forecast.html" title="GuiControlsYieldPerRecruit\lForecast" alt="" coords="212,319,395,360"/>
-<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls.html" title="MSVPAGuiControls" alt="" coords="130,155,269,181"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_gui_controls.html" title="MSVPAX2GuiControls" alt="" coords="122,80,277,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="117,229,313,271"/>
+<area shape="rect" id="node5" href="$class_gui_controls_yield_per_recruit.html" title=" " alt="" coords="5,326,203,353"/>
+<area shape="rect" id="node6" href="$class_gui_controls_yield_per_recruit_forecast.html" title=" " alt="" coords="227,319,424,360"/>
+<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls.html" title=" " alt="" coords="143,155,286,181"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_gui_controls.html" title=" " alt="" coords="135,80,295,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="175,5,254,32"/>
 </map>

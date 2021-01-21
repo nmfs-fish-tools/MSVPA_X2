@@ -1,4 +1,5 @@
 <map id="MSVPA_AlgorithmsMSVPA/nmfMSVPA.h" name="MSVPA_AlgorithmsMSVPA/nmfMSVPA.h">
-<area shape="rect" id="node2" href="$nmf_main_window_8h_source.html" title="MSVPA_Main/nmfMainWindow.h" alt="" coords="13,95,229,121"/>
-<area shape="rect" id="node3" href="$nmf_main_window_8cpp.html" title="This file contains the MSVPA_X2 Main Window implementation. " alt="" coords="5,169,236,196"/>
+<area shape="rect" id="node1" title="This file contains the MSVPA API class definitions." alt="" coords="33,5,224,47"/>
+<area shape="rect" id="node2" href="$nmf_main_window_8h_source.html" title=" " alt="" coords="13,95,244,121"/>
+<area shape="rect" id="node3" href="$nmf_main_window_8cpp.html" title="This file contains the MSVPA_X2 Main Window implementation." alt="" coords="5,169,252,196"/>
 </map>

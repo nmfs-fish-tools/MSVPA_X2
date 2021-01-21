@@ -299,7 +299,8 @@ nmfSetup_Tab3::callback_Setup_Tab3_DelSpeciesPB(bool unused)
     // Find number of selected rows
     QItemSelectionModel *selections = Setup_Tab3_SpeciesTW->selectionModel();
     QModelIndexList selected = selections->selectedRows(0);
-    qSort(selected);
+    //qSort(selected);
+    std::sort(selected.begin(),selected.end());
     int NumSelectedRows = selected.size();
 
     // Iterate through the rows and delete each one...starting with last one first.
@@ -497,7 +498,7 @@ nmfSetup_Tab3::renameSpecies(std::string newSpeName, std::string existingSpeName
        cmd += "UPDATE " + table + " SET PredName = REPLACE(PredName,'" +
               existingSpeName + "','" + newSpeName + "'); ";
        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-       if (errorMsg != " ") {
+       if (nmfUtilsQt::isAnError(errorMsg)) {
            //nmfUtils::printError("renameSpecies: ", errorMsg);
        }
 
@@ -558,7 +559,7 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
     qcmd += " FixedMaturity tinyint(1),";
     qcmd += " PRIMARY KEY (SpeIndex))";
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Setup Save(3): Create table error: ", errorMsg);
     }
 
@@ -668,7 +669,7 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
         cmd += "FixedMaturity=values(FixedMaturity); ";
 //std::cout << cmd << std::endl;
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             std::cout << cmd << std::endl;
             nmfUtils::printError("Setup: INSERT INTO Species...", errorMsg);
             insertedSpeciesOK = false;
@@ -679,14 +680,14 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
 
     // Only delete extraneous records if there were no problems with any of the inserted ones.
     if (insertedSpeciesOK) {
-        for (const std::string IndexInTable: SpeciesSet) {
+        for (const std::string& IndexInTable: SpeciesSet) {
             // If there's an Index in the database table that isn't in the GUI table,
             // then delete it from the database table.  It means the user doesn't want it anymore.
             if (SpeciesIndexesToKeep.find(IndexInTable) == SpeciesIndexesToKeep.end()) {
                 cmd = "DELETE FROM Species where SpeIndex = " + IndexInTable;
 //std::cout << cmd << std::endl;
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") {
+                if (nmfUtilsQt::isAnError(errorMsg)) {
                     std::cout << cmd << std::endl;
                     nmfUtils::printError("Setup: DELETE FROM Species...", errorMsg);
                 } // end if
@@ -749,7 +750,7 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
     qcmd += " NumSizeCats   int(11),";
     qcmd += " PRIMARY KEY (SpeIndex))";
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Setup Save(3): Create table error: ", errorMsg);
     }
 
@@ -858,7 +859,7 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
         cmd += "SizeStruc=values(SizeStruc), NumSizeCats=values(NumSizeCats); ";
 //std::cout << cmd << std::endl;
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             std::cout << cmd << std::endl;
             nmfUtils::printError("Setup: INSERT INTO OtherPredSpecies...", errorMsg);
             insertedOtherPredatorsOK = false;
@@ -868,13 +869,13 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
 
     // Only delete extraneous records if there were no problems with any of the inserted ones.
     if (insertedOtherPredatorsOK) {
-        for (const std::string IndexInTable: OtherPredatorsSet) {
+        for (const std::string& IndexInTable: OtherPredatorsSet) {
             // If there's an Index in the database table that isn't in the GUI table,
             // then delete it from the database table.  It means the user doesn't want it anymore.
             if (OtherPredatorsIndexesToKeep.find(IndexInTable) == OtherPredatorsIndexesToKeep.end()) {
                 cmd = "DELETE FROM OtherPredSpecies where SpeIndex = " + IndexInTable;
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") {
+                if (nmfUtilsQt::isAnError(errorMsg)) {
                     std::cout << cmd << std::endl;
                     nmfUtils::printError("Setup: DELETE FROM OtherPredSpecies...", errorMsg);
                 } // end if
@@ -1252,7 +1253,8 @@ nmfSetup_Tab3::callback_Setup_Tab3_DelOtherPredatorsPB(bool unused)
     // Find number of selected rows
     QItemSelectionModel *selections = Setup_Tab3_OtherPredatorsTW->selectionModel();
     QModelIndexList selected = selections->selectedRows(0);
-    qSort(selected);
+    //qSort(selected);
+    std::sort(selected.begin(),selected.end());
     int NumSelectedRows = selected.size();
 
     // Iterate through the rows and delete each one...starting with last one first.

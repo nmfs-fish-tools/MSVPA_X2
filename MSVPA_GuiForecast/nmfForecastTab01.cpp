@@ -119,7 +119,7 @@ nmfForecastTab1::saveTheForecast(std::string MSVPAName,
     cmd += "ON DUPLICATE KEY UPDATE ";
     cmd += "InitYear=values(InitYear),NYears=values(NYears),Growth=values(Growth); ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("saveTheForecast: INSERT INTO Forecasts...", errorMsg);
     }
 
@@ -131,7 +131,7 @@ nmfForecastTab1::saveTheForecast(std::string MSVPAName,
     cmd += "ON DUPLICATE KEY UPDATE ";
     cmd += "VarF=values(VarF),VarOthPred=values(VarOthPred),VarOthPrey=values(VarOthPrey),VarRec=values(VarRec),FishAsF=values(FishAsF); ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("saveTheForecast: INSERT INTO Scenarios...", errorMsg);
     }
 
@@ -202,7 +202,6 @@ nmfForecastTab1::callback_Forecast_Tab1_SavePB(bool unused)
 
     logger->logMsg(nmfConstants::Normal,"nmfForecastTab1::callback_Forecast_Tab1_SavePB");
 
-    QMessageBox::StandardButton reply;
     std::string queryStr = "";
     std::map<std::string, std::vector<std::string> > dataMap;
     std::vector<std::string> fields;
@@ -256,13 +255,13 @@ nmfForecastTab1::callback_Forecast_Tab1_SavePB(bool unused)
                 dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
                 NumRecords = dataMap["MSVPAName"].size();
                 if (NumRecords > 0) {
-                    reply = QMessageBox::warning(Forecast_Tabs,
+                    if (QMessageBox::No == QMessageBox::warning(Forecast_Tabs,
                                              tr("New Forecast"),
                                              tr("\nScenario exists. OK to overwrite?"),
-                                             QMessageBox::No|QMessageBox::Yes);
+                                             QMessageBox::No|QMessageBox::Yes)) {
+                        return;
+                    }
                 }
-                if (reply == QMessageBox::No)
-                    return;
                 // Overwrite the forecast
                 saveTheForecast(MSVPAName,Forecast,Scenario,InitYear,
                                 NumYears,ModelPredatorGrowth);

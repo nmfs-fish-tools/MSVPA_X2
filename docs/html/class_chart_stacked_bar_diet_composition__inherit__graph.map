@@ -1,4 +1,6 @@
 <map id="ChartStackedBarDietComposition" name="ChartStackedBarDietComposition">
-<area shape="rect" id="node2" href="$class_chart_stacked_bar.html" title="ChartStackedBar" alt="" coords="53,155,176,181"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_output_chart.html" title="MSVPAX2OutputChart" alt="" coords="37,80,193,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,229,244,256"/>
+<area shape="rect" id="node2" href="$class_chart_stacked_bar.html" title=" " alt="" coords="59,155,190,181"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_output_chart.html" title=" " alt="" coords="43,80,206,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="85,5,164,32"/>
 </map>

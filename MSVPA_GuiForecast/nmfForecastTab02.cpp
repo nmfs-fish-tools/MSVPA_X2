@@ -99,7 +99,7 @@ nmfForecastTab2::callback_Forecast_Tab2_SavePB(bool unused)
         cmd += "Linf=values(Linf),GrowthK=values(GrowthK),TZero=values(TZero),";
         cmd += "LWAlpha=values(LWAlpha),LWBeta=values(LWBeta);";
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             std::cout << cmd << std::endl;
             nmfUtils::printError("callback_Forecast_Tab2_SavePB: INSERT INTO ForePredVonB...", errorMsg);
         }
@@ -291,7 +291,7 @@ nmfForecastTab2::loadWidgets(
         queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'" +
                    " AND (Type = 0 or Type = 1)";
         dataMap2 = databasePtr->nmfQueryDatabase(queryStr, fields);
-        for (int i=0; i<dataMap2["SpeName"].size();++i) {
+        for (int i=0; i<int(dataMap2["SpeName"].size());++i) {
             theVonBert_model.append(nmfVonBert {
                 QString::fromStdString(dataMap2["SpeName"][i]),0,0,0,0,0,0,0});
         }

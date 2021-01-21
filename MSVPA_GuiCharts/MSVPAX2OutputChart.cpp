@@ -34,13 +34,13 @@ MSVPAX2OutputChart::restoreTitleFonts()
     mainTitleFont.setWeight(QFont::Bold);
     chart->setTitleFont(mainTitleFont);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
     axisX->setTitleFont(titleFont);
 
-    QAbstractAxis *axisY = chart->axisY();
+    QAbstractAxis *axisY = chart->axes(Qt::Vertical).back();
     titleFont = axisY->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -61,8 +61,8 @@ MSVPAX2OutputChart::callback_UpdateChartGridLines(nmfStructsQt::UpdateDataStruct
                                     data.VerticalGridLines };
 
     // Set grid line visibility
-    chart->axisY()->setGridLineVisible(GridLines[0]);
-    chart->axisX()->setGridLineVisible(GridLines[1]);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(GridLines[0]);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(GridLines[1]);
 }
 
 

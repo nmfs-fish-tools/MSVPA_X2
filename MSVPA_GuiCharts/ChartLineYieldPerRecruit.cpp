@@ -35,9 +35,6 @@ ChartLineYieldPerRecruit::callback_UpdateChart(nmfStructsQt::UpdateDataStruct da
     int MSVPA_LastYear = 0;
     int MSVPA_NYears = 0;
     int MSVPA_NSeasons = 0;
-    int SeasonInt=0;
-    int offset = 0;
-    int SpeAge = 0;
 
     QChart*      chart     = getChart();
     QChartView*  chartView = getChartView();
@@ -196,7 +193,7 @@ ChartLineYieldPerRecruit::getAndLoadYPRvsFDataMSVPA(
     char buf[100];
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -352,7 +349,7 @@ ChartLineYieldPerRecruit::getAndLoadSSBvsFDataMSVPA(
     char buf[100];
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -501,7 +498,7 @@ ChartLineYieldPerRecruit::getAndLoadHistoricalYPRDataMSVPA(
     int NumYears = NYears;
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -643,7 +640,7 @@ ChartLineYieldPerRecruit::getAndLoadHistoricalFBenchmarksDataMSVPA(
     int NumYears = NYears;
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -807,7 +804,7 @@ ChartLineYieldPerRecruit::getAndLoadHistoricalSSBBenchmarksDataMSVPA(
     int NumYears = NYears;
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -965,7 +962,7 @@ ChartLineYieldPerRecruit::getAndLoadYPRvsFDataForecast(
     double yprOut;
     double YMax=0.0;
     char buf[1000];
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::vector<std::string> LegendNames;
     boost::numeric::ublas::matrix<double> Pmature;
@@ -1123,7 +1120,7 @@ ChartLineYieldPerRecruit::getAndLoadSSBvsFDataForecast(
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
     double yprOut;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -1277,7 +1274,7 @@ ChartLineYieldPerRecruit::getAndLoadProjectedYPRDataForecast(
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
 
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -1424,7 +1421,7 @@ ChartLineYieldPerRecruit::getAndLoadProjectedFBenchmarksDataForecast(
     int Forecast_NYears;
     std::vector<std::string> XLabelNames;
     double YMax=0.0;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;
@@ -1591,7 +1588,7 @@ ChartLineYieldPerRecruit::getAndLoadProjectedSSBBenchmarksDataForecast(
     int Forecast_FirstYear;
     int Forecast_LastYear;
     int Forecast_NYears;
-    std::string yAxisUnits = getYAxisUnits(selectedSpecies);
+    std::string yAxisUnits = getYAxisUnits(databasePtr,selectedSpecies);
     boost::numeric::ublas::matrix<double> Pmature;
     boost::numeric::ublas::matrix<double> FatAge;
     boost::numeric::ublas::matrix<double> WtAtAge;

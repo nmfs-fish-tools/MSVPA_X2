@@ -30,8 +30,8 @@ ChartLine::loadChartWithData(
 {
     QLineSeries *series = NULL;
 
-    chart->removeAxis(chart->axisY());
-    chart->removeAxis(chart->axisX());
+    chart->removeAxis(chart->axes(Qt::Vertical).back());
+    chart->removeAxis(chart->axes(Qt::Horizontal).back());
 
     // Draw main chart title
     std::stringstream ss;
@@ -72,7 +72,8 @@ ChartLine::loadChartWithData(
         }
         chart->addSeries(series);
         series->setName(QString::fromStdString(LegendNames(line)));
-        chart->setAxisY(axisY,series);
+        //chart->setAxisY(axisY,series);
+        nmfUtilsQt::setAxisY(chart,axisY,series);
     }
     axisY = qobject_cast<QValueAxis *>(chart->axes(Qt::Vertical).at(0));
     if (YMaxOverride > 0.0) {
@@ -85,7 +86,8 @@ ChartLine::loadChartWithData(
     }
 
     // Set title on X axis
-    chart->setAxisX(axisX, series);
+    //chart->setAxisX(axisX, series);
+    nmfUtilsQt::setAxisX(chart,axisX,series);
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -303,9 +305,9 @@ ChartLine::calculateWeightAveFAndAssignPRFs(
 
 
 std::string
-ChartLine::getYAxisUnits(std::string selectedSpecies)
+ChartLine::getYAxisUnits(nmfDatabase* databasePtr,
+                         std::string selectedSpecies)
 {
-    nmfDatabase* databasePtr;
     std::string queryStr;
     std::map<std::string, std::vector<std::string> > dataMap;
     std::vector<std::string> fields;

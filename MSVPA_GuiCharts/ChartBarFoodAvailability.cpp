@@ -321,8 +321,6 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyAgeData(
         int &Theme)
 {
     int seasonVal=0;
-    int season=0;
-    double NConversion = 1.0;
     //double scaleFactor = 1000.0; // to display on 1000's metric tons
     std::string ageStr = "";
     std::string predAgeStr = "";
@@ -335,7 +333,6 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyAgeData(
     std::map<std::string, std::vector<std::string> > dataMap;
     std::vector<std::string> fields;
     std::string yLabelConversion="";
-    double CatchUnits = 0;
     std::vector<std::string> yLabels = {"Hundreds of Fish",
                                         "Thousands of Fish",
                                         "Millions of Fish",
@@ -411,7 +408,7 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
     int nYears;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::string titleSuffix = "";
     std::string PredAgeStr;
     std::string queryStr,queryStr2;
@@ -433,7 +430,7 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -661,7 +658,8 @@ ChartBarFoodAvailability::loadChartWithData(
         axisY->applyNiceNumbers();
     }
 
-    chart->setAxisY(axisY, series);
+    //chart->setAxisY(axisY, series);
+    nmfUtilsQt::setAxisY(chart,axisY,series);
 
 } // end loadChartWithData
 
@@ -696,11 +694,12 @@ ChartBarFoodAvailability::setTitles(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(categories);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -717,7 +716,8 @@ ChartBarFoodAvailability::setTitles(
     newAxisY->setTitleText(yLabel.c_str());
     newAxisY->setRange(0,1.0);
     newAxisY->setTickCount(6);
-    chart->setAxisY(newAxisY,series);
+    //chart->setAxisY(newAxisY,series);
+    nmfUtilsQt::setAxisY(chart,newAxisY,series);
 
 }
 

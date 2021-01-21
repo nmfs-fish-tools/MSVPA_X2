@@ -243,17 +243,17 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     int MinYear = 0;
     int MaxYear = 5000;
     int NSpecies;
-    int InitNSeasons;
+//    int InitNSeasons;
     int firstYear;
     int lastYear;
-    int InitFirstYear;
-    int InitLastYear;
+//    int InitFirstYear;
+//    int InitLastYear;
     int NumRecords;
     int AnnTempsChecked=0;
     int SeasonalSpaceOChecked=0;
-    int InitSeasonSpaceO;
+//    int InitSeasonSpaceO;
     int InitGrowth;
-    int MSVPAGrowth;
+//    int MSVPAGrowth;
     std::vector<int> SpeIndex;
 
     //logger->logMsg(nmfConstants::Normal,"nmfMSVPATab2::loadWidgets");
@@ -332,17 +332,17 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     if (! dataMap["NSeasons"].empty()) {
         NSeasons = std::stoi(dataMap["NSeasons"][0]);
         MSVPA_Tab2_NumberSeasonsLE->setText(QString::number(NSeasons));
-        InitNSeasons = NSeasons;
+//        InitNSeasons = NSeasons;
     } // end if
     if (! dataMap["FirstYear"].empty()) {
         FirstYear = std::stoi(dataMap["FirstYear"][0]);
         MSVPA_Tab2_FirstYearLE->setText(QString::number(FirstYear));
-        InitFirstYear = FirstYear;
+//        InitFirstYear = FirstYear;
     } // end if
     if (! dataMap["LastYear"].empty()) {
         LastYear = std::stoi(dataMap["LastYear"][0]);
         MSVPA_Tab2_LastYearLE->setText(QString::number(LastYear));
-        InitLastYear = LastYear;
+//        InitLastYear = LastYear;
     } // end if
 
     if (! dataMap["AnnTemps"].empty()) {
@@ -353,13 +353,13 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     if (! dataMap["SeasSpaceO"].empty()) {
         SeasonalSpaceOChecked = std::stoi(dataMap["SeasSpaceO"][0]);
         MSVPA_Tab2_SeasonalOverlapCB->setChecked(SeasonalSpaceOChecked == 1);
-        InitSeasonSpaceO = SeasonalSpaceOChecked;
+//        InitSeasonSpaceO = SeasonalSpaceOChecked;
     } // end if
 
     if (! dataMap["GrowthModel"].empty()) {
         InitGrowth = std::stoi(dataMap["GrowthModel"][0]);
         MSVPA_Tab2_PredatorGrowthCB->setChecked(InitGrowth == 1);
-        MSVPAGrowth = InitGrowth;
+//        MSVPAGrowth = InitGrowth;
     } // end if
 
             // continue with: gvim frmMSVPAyears3.frm
@@ -577,7 +577,7 @@ std::cout << "in resave, MSVPAName = " << MSVPAName << std::endl;
     cmd += " AnnTemps=values(AnnTemps), SeasSpaceO=values(SeasSpaceO), GrowthModel=values(GrowthModel); ";
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("resaveMSVPAlistFields: INSERT INTO MSVPAlist...", errorMsg);
         retv = false;
     }
@@ -784,7 +784,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_LoadPB(bool unused)
         QStringList YearLengths;
         int MinYear=9999;
         int MaxYear=0;
-        int FirstYear, LastYear=0;
+        int FirstYear=0, LastYear=0;
         QString csvMSVPAName, csvYear, csvSeason, csvVariable, csvValue;
         QStringList SeasonTemps;
         // Store data to load in next step
@@ -1159,7 +1159,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
     // Clear the current table contents
 //    qcmd = "TRUNCATE TABLE " + TableNameList;
 //    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-//    if (errorMsg != " ") {
+//    if (nmfUtilsQt::isAnError(errorMsg)) {
 //        saveOK = false;
 //        nmfUtils::printError("MSVPA Save(2): Clearing table error: ", errorMsg);
 //    }
@@ -1212,7 +1212,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
 
     fin.close();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("MSVPA Save(2a): Write table error: ", errorMsg);
         return;
@@ -1227,7 +1227,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableNameSeasInfo;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         saveOK = false;
         nmfUtils::printError("MSVPA Save(2): Clearing table error: ", errorMsg);
     }
@@ -1265,7 +1265,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
     cmd = cmd.substr(0,cmd.size()-2);
     fin.close();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("MSVPA Save(2b): Write table error: ", errorMsg);
         return;

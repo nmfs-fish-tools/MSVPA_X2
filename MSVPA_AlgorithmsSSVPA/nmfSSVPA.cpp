@@ -499,7 +499,7 @@ nmfSSVPA::Effort_Tune_VPA(
     std::string queryStr;
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
-    double checksum;
+    //double checksum;
 //std::cout << "nmfSSVPA::Effort_Tune_VPA" << std::endl;
 
     boost::numeric::ublas::matrix<double> Effort;
@@ -698,8 +698,6 @@ nmfSSVPA::Effort_Tune_VPA(
             } // end for j
         } // end for i
 //std::cout << "LogQ total: " << sum << std::endl;
-double sum1=0;
-double sum2=0;
 
         // Then calculate average and variance of LogQ by Fleet, Age..across all available LogQ for each age class
         nmfUtils::initialize(AvgLogQ,  NFleets, NCatchAge+1);
@@ -739,7 +737,6 @@ double sum2=0;
 //std::cout << "VarLogQ total: " << sum1 << std::endl;
 //std::cout << "AvgLogQ total: " << sum2 << std::endl;
 
-double sum3=0,sum9=0;
         // Calculate Estimated F by age in last year..based upon effort in last year..and raised by inverse proportion of catch
         for (int i = 0; i < NFleets; ++i) {
             for (int k = 0; k < tmpNCatchAge; ++k) {

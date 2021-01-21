@@ -731,7 +731,6 @@ ChartStackedBarDietComposition::getAverageBySeasonDataForecast(nmfDatabase* data
                                                        QStringList &RowLabels,
                                                        QStringList &ColumnLabels)
 {
-    int index;
     int NPrey;
     int MSVPA_FirstYear=0;
     int MSVPA_LastYear=0;
@@ -837,7 +836,7 @@ ChartStackedBarDietComposition::getAverageByYearAndSeasonDataForecast(nmfDatabas
     int Forecast_LastYear=0;
     int Forecast_NYears=2;
     int NumRecords;
-    int Forecast_NSeasons;
+    //int Forecast_NSeasons;
     std::string PredAge;
     std::string PredAgeStr;
     std::string queryStr;
@@ -857,7 +856,7 @@ ChartStackedBarDietComposition::getAverageByYearAndSeasonDataForecast(nmfDatabas
                                      MSVPA_LastYear,
                                      MSVPA_NYears,
                                      MSVPA_NSeasons);
-    Forecast_NSeasons = MSVPA_NSeasons;
+    //Forecast_NSeasons = MSVPA_NSeasons;
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};

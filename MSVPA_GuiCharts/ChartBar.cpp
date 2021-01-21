@@ -96,7 +96,7 @@ ChartBar::getSpawningStockBiomassDataAndLoadChart(
     int SSBFirstYear=0;
     int SSBLastYear=0;
     int Forecast_FirstYear=0;
-    int Forecast_LastYear=0;
+    //int Forecast_LastYear=0;
     int Forecast_NYears=0;
     double TmpBM = 0.0;
     std::string queryStr;
@@ -144,7 +144,7 @@ ChartBar::getSpawningStockBiomassDataAndLoadChart(
         if (dataMap["NYears"].size() > 0) {
             Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
             Forecast_NYears    = std::stoi(dataMap["NYears"][0]);
-            Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears - 1;
+            //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears - 1;
         } else {
             //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
             return;
@@ -658,7 +658,7 @@ void ChartBar::getChartDataMSVPA(
             ColumnLabels.clear();
             RowLabels << QString::number(firstYear + i);
             for (int j = 0; j < NPreyAge; ++j) {
-                if (m < dataMap3["SBM"].size()) {
+                if (m < int(dataMap3["SBM"].size())) {
                     if (std::stoi(dataMap3["PreyAge"][j]) == j) {
                         ColumnLabels << QString::fromStdString("Age "+std::to_string(j));
                         ChartData(i,j) = std::stod(dataMap3["SBM"][m++]) / AvgFA;
@@ -1080,20 +1080,20 @@ void ChartBar::getChartDataForecast(
         std::string &SizeUnitString,
         std::string &WtUnitString)
 {
-    int m;
-    int NPrey;
-    int firstYear;
-    int nYears;
+    int m = 0;
+    int NPrey = 0;
+    int firstYear = 0;
+    int nYears = 0;
     int offset=0;
-    int NumRecords;
-    int Forecast_FirstYear;
-    int Forecast_LastYear;
-    int Forecast_NYears;
-    int PredAgeVal;
-    unsigned int NPreyAge;
+    int NumRecords = 0;
+    int Forecast_FirstYear = 0;
+    //int Forecast_LastYear;
+    int Forecast_NYears = 0;
+    int PredAgeVal = 0;
+    unsigned int NPreyAge = 0;
     double AvgFA = 0.0;
-    double tmpSum;
-    double tmpTotCat;
+    double tmpSum = 0;
+    double tmpTotCat = 0;
     std::string queryStr,queryStr2,queryStr3;
     std::map<std::string, std::vector<std::string> > dataMap,dataMap2,dataMap3;
     std::vector<std::string> fields,fields2,fields3;
@@ -1146,7 +1146,7 @@ void ChartBar::getChartDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0])+1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears - 1;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears - 1;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -1490,7 +1490,7 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
                        seasonStr + " GROUP BY YEAR ";
             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
             NumRecords = dataMap["TotCons"].size();
-            if (Forecast_NYears != dataMap["TotCons"].size()) {
+            if (Forecast_NYears != int(dataMap["TotCons"].size())) {
                 std::cout << queryStr << std::endl;
                 std::cout << "Warning: NYears (" << Forecast_NYears << ") not equal to number of records from above query ("
                           << dataMap["TotCons"].size() << ").  Re-run MSVPA configuration." << std::endl;
@@ -1733,8 +1733,8 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
                 if (i == 0) {
                     ColumnLabels << QString::fromStdString("Age "+std::to_string(j));
                 }
-                if (m < dataMap3["SBM"].size()) {
-                    if (std::stoi(dataMap3["PreyAge"][j]) == j) {
+                if (m < int(dataMap3["SBM"].size())) {
+                    if (std::stoi(dataMap3["PreyAge"][j]) == int(j)) {
                         ChartData(i,j) = std::stod(dataMap3["SBM"][m++]) / AvgFA;
                     }
                 }
@@ -1886,7 +1886,7 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NPreyAge = dataMap["PreyAge"].size();
         ColumnLabels.clear();
-std::cout << "hhere: " << queryStr << ", NPreyAge: " << NPreyAge << std::endl;
+//std::cout << "hhere: " << queryStr << ", NPreyAge: " << NPreyAge << std::endl;
         for (unsigned i = 0; i < NPreyAge; ++i) {
             PreyAge(i) = std::stoi(dataMap["PreyAge"][i]);
             ColumnLabels << QString::fromStdString("Age " + std::to_string(PreyAge(i)));
@@ -1919,11 +1919,11 @@ std::cout << "hhere: " << queryStr << ", NPreyAge: " << NPreyAge << std::endl;
 
 
         std::string newSelectedSpeciesAgeSizeClass = selectedSpeciesAgeSizeClass;
-        int ageDiff = SpeAge-offset;
+        //int ageDiff = SpeAge-offset;
         if (! newSelectedSpeciesAgeSizeClass.empty()) {
             offset = (newSelectedSpeciesAgeSizeClass.find("Size") != std::string::npos) ? 1 : 0;
             newSelectedSpeciesAgeSizeClass.erase(0,newSelectedSpeciesAgeSizeClass.find(" "));
-            ageDiff = std::stoi(newSelectedSpeciesAgeSizeClass) - offset;
+            //ageDiff = std::stoi(newSelectedSpeciesAgeSizeClass) - offset;
         }
 
 
@@ -2193,7 +2193,7 @@ ChartBar::getChartDataOfPredationMortalityByPredator(
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() > 0) {
             NumRecords = dataMap["TotCons"].size();
-            if (NYears != dataMap["TotCons"].size()) {
+            if (NYears != int(dataMap["TotCons"].size())) {
                 std::cout << queryStr << std::endl;
                 std::cout << "Warning: NYears (" << NYears << ") not equal to number of records from above query ("
                           << dataMap["TotCons"].size() << ").  Re-run MSVPA configuration." << std::endl;
@@ -2262,7 +2262,8 @@ ChartBar::loadChartWithData(
     chart->legend()->setVisible(showLegend);
 
     QValueAxis *axisY = new QValueAxis();
-    chart->setAxisY(axisY, series);
+    //chart->setAxisY(axisY, series);
+    nmfUtilsQt::setAxisY(chart,axisY,series);
 
     if (! MaxScaleY.empty()) {
         double maxScaleY = std::stod(MaxScaleY);
@@ -2312,7 +2313,8 @@ ChartBar::loadChartWithData(
     chart->legend()->setVisible(showLegend);
 
     QValueAxis *axisY = new QValueAxis();
-    chart->setAxisY(axisY, series);
+    //chart->setAxisY(axisY, series);
+    nmfUtilsQt::setAxisY(chart,axisY,series);
 
     if (! MaxScaleY.empty()) {
         double maxScaleY = std::stod(MaxScaleY);
@@ -2368,12 +2370,13 @@ ChartBar::setTitles(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(categories);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(showLegend);
     chart->legend()->setAlignment(Qt::AlignRight);
 
     // Set font and labels of x axis
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -2386,7 +2389,7 @@ ChartBar::setTitles(
     axisX->setTitleVisible(true);
 
     // Set font and labels of y axis
-    QAbstractAxis *axisY = chart->axisY();
+    QAbstractAxis *axisY = chart->axes(Qt::Vertical).back();
     axisY->setTitleFont(titleFont);
     axisY->setTitleText(yLabel.c_str());
 
@@ -2439,12 +2442,13 @@ ChartBar::setTitles(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(categories);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(showLegend);
     chart->legend()->setAlignment(Qt::AlignRight);
 
     // Set font and labels of x axis
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -2457,7 +2461,7 @@ ChartBar::setTitles(
     axisX->setTitleVisible(true);
 
     // Set font and labels of y axis
-    QAbstractAxis *axisY = chart->axisY();
+    QAbstractAxis *axisY = chart->axes(Qt::Vertical).back();
     axisY->setTitleFont(titleFont);
     axisY->setTitleText(yLabel.c_str());
 
@@ -2498,7 +2502,7 @@ ChartBar::populateChart(
         const int Theme)
 {
     QBarSet *newSet;
-    QBarSeries *series;
+    QBarSeries *series = nullptr;
 
     // Set current theme
     chart->setTheme(static_cast<QChart::ChartTheme>(Theme));
@@ -2509,10 +2513,11 @@ ChartBar::populateChart(
 
         // Load data into series and then add series to the chart
         for (unsigned int i=0; i<ChartData.size2(); ++i) {
-            if (ColumnLabels.size() == ChartData.size2())
+            if (ColumnLabels.size() == int(ChartData.size2())) {
                 newSet = new QBarSet((ColumnLabels[i]));
-            else
+            } else {
                 newSet = new QBarSet("");
+            }
             for (unsigned int val=0; val<ChartData.size1(); ++val) {
                 *newSet << ChartData(val,i);
             }
@@ -2538,8 +2543,8 @@ ChartBar::populateChart(
         QBarSeries *series = new QBarSeries();
 
         // Load data into series and then add series to the chart
-        for (unsigned int i=0; i<ChartData.size2(); ++i) {
-            if (ColumnLabels.size() == ChartData.size2())
+        for (int i=0; i<int(ChartData.size2()); ++i) {
+            if (ColumnLabels.size() == int(ChartData.size2()))
                 newSet = new QBarSet((ColumnLabels[i]));
             else
                 newSet = new QBarSet("");
@@ -2562,11 +2567,14 @@ ChartBar::populateChart(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(RowLabels);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, NULL);
+
+    //chart->setAxisX(axis, NULL); // RSK - check this
+    nmfUtilsQt::setAxisX(chart,axis,new QBarSeries());
+
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -2585,17 +2593,18 @@ ChartBar::populateChart(
         newAxisY->setRange(0,1.0);
         newAxisY->setTickCount(6);
         //newAxisY->applyNiceNumbers();
-        chart->setAxisY(newAxisY,series);
+        //chart->setAxisY(newAxisY,series);
+        nmfUtilsQt::setAxisY(chart,newAxisY,series);
     }
 
-    QValueAxis *currentAxisY = qobject_cast<QValueAxis*>(chart->axisY());
+    QValueAxis *currentAxisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).back());
     currentAxisY->setTitleFont(titleFont);
     currentAxisY->setTitleText(QString::fromStdString(YTitle));
     currentAxisY->applyNiceNumbers();
 
     // Set grid line visibility
-    chart->axisX()->setGridLineVisible(GridLines[0]);
-    chart->axisY()->setGridLineVisible(GridLines[1]);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(GridLines[0]);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(GridLines[1]);
 }
 
 

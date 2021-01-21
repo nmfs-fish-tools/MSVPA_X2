@@ -340,7 +340,7 @@ std::cout << "filename: " << filename.toStdString() << std::endl;
     // Clear the current table contents
     QString qcmd = "TRUNCATE TABLE " + tableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(4p): Clearing table error: ",
                              errorMsg+": "+tableName.toStdString());
         return;
@@ -408,7 +408,7 @@ std::cout << "line: " << line.toStdString() << std::endl;
     fin.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(4p): Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return;
@@ -815,7 +815,6 @@ void
 nmfMSVPATab4::callback_MSVPA_Tab4_SavePB(bool unused)
 {
     bool saveOK = true;
-    bool FirstLine;
     QString fileName;
     QString filePath;
     QString fileNameWithPathOthPrey;
@@ -1098,7 +1097,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
                                        QString fileNameWithPathOthPreyAnn,
                                        QString tmpFileNameWithPathOthPreyAnn)
 {
-    bool saveOK = true;
+//    bool saveOK = true;
     bool FirstLine;
     int retv;
     std::string cmd;
@@ -1128,8 +1127,8 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableNameOthPrey;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
-        saveOK = false;
+    if (nmfUtilsQt::isAnError(errorMsg)) {
+//        saveOK = false;
         nmfUtils::printError("MSVPA Save(3a): Clearing table error: ",
                              errorMsg+": "+TableNameOthPrey.toStdString());
         return false;
@@ -1175,7 +1174,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     fin.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(3c): Write table error: ", errorMsg);
         return false;
     }
@@ -1191,8 +1190,8 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     // 2. Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableNameOthPreyAnn;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
-        saveOK = false;
+    if (nmfUtilsQt::isAnError(errorMsg)) {
+//        saveOK = false;
         nmfUtils::printError("MSVPA Save(3d): Clearing table error: ",
                              errorMsg+": "+TableNameOthPreyAnn.toStdString());
     }
@@ -1232,7 +1231,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     fin.close();
     //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(3f): Write table error: ", errorMsg);
         //std::cout << cmd << std::endl;
         return false;
@@ -1335,7 +1334,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
                      tmpFileNameWithPathlist.toStdString() << " to " <<
                      fileNameWithPathlist.toStdString() <<
                      ". Save aborted." << std::endl;
-        saveOK = false;
+//        saveOK = false;
         return false;
     }
 
@@ -1349,8 +1348,8 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableNamelist;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
-        saveOK = false;
+    if (nmfUtilsQt::isAnError(errorMsg)) {
+//        saveOK = false;
         nmfUtils::printError("MSVPA Save(3g): Clearing table error: ",
                              errorMsg+": "+TableNamelist.toStdString());
     }
@@ -1398,7 +1397,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     fin.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(3k): Write table error: ", errorMsg);
         std::cout << cmd << std::endl;
         return false;
@@ -1467,7 +1466,7 @@ nmfMSVPATab4::loadWidgets(nmfDatabase *theDatabasePtr,
     std::vector<std::string> fields;
     std::string queryStr;
     int NSpecies;
-    int m;
+//    int m;
     std::string species;
     int FirstYear=0;
     int LastYear=0;
@@ -1494,7 +1493,7 @@ nmfMSVPATab4::loadWidgets(nmfDatabase *theDatabasePtr,
     queryStr = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM MSVPAOthPrey WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSpecies = dataMap["OthPreyName"].size();
-    m = 0;
+//    m = 0;
     if (NSpecies > 0) {
         MSVPA_Tab4_PreySpeciesCMB->blockSignals(true);
         MSVPA_Tab4_PreySpeciesCMB->clear();

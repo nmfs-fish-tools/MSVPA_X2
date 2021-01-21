@@ -295,7 +295,7 @@ nmfForecastTab4::createScenario(std::string newScenarioName)
     cmd  = "INSERT INTO Scenarios (MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ('" + \
            MSVPAName + "', '" + ForecastName + "', '" + newScenarioName + "', 0, 0, 0, 0, 1)";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) nmfUtils::printError("Error createScenario",errorMsg);
+    if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Error createScenario",errorMsg);
 
     updateMainWindowScenarioList();
 
@@ -331,7 +331,7 @@ nmfForecastTab4::deleteScenario(std::string scenarioToDelete)
            "' AND ForeName='" + ForecastName +
            "' AND Scenario='" + scenarioToDelete + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) nmfUtils::printError("Error createScenario",errorMsg);
+    if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Error createScenario",errorMsg);
 
     updateMainWindowScenarioList();
 
@@ -362,7 +362,7 @@ nmfForecastTab4::Save_Scenarios()
     cmd += "VarF=values(VarF),VarOthPred=values(VarOthPred),VarOthPrey=values(VarOthPrey),";
     cmd += "VarRec=values(VarRec),FishAsF=values(FishAsF); ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_Scenarios: ",errorMsg);
     }
@@ -390,7 +390,7 @@ nmfForecastTab4::Save_ScenarioF()
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioF Delete Failed: ",errorMsg);
         return;
@@ -443,7 +443,7 @@ nmfForecastTab4::Save_ScenarioF()
     } // end for SpeIndex
 
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save ScenarioF: ",errorMsg);
     }
@@ -468,7 +468,7 @@ nmfForecastTab4::Save_ScenarioOthPred()
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioOthPred Delete Failed: ",errorMsg);
         return;
@@ -493,7 +493,7 @@ nmfForecastTab4::Save_ScenarioOthPred()
 
     // Execute the command and update the ScenarioOthPred table
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioOthPred: ",errorMsg);
     }
@@ -520,7 +520,7 @@ nmfForecastTab4::Save_ScenarioOthPrey()
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioOthPrey Delete Failed: ",errorMsg);
         return;
@@ -546,7 +546,7 @@ nmfForecastTab4::Save_ScenarioOthPrey()
     } // end for prey
 
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioOthPrey: ",errorMsg);
     }
@@ -573,7 +573,7 @@ nmfForecastTab4::Save_ScenarioRec()
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioRec Delete Failed: ",errorMsg);
         return;
@@ -600,7 +600,7 @@ nmfForecastTab4::Save_ScenarioRec()
     } // end for col
 
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if ( errorMsg != " " ) {
+    if ( nmfUtilsQt::isAnError(errorMsg) ) {
         std::cout << cmd << std::endl;
         nmfUtils::printError("Error: Forecast Tab4 Save_ScenarioOthPrey: ",errorMsg);
     }
@@ -1358,7 +1358,7 @@ nmfForecastTab4::callback_Forecast_Tab4_RecCBs(int state)
     std::vector<std::string> fields;
     std::string queryStr;
     double val;
-    int col;
+    int col = 0;
     QTableWidgetItem *item;
 
     QCheckBox *cb = qobject_cast<QCheckBox*>(sender());

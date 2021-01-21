@@ -1,5 +1,7 @@
 <map id="GuiControlsMultispeciesPopulations" name="GuiControlsMultispeciesPopulations">
-<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls_non_yield_per_recruit.html" title="MSVPAGuiControlsNonYield\lPerRecruit" alt="" coords="26,229,217,271"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_gui_controls.html" title="MSVPAGuiControls" alt="" coords="52,155,191,181"/>
-<area shape="rect" id="node4" href="$class_m_s_v_p_a_x2_gui_controls.html" title="MSVPAX2GuiControls" alt="" coords="44,80,199,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,319,261,345"/>
+<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls_non_yield_per_recruit.html" title=" " alt="" coords="33,229,234,271"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_gui_controls.html" title=" " alt="" coords="62,155,205,181"/>
+<area shape="rect" id="node4" href="$class_m_s_v_p_a_x2_gui_controls.html" title=" " alt="" coords="53,80,213,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="94,5,173,32"/>
 </map>

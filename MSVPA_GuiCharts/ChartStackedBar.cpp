@@ -23,8 +23,8 @@ ChartStackedBar::callback_UpdateChartGridLines(nmfStructsQt::UpdateDataStruct da
     QChart* chart = getChart();
 
     // Set grid line visibility
-    chart->axisY()->setGridLineVisible(GridLines[0]);
-    chart->axisX()->setGridLineVisible(GridLines[1]);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(GridLines[0]);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(GridLines[1]);
 }
 
 
@@ -79,11 +79,12 @@ ChartStackedBar::setTitlesAndGridLines(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(rowLabels);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -100,11 +101,12 @@ ChartStackedBar::setTitlesAndGridLines(
     newAxisY->setTitleText(yLabel.c_str());
     newAxisY->setRange(0,1.0);
     newAxisY->setTickCount(6);
-    chart->setAxisY(newAxisY,series);
+    //chart->setAxisY(newAxisY,series);
+    nmfUtilsQt::setAxisY(chart,newAxisY,series);
 
     // Set grid line visibility
-    chart->axisX()->setGridLineVisible(GridLines[0]);
-    chart->axisY()->setGridLineVisible(GridLines[1]);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(GridLines[0]);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(GridLines[1]);
 }
 
 
@@ -149,11 +151,12 @@ ChartStackedBar::populateChart(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(RowLabels);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -170,11 +173,12 @@ ChartStackedBar::populateChart(
     newAxisY->setTitleText(QString::fromStdString(YTitle));
     newAxisY->setRange(0,1.0);
     newAxisY->setTickCount(6);
-    chart->setAxisY(newAxisY,series);
+    //chart->setAxisY(newAxisY,series);
+    nmfUtilsQt::setAxisY(chart,newAxisY,series);
 
     // Set grid line visibility
-    chart->axisX()->setGridLineVisible(GridLines[0]);
-    chart->axisY()->setGridLineVisible(GridLines[1]);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(GridLines[0]);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(GridLines[1]);
 }
 
 

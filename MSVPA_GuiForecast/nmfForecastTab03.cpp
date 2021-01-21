@@ -452,6 +452,12 @@ nmfForecastTab3::loadSSBRecruitsChart(Boost3DArrayDouble &SRData,
     axisX->setTitleText("SSB (000 mt)");
     chartTopRight->setAxisX(axisX,scatterSeries);
     chartTopRight->setAxisX(axisX,lineSeries);
+//    RSK - double check the following logic for the deprecated setAxisX above calls
+//    chartTopRight->removeAxis(chartTopRight->axes(Qt::Horizontal).back());
+//    chartTopRight->addAxis(axisX, Qt::AlignBottom);
+//    scatterSeries->attachAxis(axisX);
+//    chartTopRight->addAxis(axisX, Qt::AlignBottom);
+//    lineSeries->attachAxis(axisX);
     axisX->applyNiceNumbers();
 
     // Create new Y axis with "nice" numbers set on scale.
@@ -512,7 +518,8 @@ nmfForecastTab3::loadYearResidualChart(Boost3DArrayDouble &SRData,
     axisX->setLabelFormat("%d");
     //axisX->setMin(0.0);
     axisX->setTitleText(QString::fromStdString(xTitle));
-    chartBottomRight->setAxisX(axisX,lineSeries);
+    //chartBottomRight->setAxisX(axisX,lineSeries);
+    nmfUtilsQt::setAxisX(chartBottomRight,axisX,lineSeries);
     //axisX->applyNiceNumbers();
     //int numTicks = (NYears % 2) ? NYears/2 : NYears/2+1;
     axisX->setTickCount(NYears);
@@ -529,7 +536,8 @@ nmfForecastTab3::loadYearResidualChart(Boost3DArrayDouble &SRData,
     axisY->setLabelFormat("%.1f");
     axisY->setMin(0.0);
     axisY->setTitleText(QString::fromStdString(yTitle));
-    chartBottomRight->setAxisY(axisY,lineSeries);
+    //chartBottomRight->setAxisY(axisY,lineSeries);
+    nmfUtilsQt::setAxisY(chartBottomRight,axisY,lineSeries);
     axisY->applyNiceNumbers();
 
     logger->logMsg(nmfConstants::Normal,"nmfForecastTab3::loadYearResidualChart Complete");
@@ -930,7 +938,7 @@ nmfForecastTab3::loadSRTable() // aka Get_SRData() from frmStockRec2.bas
                    " AND SpeName = '" + SpeName + "'" +
                    " AND Age = 0 AND Season = 0 GROUP BY Year";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
-        if (dataMap["Abundance"].size() != NYears) {
+        if (int(dataMap["Abundance"].size()) != NYears) {
             logger->logMsg(nmfConstants::Error,"nmfForecastTab3::loadSRTable Missing Abundance data from MSVPASeasBiomass");
             return;
         }
@@ -1103,7 +1111,7 @@ nmfForecastTab3::callback_Forecast_Tab3_FitSRCurveSavePB(bool unused)
     cmd += "SRRK=values(SRRK),Userdefined=values(Userdefined); ";
 std::cout << cmd << std::endl;
 //    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-//    if (errorMsg != " ") {
+//    if (nmfUtilsQt::isAnError(errorMsg)) {
 //        std::cout << cmd << std::endl;
 //        nmfUtils::printError("callback_Forecast_Tab3_FitSRCurveSavePB: INSERT INTO ForeSRR...", errorMsg);
 //    }

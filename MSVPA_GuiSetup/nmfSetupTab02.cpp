@@ -480,7 +480,7 @@ nmfSetup_Tab2::callback_Setup_Tab2_AddDatabase()
     // OK to now add the database
     cmd = "CREATE database " + enteredName.toStdString();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         QApplication::restoreOverrideCursor();
         QMessageBox::critical(Setup_Tabs,tr("Invalid Database Name"),
                               tr("\nDatabase exists from another application. Please choose a different name."),
@@ -532,7 +532,7 @@ nmfSetup_Tab2::callback_Setup_Tab2_DelDatabase()
         // Remove database from mysql and reload widget
         cmd = "DROP database " + databaseToDelete.toStdString();
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             Setup_Tabs->setCursor(Qt::ArrowCursor);
             nmfUtils::printError("Function: callback_Setup_Tab2_DelDatabase ",errorMsg);
             deleteOK = false;

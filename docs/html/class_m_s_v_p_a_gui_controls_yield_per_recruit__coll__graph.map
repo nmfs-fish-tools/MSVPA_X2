@@ -1,4 +1,6 @@
 <map id="MSVPAGuiControlsYieldPerRecruit" name="MSVPAGuiControlsYieldPerRecruit">
-<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls.html" title="MSVPAGuiControls" alt="" coords="29,155,168,181"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_gui_controls.html" title="MSVPAX2GuiControls" alt="" coords="21,80,176,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,229,201,271"/>
+<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls.html" title=" " alt="" coords="32,155,175,181"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_gui_controls.html" title=" " alt="" coords="23,80,183,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="64,5,143,32"/>
 </map>

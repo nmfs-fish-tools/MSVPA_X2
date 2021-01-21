@@ -70,7 +70,9 @@ public:
             boost::numeric::ublas::vector<double> &FullF,
             boost::numeric::ublas::matrix<double> &PRF);
 
-    static std::string getYAxisUnits(std::string selectedSpecies);
+    static std::string getYAxisUnits(
+            nmfDatabase* databasePtr,
+            std::string selectedSpecies);
 
 public slots:
     void callback_UpdateChart(nmfStructsQt::UpdateDataStruct data);

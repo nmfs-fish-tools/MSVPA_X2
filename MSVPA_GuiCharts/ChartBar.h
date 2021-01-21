@@ -2,7 +2,7 @@
 #define CHARTBAR_H
 
 #include "MSVPAX2OutputChart.h"
-
+#include "nmfUtilsQt.h"
 
 QT_CHARTS_USE_NAMESPACE
 

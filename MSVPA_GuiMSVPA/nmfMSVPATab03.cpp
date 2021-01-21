@@ -546,7 +546,7 @@ nmfMSVPATab3::saveBiomassData()
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         logger->logMsg(nmfConstants::Normal,"nmfMSVPATab3 Save(1a): Clearing table error: " + errorMsg);
         return false;
     }
@@ -585,7 +585,7 @@ nmfMSVPATab3::saveBiomassData()
     cmd = cmd.substr(0,cmd.size()-2);
     fin2.close();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         std::cout << cmd << std::endl;
         logger->logMsg(nmfConstants::Normal,"nmfMSVPATab3 Save(2a): Write table error: " + errorMsg);
         return false;
@@ -735,7 +735,7 @@ nmfMSVPATab3::saveFeedingData()
     // Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         logger->logMsg(nmfConstants::Normal,"nmfMSVPATab3 Save(2b): Clearing table error: " + errorMsg);
         return false;
     }
@@ -784,7 +784,7 @@ nmfMSVPATab3::saveFeedingData()
     cmd = cmd.substr(0,cmd.size()-2);
     fin2.close();
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         std::cout << cmd << std::endl;
         logger->logMsg(nmfConstants::Normal,"nmfMSVPATab3 Save(2c): Write table error: " + errorMsg);
         logger->logMsg(nmfConstants::Normal,"cmd: " + cmd);
@@ -981,7 +981,7 @@ nmfMSVPATab3::loadSubTab1(QString dataSource,
     std::string queryStr;
     std::string labelTxt;
     QStringList strList;
-    int LastYear;
+    int LastYear=0;
     QStandardItem *item;
     bool csvFileEmpty = false;
 
@@ -1034,7 +1034,7 @@ nmfMSVPATab3::loadSubTab1(QString dataSource,
 
     // Make Row headers
     strList.clear();
-    for (int k=FirstYear; k<=LastYear; ++k) {
+    for (int k=FirstYear; k<=LastYear; ++k) { // RSK - problem here....LastYear is always 0
         strList << QString::number(k);
     }
     smodelBiomass[OtherPredSpeciesIndex]->setVerticalHeaderLabels(strList);
@@ -1274,7 +1274,7 @@ nmfMSVPATab3::getInitData(QString OtherPredSpecies,
 void
 nmfMSVPATab3::callback_MSVPA_Tab3_OtherPredSpeciesCMB(QString species)
 {
-    int NumYears=0;
+//    int NumYears=0;
     QString OtherPredSpecies;
     int OtherPredSpeciesIndex;
 
@@ -1287,8 +1287,8 @@ nmfMSVPATab3::callback_MSVPA_Tab3_OtherPredSpeciesCMB(QString species)
                 species.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     if (dataMap["SpeIndex"].size() > 0) {
-        NumYears = std::stoi(dataMap["LastYear"][0]) -
-                   std::stoi(dataMap["FirstYear"][0]) + 1;
+//        NumYears = std::stoi(dataMap["LastYear"][0]) -
+//                   std::stoi(dataMap["FirstYear"][0]) + 1;
     } else {
         std::cout << "Error nmfMSVPATab3::callback_MSVPA_Tab3_OtherPredSpeciesCMB cmd:\n" << queryStr << std::endl;
         return;

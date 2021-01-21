@@ -38,9 +38,6 @@ ChartLineMultispeciesPopulations::callback_UpdateChart(nmfStructsQt::UpdateDataS
     int MSVPA_LastYear = 0;
     int MSVPA_NYears = 0;
     int MSVPA_NSeasons = 0;
-    int SeasonInt=0;
-    int offset = 0;
-    int SpeAge = 0;
     static_yMax = 0;
 
     QChart*     chart     = getChart();
@@ -48,7 +45,7 @@ ChartLineMultispeciesPopulations::callback_UpdateChart(nmfStructsQt::UpdateDataS
 
     nmfDatabase* databasePtr                  = data.databasePtr;
     nmfLogger*   logger                       = data.logger;
-    int          Nage                         = data.NumAgeSizeClasses;
+    //int          Nage                         = data.NumAgeSizeClasses;
     double       MaxScaleY                    = data.MaxScaleY.toDouble();
     std::string  MSVPAName                    = data.MSVPAName;
     std::string  ModelName                    = data.ModelName;
@@ -525,7 +522,7 @@ ChartLineMultispeciesPopulations::getAndLoadTotalBiomassDataForecast(
     int NMSVPASpe=0;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::matrix<double> ChartData;
     boost::numeric::ublas::vector<std::string> MSVPASpeList;
@@ -541,7 +538,7 @@ ChartLineMultispeciesPopulations::getAndLoadTotalBiomassDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears ;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears ;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -613,7 +610,7 @@ ChartLineMultispeciesPopulations::getAndLoadTotalAbundanceDataForecast(
     int NMSVPASpe=0;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::matrix<double> ChartData;
     boost::numeric::ublas::vector<std::string> MSVPASpeList;
@@ -632,7 +629,7 @@ ChartLineMultispeciesPopulations::getAndLoadTotalAbundanceDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears ;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears ;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -701,7 +698,7 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusBiomassDataForecast(
     int NMSVPASpe=0;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::matrix<double> ChartData;
     boost::numeric::ublas::vector<std::string> MSVPASpeList;
@@ -720,7 +717,7 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusBiomassDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -789,7 +786,7 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
     int NMSVPASpe=0;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::matrix<double> ChartData;
     boost::numeric::ublas::vector<std::string> MSVPASpeList;
@@ -808,7 +805,7 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -829,7 +826,7 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -893,7 +890,7 @@ ChartLineMultispeciesPopulations::getAndLoadSpawningStockBiomassDataForecast(
     int m=0;
     int Forecast_FirstYear;
     int Forecast_NYears;
-    int Forecast_LastYear;
+    //int Forecast_LastYear;
     std::vector<std::string> XLabelNames;
     boost::numeric::ublas::matrix<double> ChartData;
     boost::numeric::ublas::vector<std::string> MSVPASpeList;
@@ -909,7 +906,7 @@ ChartLineMultispeciesPopulations::getAndLoadSpawningStockBiomassDataForecast(
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
         Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-        Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+        //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
     } else {
         //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
         return;
@@ -1062,8 +1059,8 @@ ChartLineMultispeciesPopulations::loadChartWithData(
 {
     QLineSeries *series = NULL;
 
-    chart->removeAxis(chart->axisY());
-    chart->removeAxis(chart->axisX());
+    chart->removeAxis(chart->axes(Qt::Vertical).back());
+    chart->removeAxis(chart->axes(Qt::Horizontal).back());
 
     // Draw main chart title
     QFont mainTitleFont = chart->titleFont();
@@ -1102,7 +1099,8 @@ ChartLineMultispeciesPopulations::loadChartWithData(
         chart->addSeries(series);
         series->setName(QString::fromStdString(LegendNames(line)));
         series->setColor(QColor(QString::fromStdString(nmfConstants::LineColors[line % nmfConstants::LineColorNames.size()])));
-        chart->setAxisY(axisY,series);
+        //chart->setAxisY(axisY,series);
+        nmfUtilsQt::setAxisY(chart,axisY,series);
     }
     axisY = qobject_cast<QValueAxis *>(chart->axes(Qt::Vertical).at(0));
     if (MaxScaleY > 0.0) {
@@ -1116,7 +1114,8 @@ ChartLineMultispeciesPopulations::loadChartWithData(
     }
 
     // Set title on X axis
-    chart->setAxisX(axisX, series);
+    //chart->setAxisX(axisX, series);
+    nmfUtilsQt::setAxisX(chart,axisX,series);
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);

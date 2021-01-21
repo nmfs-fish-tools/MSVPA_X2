@@ -1,4 +1,6 @@
 <map id="ChartBarPopulationSize" name="ChartBarPopulationSize">
-<area shape="rect" id="node2" href="$class_chart_bar.html" title="ChartBar" alt="" coords="49,155,123,181"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_output_chart.html" title="MSVPAX2OutputChart" alt="" coords="8,80,164,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,229,180,256"/>
+<area shape="rect" id="node2" href="$class_chart_bar.html" title=" " alt="" coords="53,155,132,181"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_x2_output_chart.html" title=" " alt="" coords="11,80,174,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="53,5,132,32"/>
 </map>

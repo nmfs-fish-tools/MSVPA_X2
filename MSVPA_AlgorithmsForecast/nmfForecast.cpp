@@ -945,7 +945,7 @@ std::cout << 44 << std::endl;
         // Remove last comma and space from string
         cmd = cmd.substr(0, cmd.size() - 2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             logger->logMsg(nmfConstants::Error,"nmfForecast::ModelNoPredatorGrowth: SUITABLE BIOMASS CALCULATION FOR OTHER PREY EATEN BY OTHER PREDS: " + errorMsg);
         }
     }
@@ -1787,7 +1787,7 @@ std::cout << 44 << std::endl;
                         // Remove last comma and space from string
                         cmd = cmd.substr(0, cmd.size() - 2);
                         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                        if (errorMsg != " ") {
+                        if (nmfUtilsQt::isAnError(errorMsg)) {
                             nmfUtils::printError("Section: ForeOutput {1} ", errorMsg);
                         }
                     }
@@ -1849,7 +1849,7 @@ std::cout << 44 << std::endl;
                         cmd = cmd.substr(0, cmd.size() - 2);
 //std::cout << "cmd2: " << cmd << std::endl;
                         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                        if (errorMsg != " ") {
+                        if (nmfUtilsQt::isAnError(errorMsg)) {
                             nmfUtils::printError("Section: ForeOutput [2] ", errorMsg);
                         }
                     }
@@ -1919,7 +1919,7 @@ std::cout << 44 << std::endl;
                         cmd1 = cmd1.substr(0, cmd1.size() - 2);
 
                         errorMsg = databasePtr->nmfUpdateDatabase(cmd1);
-                        if (errorMsg != " ") {
+                        if (nmfUtilsQt::isAnError(errorMsg)) {
                             nmfUtils::printError("Section: ForeOutput ", errorMsg);
                         }
 
@@ -1952,7 +1952,7 @@ std::cout << 44 << std::endl;
                             // Remove last comma and space from string
                             cmd2 = cmd2.substr(0, cmd2.size() - 2);
                             errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
-                            if (errorMsg != " ") {
+                            if (nmfUtilsQt::isAnError(errorMsg)) {
                                 nmfUtils::printError("Section: ForeSuitPreyBiomass-1 ", errorMsg);
                             }
                         }
@@ -2012,7 +2012,7 @@ std::cout << 44 << std::endl;
                                 // Remove last comma and space from string
                                 cmd3 = cmd3.substr(0, cmd3.size() - 2);
                                 errorMsg = databasePtr->nmfUpdateDatabase(cmd3);
-                                if (errorMsg != " ") {
+                                if (nmfUtilsQt::isAnError(errorMsg)) {
                                     nmfUtils::printError("Section: ForeSuitPreyBiomass-2 ", errorMsg);
                                 }
                             }
@@ -2358,7 +2358,7 @@ nmfForecast::buildWriteCmdAndRun(nmfDatabase *databasePtr,
     cmd = cmd.substr(0, cmd.size()-1);
     cmd += ") ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("Section: "+msg, errorMsg);
     }
 } // end buildWriteCmdAndRun

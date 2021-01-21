@@ -1,6 +1,7 @@
 <map id="MSVPA_AlgorithmsSSVPA/nmfSSVPA.h" name="MSVPA_AlgorithmsSSVPA/nmfSSVPA.h">
-<area shape="rect" id="node2" href="$nmf_s_s_v_p_a_8cpp.html" title="This file contains the MSVPA API implementations. " alt="" coords="5,95,188,136"/>
-<area shape="rect" id="node3" href="$nmf_s_s_v_p_a_tab04_8h_source.html" title="MSVPA_GuiSSVPA/nmfSSVPATab04.h" alt="" coords="213,102,471,129"/>
-<area shape="rect" id="node4" href="$nmf_main_window_8h_source.html" title="MSVPA_Main/nmfMainWindow.h" alt="" coords="317,184,533,211"/>
-<area shape="rect" id="node5" href="$nmf_main_window_8cpp.html" title="This file contains the MSVPA_X2 Main Window implementation. " alt="" coords="309,259,540,285"/>
+<area shape="rect" id="node1" title="This file contains the SVPA API definitions." alt="" coords="252,5,439,47"/>
+<area shape="rect" id="node2" href="$nmf_s_s_v_p_a_8cpp.html" title="This file contains the MSVPA API implementations." alt="" coords="5,95,192,136"/>
+<area shape="rect" id="node3" href="$nmf_s_s_v_p_a_tab04_8h_source.html" title=" " alt="" coords="217,102,474,129"/>
+<area shape="rect" id="node4" href="$nmf_main_window_8h_source.html" title=" " alt="" coords="313,184,543,211"/>
+<area shape="rect" id="node5" href="$nmf_main_window_8cpp.html" title="This file contains the MSVPA_X2 Main Window implementation." alt="" coords="305,259,551,285"/>
 </map>

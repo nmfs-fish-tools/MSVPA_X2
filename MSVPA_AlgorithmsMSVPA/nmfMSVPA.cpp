@@ -1045,7 +1045,7 @@ nmfMSVPA::MSVPA_NoPredatorGrowth(
         // Remove last comma and space from string
         cmd = cmd.substr(0,cmd.size()-2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if ( errorMsg != " " ) nmfUtils::printError("Section: 1a",errorMsg);
+        if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Section: 1a",errorMsg);
 
         //databasePtr->nmfSaveDatabase();
         cmd = "INSERT INTO MSVPASeasBiomass (MSVPAname, Season, SpeName, SpeType, Year, Age, Biomass) values ";
@@ -1070,7 +1070,7 @@ nmfMSVPA::MSVPA_NoPredatorGrowth(
         // Remove last comma and space from string
         cmd = cmd.substr(0,cmd.size()-2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if ( errorMsg != " " ) nmfUtils::printError("Error 1b",errorMsg);
+        if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Error 1b",errorMsg);
 
     } // end if
 
@@ -1220,7 +1220,7 @@ if (ReadRunStopFile() == "Stop")
         // Remove last comma and space from string
         cmd = cmd.substr(0,cmd.size()-2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if ( errorMsg != " " ) nmfUtils::printError("Section: Starting calculations for MSVPA Species eating other prey",errorMsg);
+        if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Section: Starting calculations for MSVPA Species eating other prey",errorMsg);
     }
     nmfUtils::printMsg("End of suitable biomass calculations for MSVPA Species eating other prey.\n");
 
@@ -1356,7 +1356,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
         // Remove last comma and space from string
         cmd = cmd.substr(0,cmd.size()-2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if ( errorMsg != " " ) nmfUtils::printError("Section: Calculate SUITABLE Biomass for other predators",errorMsg);
+        if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Section: Calculate SUITABLE Biomass for other predators",errorMsg);
     }
     nmfUtils::printMsg("END SUITABLE BIOMASS CALCULATION FOR OTHER PREY EATEN BY OTHER PREDS\n");
 
@@ -1787,7 +1787,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
             queryStr = "DELETE FROM MSVPASeasBiomass WHERE MSVPAName='"	+ MSVPAName +
                        "' AND SpeName='" + MSVPASpeciesList[j]->SpeName + "'";
             errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
-            if (errorMsg != " ") {
+            if (nmfUtilsQt::isAnError(errorMsg)) {
                 logger->logMsg(nmfConstants::Error,"Error: "+queryStr+"; "+errorMsg);
                 //nmfUtils::printError(queryStr, errorMsg);
             }
@@ -1853,7 +1853,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
 //std::cout << "the cmd: " << cmd << std::endl;
 
             errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-            if (errorMsg != " ") nmfUtils::printError("Section: CALCULATE BIOMASSES FOR MSVPA SPECIES BY SEASON", errorMsg);
+            if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: CALCULATE BIOMASSES FOR MSVPA SPECIES BY SEASON", errorMsg);
         }
         // END OF SEASONAL BIOMASS CALCULATION LOOP >>>>>>>>>
 
@@ -1868,7 +1868,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
             queryStr = "DELETE FROM MSVPASuitPreyBiomass WHERE MSVPAName = '" + MSVPAName +
                        "' AND PreyName = '"	+ MSVPASpeciesList[i]->SpeName + "';";
             errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
-            if (errorMsg != " ") nmfUtils::printError(queryStr, errorMsg);
+            if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError(queryStr, errorMsg);
         }
 
         // Updating MSVPASuitPreyBiomass
@@ -1948,7 +1948,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
             // Remove last comma and space from string
             cmd = cmd.substr(0,cmd.size()-2);
             errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-            if ( errorMsg != " " ) nmfUtils::printError("Section: Calculate suitable prey biomass",errorMsg);
+            if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Section: Calculate suitable prey biomass",errorMsg);
         }
         // END OF SUITABLE PREY BIOMASS CALCULATION LOOP >>>>>>>
         //std::cout << "END OF SUITABLE PREY BIOMASS CALCULATION LOOP" << std::endl;
@@ -1973,7 +1973,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
                                "' and PredName = '"	+ OthPredList[i]->SpeName +
                                "' AND PreyName = '"	+ MSVPASpeciesList[j]->SpeName + "'";
                     errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
-                    if (errorMsg != " ") nmfUtils::printError(queryStr, errorMsg);
+                    if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError(queryStr, errorMsg);
                 } // end for j
             }// end for i
 
@@ -2074,7 +2074,7 @@ updateProgress(progressVal++, "Setup: Calculating suitable biomass for other pre
                 // Remove last comma and space from string
                 cmd = cmd.substr(0, cmd.size() - 2);
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") nmfUtils::printError("Section: CALCULATE SUITABLE PREY BIOMASS", errorMsg);
+                if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: CALCULATE SUITABLE PREY BIOMASS", errorMsg);
             }
         } // end if NOtherPreds
         // END SUITABLE BIOMASS CALCULATIONS FOR OTHER PREDATORS EATING MSVPA SPECIES
@@ -2290,14 +2290,14 @@ std::cout << std::endl;
         // Remove last comma and space from string
         cmd = cmd.substr(0, cmd.size() - 2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") nmfUtils::printError("Section: REPLACE INTO MSVPASuitPreyBiomass...",	errorMsg);
+        if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: REPLACE INTO MSVPASuitPreyBiomass...",	errorMsg);
 
         //databasePtr->nmfSaveDatabase();
 
         // Remove last comma and space from string
         cmd2 = cmd2.substr(0, cmd2.size() - 2);
         errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             nmfUtils::printError("Section: REPLACE INTO MSVPASeasBiomass...", errorMsg);
             //std::cout << "cmd:  " << cmd2 << std::endl;
         }
@@ -2335,7 +2335,7 @@ std::cout << std::endl;
                 for (int j = 0; j < NCats; ++j) {
                     for (int k = 0; k < NYears; ++k) {
                         for (int l = 0; l < NSeas; ++l) {
-                           if (m < dataMap["TotSBM"].size()) {
+                           if (m < int(dataMap["TotSBM"].size())) {
                               OthPredTotSuitBiomass[i][j][k][l] = std::stod(dataMap["TotSBM"][m++]);
                            } else {
                                logger->logMsg(nmfConstants::Error,"Error MSVPA(13.5): Missing data in MSVPASuitPreyBiomass");
@@ -2493,14 +2493,14 @@ std::cout << std::endl;
                 // Remove last comma and space from string
                 cmd = cmd.substr(0, cmd.size() - 2);
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") nmfUtils::printError("Section: REPLACE INTO MSVPASeasBiomass(2)...", errorMsg);
+                if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: REPLACE INTO MSVPASeasBiomass(2)...", errorMsg);
 
                 //databasePtr->nmfSaveDatabase();
 
                 // Remove last comma and space from string
                 cmd2= cmd2.substr(0, cmd2.size() - 2);
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
-                if (errorMsg != " ") nmfUtils::printError("Section: REPLACE INTO MSVPASuitPreyBiomass(2)...",	errorMsg);
+                if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: REPLACE INTO MSVPASuitPreyBiomass(2)...",	errorMsg);
 
                 //databasePtr->nmfSaveDatabase();
 
@@ -2597,7 +2597,7 @@ std::cout << std::endl;
         if (updateDB) {
             cmd = cmd.substr(0, cmd.size() - 2);
             errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-            if (errorMsg != " ") nmfUtils::printError("Section: Calculate M2 values...", errorMsg);
+            if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Section: Calculate M2 values...", errorMsg);
         }
         //databasePtr->nmfSaveDatabase();
 
@@ -2697,7 +2697,7 @@ std::cout << std::endl;
     cmd = "SELECT SpeName,SeasM2,AnnBiomass,StomCont FROM MSVPASeasBiomass where SpeName=\"Menhaden\" INTO OUTFILE \"" + filename + "\"";
     cmd = "SELECT SpeName,Year,Age,Season,sum(SeasM2) as TotM2, sum(AnnBiomass) as TotBM,sum(StomCont) as TotSC FROM MSVPASeasBiomass where SpeName='Menhaden' and Age=0  and Season = 0 group by SpeName,Year,Age,Season INTO OUTFILE \"" + filename + "\"";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") nmfUtils::printError("Error exporting test.csv file", errorMsg);
+    if (nmfUtilsQt::isAnError(errorMsg)) nmfUtils::printError("Error exporting test.csv file", errorMsg);
 */
     updateProgress(nmfConstantsMSVPA::MaxMSVPALoops + nmfConstantsMSVPA::NumMSVPASetupSteps,
                    loopPrefix + ":  Done");

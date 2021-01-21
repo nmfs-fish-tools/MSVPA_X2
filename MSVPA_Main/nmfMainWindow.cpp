@@ -1078,7 +1078,7 @@ nmfMainWindow::readMSVPAProgressSetupDataFile(std::string progressDataFile)
 void
 nmfMainWindow::readForecastProgressSetupDataFile(std::string progressDataFile)
 {
-    int value;
+    //int value;
 
     std::ifstream inputFile(progressDataFile);
     if (inputFile) {
@@ -2275,13 +2275,13 @@ void nmfMainWindow::restoreTitleFonts()
     mainTitleFont.setWeight(QFont::Bold);
     chart->setTitleFont(mainTitleFont);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
     axisX->setTitleFont(titleFont);
 
-    QAbstractAxis *axisY = chart->axisY();
+    QAbstractAxis *axisY = chart->axes(Qt::Vertical).back();
     titleFont = axisY->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -2953,11 +2953,12 @@ void nmfMainWindow::setTitles(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(categories);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -2974,7 +2975,8 @@ void nmfMainWindow::setTitles(
     newAxisY->setTitleText(yLabel.c_str());
     newAxisY->setRange(0,1.0);
     newAxisY->setTickCount(6);
-    chart->setAxisY(newAxisY,series);
+    //chart->setAxisY(newAxisY,series);
+    nmfUtilsQt::setAxisY(chart,newAxisY,series);
 }
 
 
@@ -3363,7 +3365,7 @@ nmfMainWindow::callback_horzGridLine2dCheckboxChanged(int state)
     if (! outputChart)
         return;
     hGridLine2d = state==Qt::Checked;
-    chart->axisY()->setGridLineVisible(hGridLine2d);
+    chart->axes(Qt::Vertical).back()->setGridLineVisible(hGridLine2d);
 
     //outputChart->setGridLines(chart,"horizontal",(state==Qt::Checked));
 
@@ -3376,7 +3378,7 @@ nmfMainWindow::callback_vertGridLine2dCheckboxChanged(int state)
         return;
 
     vGridLine2d = state==Qt::Checked;
-    chart->axisX()->setGridLineVisible(vGridLine2d);
+    chart->axes(Qt::Horizontal).back()->setGridLineVisible(vGridLine2d);
 
     //outputChart->setGridLines(chart,"vertical",(state==Qt::Checked));
 
@@ -6283,7 +6285,6 @@ nmfMainWindow::callback_RunForecast()
 void
 nmfMainWindow::callback_RunForecastClicked(bool checked)
 {
-    bool retv;
     std::vector<std::string> outputFields;
     std::string errorMsg="";
     std::string cmd = "";
@@ -6319,7 +6320,7 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     // Remove last comma and space from string
     cmd = cmd.substr(0, cmd.size() - 2);
     errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         m_logger->logMsg(nmfConstants::Error,"Function: callback_RunForecastClicked: " + errorMsg);
     }
 
@@ -6451,7 +6452,6 @@ void nmfMainWindow::testFunc()
 
 void nmfMainWindow::callback_RunMSVPAClicked(bool checked)
 {
-    int numLoops = 0;
     std::string errorMsg;
     std::map<std::string,int> CohortAnalysisGuiData;
     std::map<std::string,int> EffortTunedGuiData;
@@ -6776,8 +6776,8 @@ std::cout << "nmfMainWindow::callback_RunSSVPA START with type: " << SSVPAType <
         m_CatchDataInitialized = true;
     }
     model = m_UI->SSVPAInputTabWidget->findChild<QTableView *>("SSVPACatchAtAgeTV")->model();
-    int nrows = model->rowCount();
-    int ncols = model->columnCount();
+    //int nrows = model->rowCount();
+    //int ncols = model->columnCount();
 
     fields   = {"SpeName","FirstYear","LastYear"};
     queryStr = "SELECT SpeName,FirstYear,LastYear FROM Species WHERE SpeIndex = " + std::to_string(SpeciesIndex);
@@ -7389,7 +7389,7 @@ nmfMainWindow::clearDatabaseTables(std::string type,
             // Clear database table
             qcmd = "TRUNCATE TABLE " + QString::fromStdString(tableToClear);
             errorMsg = m_databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-            if (errorMsg != " ") {
+            if (nmfUtilsQt::isAnError(errorMsg)) {
                 nmfUtils::printError("menu_clear"+type+"Tables: Clearing table error: ",
                                      errorMsg+": "+tableToClear);
                 continue;
@@ -7551,7 +7551,7 @@ void nmfMainWindow::callback_schemeLight() {
 void nmfMainWindow::menu_about()
 {
     QString name = "Multi-Species Virtual Population Analysis 2nd Version";
-    QString version = QString("MSVPA_X2 v0.9.2 (beta)"); // + "&alpha;";
+    QString version = QString("MSVPA_X2 v0.9.3 (beta)"); // + "&alpha;";
     QString specialAcknowledgement = "<br><br>This code is a C++ implementation of the Visual Basic code written by Dr. Lance Garrison.";
     QString msg = "";
     QString cppVersion = "C++??";
@@ -7667,7 +7667,7 @@ nmfMainWindow::menu_newMSVPA()
         cmd += "(\"" + NewMSVPAName.toStdString() + "\", " +
                 "0,0,0,0,0,0,0,0,0,0,0)";
         errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             std::cout << cmd << std::endl;
             m_logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAlist: " + errorMsg);
         }
@@ -7691,7 +7691,7 @@ nmfMainWindow::menu_newMSVPA()
                 cmd += "ON DUPLICATE KEY UPDATE ";
                 cmd += "SpeIndex=values(SpeIndex); ";
                 errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") {
+                if (nmfUtilsQt::isAnError(errorMsg)) {
                     std::cout << cmd << std::endl;
                     m_logger->logMsg(nmfConstants::Error,"menu_newMSVPA: INSERT INTO MSVPAspecies: "+errorMsg);
                 }
@@ -7810,7 +7810,7 @@ void nmfMainWindow::menu_deleteSpecies()
             if (reply == QMessageBox::Yes) {
                 cmd = "DELETE FROM Species WHERE SpeName='" + currentSpecies + "'";
                 errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-                if (errorMsg != " ") {
+                if (nmfUtilsQt::isAnError(errorMsg)) {
                     m_logger->logMsg(nmfConstants::Error,"menu_deleteSpecies: DELETE FROM Species: " + errorMsg);
                 }
             } else {
@@ -7880,7 +7880,7 @@ void nmfMainWindow::deleteTheMSVPA()
             cmd  = "DELETE FROM " + table;
             cmd += " WHERE MSVPAName = '" + MSVPAName + "' ";
             errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-            if (errorMsg != " ") {
+            if (nmfUtilsQt::isAnError(errorMsg)) {
                 msg = "deleteTheMSVPA: DELETE FROM " + table + ": ";
                 m_logger->logMsg(nmfConstants::Error,msg+errorMsg);
             }
@@ -7975,7 +7975,7 @@ void nmfMainWindow::clearForecastTables(std::string MSVPAName, std::string Forec
             cmd += " WHERE MSVPAName = '" + MSVPAName + "' " +
                     "AND ForeName = '" + Forecast + "' ";
             errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-            if (errorMsg != " ") {
+            if (nmfUtilsQt::isAnError(errorMsg)) {
                 m_logger->logMsg(nmfConstants::Error,"clearForecastTables: DELETE FROM Scenarios: "+errorMsg);
             }
         }
@@ -8010,7 +8010,7 @@ void nmfMainWindow::deleteTheForecast(std::string Forecast,
            "AND Scenario = '" + Scenario + "'";
 //std::cout << "cmd1: " << cmd << std::endl;
     errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         m_logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Scenarios: "+errorMsg);
     }
 
@@ -8021,7 +8021,7 @@ void nmfMainWindow::deleteTheForecast(std::string Forecast,
                 "AND ForeName = '" + Forecast + "' ";
 //std::cout << "cmd2: " << cmd << std::endl;
         errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
-        if (errorMsg != " ") {
+        if (nmfUtilsQt::isAnError(errorMsg)) {
             m_logger->logMsg(nmfConstants::Error,"deleteTheForecast: DELETE FROM Forecasts..."+errorMsg);
         }
         clearForecastTables(MSVPAName,Forecast);
@@ -8638,7 +8638,7 @@ void nmfMainWindow::menu_saveOutputData()
         outFile.setFileName(filename);
         outFile.open(QIODevice::Append | QIODevice::Text);
         QTextStream out(&outFile);
-        out << SetupOutputTE->toPlainText() << endl;
+        out << SetupOutputTE->toPlainText() << "\n";
         outFile.close();
 
     } else if (theModelName == "SSVPA") {
@@ -8647,7 +8647,7 @@ void nmfMainWindow::menu_saveOutputData()
         outFile.setFileName(filename);
         outFile.open(QIODevice::Append | QIODevice::Text);
         QTextStream out(&outFile);
-        out << SSVPAOutputTE->toPlainText() << endl;
+        out << SSVPAOutputTE->toPlainText() << "\n";
         outFile.close();
 
     } else if ((theModelName == "MSVPA") ||

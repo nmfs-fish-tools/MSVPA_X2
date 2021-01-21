@@ -475,7 +475,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_SavePB(bool unused)
     // 2. Clear the current table contents
     qcmd = "TRUNCATE TABLE " + TableName;
     errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         saveOK = false;
         nmfUtils::printError("MSVPA Save(1): Clearing table error: ", errorMsg);
     }
@@ -512,7 +512,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_SavePB(bool unused)
     fin2.close();
 //std::cout << cmd << std::endl;
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
-    if (errorMsg != " ") {
+    if (nmfUtilsQt::isAnError(errorMsg)) {
         nmfUtils::printError("MSVPA Save(3): Write table error: "+TableName.toStdString(), errorMsg);
         return;
     }

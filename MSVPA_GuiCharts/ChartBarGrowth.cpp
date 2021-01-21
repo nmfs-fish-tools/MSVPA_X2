@@ -542,7 +542,7 @@ ChartBarGrowth::getChartData(
     int nYears;
     int Forecast_FirstYear=0;
     int Forecast_NYears=0;
-    int Forecast_LastYear=0;
+    //int Forecast_LastYear=0;
 
     // Find number of Forecast years
     if (! ForecastName.empty()) {
@@ -553,7 +553,7 @@ ChartBarGrowth::getChartData(
         if (dataMap["NYears"].size() > 0) {
             Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
             Forecast_NYears    = std::stoi(dataMap["NYears"][0]) + 1;
-            Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
+            //Forecast_LastYear  = Forecast_FirstYear + Forecast_NYears;
         } else {
             //logger->logMsg(nmfConstants::Error,"No NYears data for Forecast: "+ForecastName);
             return;

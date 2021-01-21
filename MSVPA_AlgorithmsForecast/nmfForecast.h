@@ -39,6 +39,7 @@
 
 #include "nmfDatabase.h"
 #include "nmfLogger.h"
+#include "nmfUtilsQt.h"
 
 //#include "nmfforecast_global.h"
 

@@ -778,11 +778,12 @@ ChartBarMortalityRates::setTitles(
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(categories);
     chart->createDefaultAxes();
-    chart->setAxisX(axis, series);
+    //chart->setAxisX(axis, series);
+    nmfUtilsQt::setAxisX(chart,axis,series);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignRight);
 
-    QAbstractAxis *axisX = chart->axisX();
+    QAbstractAxis *axisX = chart->axes(Qt::Horizontal).back();
     QFont titleFont = axisX->titleFont();
     titleFont.setPointSize(12);
     titleFont.setWeight(QFont::Bold);
@@ -799,7 +800,8 @@ ChartBarMortalityRates::setTitles(
     newAxisY->setTitleText(yLabel.c_str());
     newAxisY->setRange(0,1.0);
     newAxisY->setTickCount(6);
-    chart->setAxisY(newAxisY,series);
+    //chart->setAxisY(newAxisY,series);
+    nmfUtilsQt::setAxisY(chart,newAxisY,series);
 }
 
 

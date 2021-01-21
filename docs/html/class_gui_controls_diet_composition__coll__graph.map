@@ -1,5 +1,7 @@
 <map id="GuiControlsDietComposition" name="GuiControlsDietComposition">
-<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls_non_yield_per_recruit.html" title="MSVPAGuiControlsNonYield\lPerRecruit" alt="" coords="5,229,196,271"/>
-<area shape="rect" id="node3" href="$class_m_s_v_p_a_gui_controls.html" title="MSVPAGuiControls" alt="" coords="31,155,170,181"/>
-<area shape="rect" id="node4" href="$class_m_s_v_p_a_x2_gui_controls.html" title="MSVPAX2GuiControls" alt="" coords="23,80,178,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,319,212,345"/>
+<area shape="rect" id="node2" href="$class_m_s_v_p_a_gui_controls_non_yield_per_recruit.html" title=" " alt="" coords="8,229,209,271"/>
+<area shape="rect" id="node3" href="$class_m_s_v_p_a_gui_controls.html" title=" " alt="" coords="37,155,180,181"/>
+<area shape="rect" id="node4" href="$class_m_s_v_p_a_x2_gui_controls.html" title=" " alt="" coords="29,80,189,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="69,5,148,32"/>
 </map>
