@@ -559,7 +559,7 @@ nmfMSVPA::MSVPA_NoPredatorGrowth(
     XSAGuiData.clear();
 
     // Start timer for algorithmic timing
-    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
     //std::string logFile =  nmfLogger::logFile();
 
@@ -2668,7 +2668,7 @@ std::cout << std::endl;
     updateProgress(-1,"MSVPA Completed.");
 
     // End timer for algorithmic timing
-    std::string elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    std::string elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     if (userHalted) {
         logger->logMsg(nmfConstants::Normal,"MSVPA: User halted iterations. Output data incomplete.");

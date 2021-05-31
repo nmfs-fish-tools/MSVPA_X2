@@ -4422,8 +4422,7 @@ nmfSSVPATab4::runSSVPA_CohortAnalysis(
     // Set cursor and timer
 
     //QApplication::setOverrideCursor(Qt::WaitCursor);
-    std::chrono::_V2::system_clock::time_point startTime =
-            nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
     // Pack input and output arg structs
     argsIn.databasePtr           = databasePtr;
@@ -4458,7 +4457,7 @@ nmfSSVPATab4::runSSVPA_CohortAnalysis(
 
     // Reset cursor and stop timer
     //QApplication::setOverrideCursor(Qt::ArrowCursor);
-    elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     // Create the column and row headings
     for (int year=FirstCatchYear; year<=LastCatchYear; ++year) {
@@ -4524,8 +4523,7 @@ nmfSSVPATab4::runSSVPA_SeparableVPA(
 
     // Set cursor and timer
     //QApplication::setOverrideCursor(Qt::WaitCursor);
-    std::chrono::_V2::system_clock::time_point startTime =
-            nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
     selectivityModel = SSVPAInitialSelectivityTV->model();
     for (int row = 0; row < selectivityModel->rowCount(); ++row) {
@@ -4569,7 +4567,7 @@ nmfSSVPATab4::runSSVPA_SeparableVPA(
 
     // Reset cursor and stop timer
     //QApplication::setOverrideCursor(Qt::ArrowCursor);
-    elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     // Create row and column headers for output table.
     for (int year=FirstYear; year<=LastYear; ++year) {
@@ -4640,8 +4638,7 @@ nmfSSVPATab4::runSSVPA_EffortTuned(
 
     // Set cursor and timer
     //QApplication::setOverrideCursor(Qt::WaitCursor);
-    std::chrono::_V2::system_clock::time_point startTime =
-            nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
     // Load FleetData struct for the Effort_Tune_VPA API call
     int numRows = LastYear-FirstYear+1;
@@ -4678,7 +4675,7 @@ nmfSSVPATab4::runSSVPA_EffortTuned(
 
     // Reset cursor and stop timer
     //QApplication::setOverrideCursor(Qt::ArrowCursor);
-    elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     // Create row and column headers for output table.
     for (int year=FirstYear; year<=LastYear; ++year) {
@@ -4732,8 +4729,7 @@ nmfSSVPATab4::runSSVPA_XSA(
 
     // Set cursor and timer
     //QApplication::setOverrideCursor(Qt::WaitCursor);
-    std::chrono::_V2::system_clock::time_point startTime =
-            nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
     // pack input and output arguments for passing to XSA run
     inputArgs.databasePtr         = databasePtr;
@@ -4758,7 +4754,7 @@ nmfSSVPATab4::runSSVPA_XSA(
 
     // Reset cursor and stop timer
     //QApplication::setOverrideCursor(Qt::ArrowCursor);
-    elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     for (int year=FirstYear; year<=LastYear; ++year) {
         rowTitles.push_back(std::to_string(year));

@@ -233,7 +233,7 @@ nmfForecast::Forecast_NoPredatorGrowth(
     outputProgressLabel("");
 
     // Start timer for algorithmic timing
-    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
 
 
 // test code RSK
@@ -2191,7 +2191,7 @@ std::cout << 44 << std::endl;
     }
 
     // End timer for algorithmic timing
-    std::string elapsedTimeStr = nmfUtils::elapsedTime(startTime);
+    std::string elapsedTimeStr = nmfUtilsQt::elapsedTime(startTime);
 
     if (userHalted) {
         logger->logMsg(nmfConstants::Normal,"Forecast: User halted Forecast Run. Output data incomplete.");

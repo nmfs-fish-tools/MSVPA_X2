@@ -69,6 +69,7 @@
 //#include "ui_MSVPA_X2.h"
 
 #include <QThreadPool>
+#include <QThread>
 
 typedef boost::multi_array<double, 3> Boost3DArrayDouble;
 typedef boost::multi_array<double, 4> Boost4DArrayDouble;

@@ -6367,9 +6367,6 @@ nmfMainWindow::callback_RunForecastClicked(bool checked)
     //dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     //int NSeasons = std::stoi(dataMap["NSeasons"][0]);
 
-    // Start timer for algorithmic timing
-    //std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
-
     // Setup 1 second periodic timer to check a file that contains progress data from algorithm.
     // Doing it this way rather than passing the QProgressBar to the algorithms continues to keep
     // separate the GUI from the algorithm.
@@ -6478,9 +6475,6 @@ void nmfMainWindow::callback_RunMSVPAClicked(bool checked)
                 predPreyMap["predators"],
                 predPreyMap["prey"],
                 predPreyMap["otherPredators"]);
-
-    // Start timer for algorithmic timing
-    //std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
 
     std::cout << "\n*** Warning: Check for other hardcoded values from original tool.....\n\n" << std::endl;
 
@@ -7551,7 +7545,7 @@ void nmfMainWindow::callback_schemeLight() {
 void nmfMainWindow::menu_about()
 {
     QString name = "Multi-Species Virtual Population Analysis 2nd Version";
-    QString version = QString("MSVPA_X2 v0.9.3 (beta)"); // + "&alpha;";
+    QString version = QString("MSVPA_X2 v0.9.4 (beta)"); // + "&alpha;";
     QString specialAcknowledgement = "<br><br>This code is a C++ implementation of the Visual Basic code written by Dr. Lance Garrison.";
     QString msg = "";
     QString cppVersion = "C++??";
@@ -8552,7 +8546,7 @@ QString nmfMainWindow::getOutputFilename(QString type, QString filenameEntered)
             }
 
             // Sleep so any previous popup has time to close and so won't be captured in the image.
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            QThread::msleep((unsigned long)(100));
         }
     } else {
         outputFile = QDir(path).filePath(filenameEntered);

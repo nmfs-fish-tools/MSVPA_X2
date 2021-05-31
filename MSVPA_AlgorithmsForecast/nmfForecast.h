@@ -36,6 +36,7 @@
 #include <algorithm>
 
 #include <QApplication>
+#include <QDateTime>
 
 #include "nmfDatabase.h"
 #include "nmfLogger.h"
