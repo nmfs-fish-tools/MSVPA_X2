@@ -121,7 +121,8 @@ ChartBarMortalityRates::callback_UpdateChart(nmfStructsQt::UpdateDataStruct data
 
     // Find NConversion scale factor which is used in some cases
     fields = {"WtUnits","CatchUnits"};
-    queryStr = "SELECT WtUnits,CatchUnits from Species where SpeName='" + SelectedSpecies + "'";
+    queryStr = "SELECT WtUnits,CatchUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName='" + SelectedSpecies + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["WtUnits"].size() > 0) {
         CatchUnits = std::stod(dataMap["CatchUnits"][0]);
@@ -288,7 +289,9 @@ ChartBarMortalityRates::getAndLoadFishingMortalityDataMSVPA(
     RowLabels.clear();
     ColumnLabels.clear();
     fields = {"Year", "SumField"};
-    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'"
+    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAname = '" + MSVPAName + "'"
                " AND SpeName = '" + SelectedSpecies + "'" +
                seasonStr + " GROUP BY Year, Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -465,7 +468,9 @@ ChartBarMortalityRates::getAndLoadPredationMortalityDataMSVPA(
     nmfUtils::initialize(GridData, MSVPA_NYears, Nage);
     m = 0;
     fields = {"Year", "SumField"};
-    queryStr = "Select Year, Sum(SeasM2) As SumField FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'"
+    queryStr = "Select Year, Sum(SeasM2) As SumField FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAname = '" + MSVPAName + "'"
                " AND SpeName  = '" + SelectedSpecies + "'" +
                seasonStr + " GROUP BY Year, Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -574,13 +579,14 @@ ChartBarMortalityRates::getYearsAndAges(
 
     // Find NumYears and NumAges per species
     fields   = {"NumYears","NumAges"};
-    queryStr = "SELECT count(DISTINCT(Year)) as NumYears, count(DISTINCT(Age)) as NumAges FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
+    queryStr = "SELECT count(DISTINCT(Year)) as NumYears, count(DISTINCT(Age)) as NumAges FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAName = '" + MSVPAName +
                "' and SpeName='" + species + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumYears = std::stoi(dataMap["NumYears"][0]);
     NumAges  = std::stoi(dataMap["NumAges"][0]);
 }
-
 
 
 void
@@ -650,7 +656,8 @@ ChartBarMortalityRates::getAndLoadPredationMortality3DDataMSVPA(
 
     // Find all species
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName + "'";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     for (int i=0;i<NumSpecies;++i) {
@@ -666,7 +673,9 @@ ChartBarMortalityRates::getAndLoadPredationMortality3DDataMSVPA(
 
     // Load M2 rates
     fields = {"Year","Age","M2"};
-    queryStr = "SELECT Year,Age,Sum(SeasM2) as M2 FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +"'" +
+    queryStr = "SELECT Year,Age,Sum(SeasM2) as M2 FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAName = '" + MSVPAName +"'" +
                " and SpeName='" + SelectedSpecies + "'" +
                " GROUP BY Year, Age";
 

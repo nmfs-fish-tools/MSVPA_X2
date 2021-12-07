@@ -178,9 +178,11 @@ std::cout << "Data: " << std::endl;
     for (int i = 0; i < NMSVPASpe; ++i) {
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
         fields = {"Year","Biomass"};
-        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Biomass FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND SpeName = '" + MSVPASpeList(i) + "'" +
-                  seasonStr + " GROUP By Year";
+        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND SpeName = '" + MSVPASpeList(i) + "'" +
+                    seasonStr + " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         for (int j = 0; j < NumYears; ++j) {
             if (i == 0) {
@@ -249,10 +251,12 @@ ChartLineMultispeciesPopulations::getAndLoadTotalAbundanceDataMSVPA(
     for (int i = 0; i < NMSVPASpe; ++i) {
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
         fields = {"Year","Abundance"};
-        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Abundance FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND SpeName = '" + MSVPASpeList(i) + "'" +
-                  seasonStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Abundance FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND SpeName = '" + MSVPASpeList(i) + "'" +
+                    seasonStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int j = 0; j <  NumYears; ++j) {
@@ -323,7 +327,9 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusBiomassDataMSVPA(
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
 
         fields = {"Year","Biomass"};
-        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Biomass FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND SpeName = '" + MSVPASpeList(i) + "'" +
                      seasonStr + " AND Age >= 1 GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -394,10 +400,12 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataMSVPA(
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
 
         fields = {"Year","Abundance"};
-        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Abundance FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND SpeName = '" + MSVPASpeList(i) + "'" +
-                  seasonStr +
-                " AND Age >= 1 GROUP By Year";
+        queryStr = "SELECT Year, Sum(" + abundVariable + ") AS Abundance FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND SpeName = '" + MSVPASpeList(i) + "'" +
+                    seasonStr +
+                   " AND Age >= 1 GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int j = 0; j <  NumYears; ++j) {
@@ -470,10 +478,12 @@ ChartLineMultispeciesPopulations::getAndLoadSpawningStockBiomassDataMSVPA(
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
 
         fields = {"Year","Age","Biomass"};
-        queryStr = "SELECT Year, Age, Sum(" + abundVariable + ") AS Biomass FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND SpeName = '"  + MSVPASpeList(i) + "'" +
-                  seasonStr +
-                " GROUP By Year, Age";
+        queryStr = "SELECT Year, Age, Sum(" + abundVariable + ") AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND SpeName = '"  + MSVPASpeList(i) + "'" +
+                    seasonStr +
+                   " GROUP By Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         m = 0;
@@ -532,8 +542,9 @@ ChartLineMultispeciesPopulations::getAndLoadTotalBiomassDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -561,7 +572,9 @@ ChartLineMultispeciesPopulations::getAndLoadTotalBiomassDataForecast(
     for (int i = 0; i < NMSVPASpe; ++i) {
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
         fields = {"Year","Biomass"};
-        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND ForeName = '" + ForecastName + "'" +
                    " AND Scenario = '" + ScenarioName + "'" +
                    " AND SpeName = '" + MSVPASpeList(i) + "'" +
@@ -623,8 +636,9 @@ ChartLineMultispeciesPopulations::getAndLoadTotalAbundanceDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -649,11 +663,13 @@ ChartLineMultispeciesPopulations::getAndLoadTotalAbundanceDataForecast(
     for (int i = 0; i < NMSVPASpe; ++i) {
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
         fields = {"Year","Abundance"};
-        queryStr = "SELECT Year, Sum(InitAbund) AS Abundance FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + MSVPASpeList(i) + "'" +
-                  seasonStr + " GROUP By Year";
+        queryStr = "SELECT Year, Sum(InitAbund) AS Abundance FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + MSVPASpeList(i) + "'" +
+                    seasonStr + " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int j = 0; j <  Forecast_NYears; ++j) {
@@ -711,8 +727,9 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusBiomassDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -738,11 +755,13 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusBiomassDataForecast(
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
 
         fields = {"Year","Biomass"};
-        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + MSVPASpeList(i) + "'" +
-                  seasonStr + " AND Age >= 1 GROUP By Year";
+        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + MSVPASpeList(i) + "'" +
+                     seasonStr + " AND Age >= 1 GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int j = 0; j < Forecast_NYears; ++j) {
@@ -799,8 +818,9 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -820,8 +840,9 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -840,11 +861,13 @@ ChartLineMultispeciesPopulations::getAndLoadAge1PlusAbundanceDataForecast(
         ColumnLabels << QString::fromStdString(MSVPASpeList(i));
 
         fields = {"Year","Abundance"};
-        queryStr = "SELECT Year, Sum(InitAbund) AS Abundance FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + MSVPASpeList(i) + "'" +
-                  seasonStr + " AND Age >= 1 GROUP By Year";
+        queryStr = "SELECT Year, Sum(InitAbund) AS Abundance FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + MSVPASpeList(i) + "'" +
+                    seasonStr + " AND Age >= 1 GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int j = 0; j <  Forecast_NYears; ++j) {
@@ -900,8 +923,9 @@ ChartLineMultispeciesPopulations::getAndLoadSpawningStockBiomassDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -931,11 +955,13 @@ ChartLineMultispeciesPopulations::getAndLoadSpawningStockBiomassDataForecast(
 
         fields = {"Year","Age","Biomass"};
 
-        queryStr = "SELECT Year, Age, Sum(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + MSVPASpeList(i) + "'" +
-                seasonStr + " GROUP By Year, Age";
+        queryStr = "SELECT Year, Age, Sum(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + MSVPASpeList(i) + "'" +
+                   seasonStr + " GROUP By Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         m = 0;
@@ -976,7 +1002,8 @@ ChartLineMultispeciesPopulations::getMSVPASpecies(
 
     // Load all msvpa species and ages
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND (Type = 0 or Type = 1)";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     NMSVPASpecies = dataMap["SpeName"].size();
@@ -1002,7 +1029,8 @@ ChartLineMultispeciesPopulations::getMSVPASpeciesNamesAges(
 
     for (int i=0; i<NMSVPASpe; ++i) {
         fields = {"MaxAge"};
-        queryStr = "SELECT MaxAge FROM Species WHERE SpeName = '" + MSVPASpeList(i) + "'";
+        queryStr = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE SpeName = '" + MSVPASpeList(i) + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         MSVPASpeAge.push_back( std::stoi(dataMap["MaxAge"][0]) );
     }
@@ -1028,7 +1056,8 @@ ChartLineMultispeciesPopulations::getMaturity(
     // Get Maturity data....RSK possibly make this an nmfDatabase function
     for (int i = 0; i < NMSVPASpe; ++i) {
         fields = {"PMature"};
-        queryStr = "SELECT PMature FROM SpeMaturity WHERE SpeName = '" + MSVPASpeList(i) + "'" +
+        queryStr = "SELECT PMature FROM " + nmfConstantsMSVPA::TableSpeMaturity +
+                   " WHERE SpeName = '" + MSVPASpeList(i) + "'" +
                    " AND Year = " + std::to_string(FirstYear) +
                    " ORDER By Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);

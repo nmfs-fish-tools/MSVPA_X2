@@ -154,8 +154,9 @@ ChartLineYieldPerRecruit::getForecastYears(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
         Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);

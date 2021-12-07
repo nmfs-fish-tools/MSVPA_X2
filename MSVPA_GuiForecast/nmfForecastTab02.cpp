@@ -84,8 +84,8 @@ nmfForecastTab2::callback_Forecast_Tab2_SavePB(bool unused)
 
     int nrows = vonBert_model->count();
     for (int i=0;i<nrows; ++i) {
-        cmd  = "INSERT INTO ForePredVonB ";
-        cmd += "(MSVPAName,ForeName,PredName,PredIndex,PredType,Linf,GrowthK,TZero,LWAlpha,LWBeta) values ";
+        cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForePredVonB;
+        cmd += " (MSVPAName,ForeName,PredName,PredIndex,PredType,Linf,GrowthK,TZero,LWAlpha,LWBeta) values ";
         cmd += "(\"" + MSVPAName + "\", \"" + ForecastName + "\", \"" +
                 vonBert_model->index(i,0).data().toString().toStdString() + "\", " +
                 vonBert_model->index(i,1).data().toString().toStdString() + "," +
@@ -125,7 +125,7 @@ nmfForecastTab2::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "ForePredVonB";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForePredVonB);
     fields    = {"MSVPAName","ForeName","PredName","PredIndex","PredType",
                  "Linf","GrowthK","TZero","LWAlpha","LWBeta"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -154,7 +154,7 @@ nmfForecastTab2::callback_Forecast_Tab2_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg->setDirectory(path);
-    fileDlg->selectFile("ForePredVonB.csv");
+    fileDlg->selectFile(QString::fromStdString(nmfConstantsMSVPA::TableForePredVonB)+".csv");
     fileDlg->setNameFilters(NameFilters);
     fileDlg->setWindowTitle("Load Forecast Predator Von B CSV File");
     if (fileDlg->exec()) {
@@ -206,11 +206,11 @@ nmfForecastTab2::callback_Forecast_Tab2_LoadPB(bool unused)
 
     logger->logMsg(nmfConstants::Normal,"nmfForecastTab2::callback_Forecast_Tab2_Load Complete");
 
-/*
-    emit LoadDataTable(MSVPAName,ForecastName,
-                       "Forecast","ForePredVonB",
-                       "Forecast",1);
-*/
+
+//    emit LoadDataTable(MSVPAName,ForecastName,
+//                       "Forecast","ForePredVonB",
+//                       "Forecast",1);
+
 } // end callback_Forecast_Tab2_Load
 
 
@@ -219,14 +219,14 @@ nmfForecastTab2::callback_TableDataChanged(QModelIndex unused)
 {
     Forecast_Tab2_SavePB->setEnabled(true);
 
-    MarkAsDirty("ForePredVonB");
+    MarkAsDirty(nmfConstantsMSVPA::TableForePredVonB);
 
 } // end callback_TableDataChanged
 
 //void
 //nmfForecastTab2::callback_TableDataChanged(QModelIndex &unused1, QModelIndex &unused2)
 //{
-//    MarkAsDirty("ForePredVonB");
+//    MarkAsDirty(nmfConstantsMSVPA::TableForePredVonB);
 //} // end callback_TableDataChanged
 
 void
@@ -279,7 +279,9 @@ nmfForecastTab2::loadWidgets(
 
     // Load Von Bert data from table
     fields = {"PredName","PredIndex","PredType","Linf","GrowthK","TZero","LWAlpha","LWBeta"};
-    queryStr = "SELECT PredName,PredIndex,PredType,Linf,GrowthK,TZero,LWAlpha,LWBeta FROM ForePredVonB WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT PredName,PredIndex,PredType,Linf,GrowthK,TZero,LWAlpha,LWBeta FROM " +
+                nmfConstantsMSVPA::TableForePredVonB +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'" +
                " ORDER BY PredIndex";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -288,7 +290,8 @@ nmfForecastTab2::loadWidgets(
     if (NumRecords == 0) {
         theVonBert_model.removeRows(0, theVonBert_model.count(), QModelIndex());
         fields = {"SpeName"};
-        queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'" +
+        queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                   " WHERE MSVPAName = '" + MSVPAName + "'" +
                    " AND (Type = 0 or Type = 1)";
         dataMap2 = databasePtr->nmfQueryDatabase(queryStr, fields);
         for (int i=0; i<int(dataMap2["SpeName"].size());++i) {

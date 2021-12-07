@@ -405,7 +405,7 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
     std::string seasonStr = "";
     int seasonVal=0;
     int firstYear=0;
-    int nYears;
+    int nYears = 0;
     int Forecast_FirstYear;
     int Forecast_NYears;
     //int Forecast_LastYear;
@@ -424,7 +424,9 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
+    queryStr  = "SELECT InitYear,NYears FROM " +
+                 nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" +
                 MSVPAName + "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
@@ -452,21 +454,25 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
         nYears    = MSVPA_NYears;
 
         // First need to get a list of prey names and a count of prey for the predator.
-        databasePtr->nmfQueryMsvpaPreyList(selectedSpeciesAgeSizeClass,
-                                           selectedSpecies,
+        databasePtr->nmfQueryMsvpaPreyList(selectedSpecies,
                                            MSVPAName,
+                                           false,
+                                           selectedSpeciesAgeSizeClass,
                                            PredAgeStr,
                                            NPrey,
-                                           ColumnLabels,
-                                           false);
-        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                PredAgeStr + seasonStr +
-                " GROUP By Year";
-        queryStr2 = "SELECT Year, PreyName, Sum(SuitPreyBiomass) AS SBM FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                PredAgeStr + seasonStr +
-                " GROUP By Year, PreyName";
+                                           ColumnLabels);
+        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                    PredAgeStr + seasonStr +
+                   " GROUP By Year";
+        queryStr2 = "SELECT Year, PreyName, Sum(SuitPreyBiomass) AS SBM FROM " +
+                     nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                     PredAgeStr + seasonStr +
+                    " GROUP By Year, PreyName";
 
     } else if (ModelName == "Forecast") {
 
@@ -479,13 +485,17 @@ ChartBarFoodAvailability::getAndLoadFoodAvailabilityByPreyTypeData(
                                               ColumnLabels);
         NPrey = ColumnLabels.size();
 
-        queryStr  = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr  = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
                     " AND ForeName = '" + ForecastName + "'" +
                     " AND Scenario = '" + ScenarioName + "'" +
                     " AND PredName = '" + selectedSpecies + "'" +
                       PredAgeStr + seasonStr +
                     " GROUP By Year";
-        queryStr2 = "SELECT Year, PreyName, Sum(SuitPreyBiomass) AS SBM FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr2 = "SELECT Year, PreyName, Sum(SuitPreyBiomass) AS SBM FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
                     " AND ForeName = '" + ForecastName + "'" +
                     " AND Scenario = '" + ScenarioName + "'" +
                     " AND PredName = '" + selectedSpecies + "'" +

@@ -169,15 +169,16 @@ GuiControlsConsumptionRates::loadSelectPredatorCMB(nmfDatabase* databasePtr,
     //
     // Load Type=0 species from MSVPAspecies table
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies where MSVPAName='" + MSVPAName +
-            "' and Type = 0";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName +
+               "' and Type = 0";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         speciesList << QString::fromStdString(dataMap["SpeName"][i]);
     }
     //
     // Then also load species from OtherPredSpecies
-    queryStr = "SELECT SpeName FROM OtherPredSpecies";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         speciesList << QString::fromStdString(dataMap["SpeName"][i]);
@@ -215,10 +216,12 @@ GuiControlsConsumptionRates::loadSelectPreyCMB(nmfDatabase* databasePtr,
     fields = {"PreyName"};
 
     // For MSVPA
-    queryStr = "SELECT DISTINCT PreyName FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-            " AND PredName = '" + Species + "'" +
-            " AND PredAge = "   + std::to_string(PredAgeVal) +
-            " ORDER BY PreyName";
+    queryStr = "SELECT DISTINCT PreyName FROM " +
+                nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND PredName = '" + Species + "'" +
+               " AND PredAge = "   + std::to_string(PredAgeVal) +
+               " ORDER BY PreyName";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["PreyName"].size(); ++i) {
         SelectPreyCMB->addItem(QString::fromStdString(dataMap["PreyName"][i]));

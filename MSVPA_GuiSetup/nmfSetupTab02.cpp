@@ -317,7 +317,7 @@ std::cout << "NewProject: " << NewProject << std::endl;
     // If they have don't allow it since many tables will be out of sync.
     //
     fields = {"FirstYear","LastYear"};
-    queryStr = "SELECT FirstYear,LastYear FROM Species";
+    queryStr = "SELECT FirstYear,LastYear FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecordsSpecies = dataMap["FirstYear"].size();
     msg  = "\nWarning:\n";
@@ -338,7 +338,7 @@ std::cout << "NewProject: " << NewProject << std::endl;
     }
 
     fields = {"FirstYear","LastYear"};
-    queryStr = "SELECT FirstYear,LastYear FROM OtherPredSpecies";
+    queryStr = "SELECT FirstYear,LastYear FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecordsOtherPredSpecies = dataMap["FirstYear"].size();
     for (int i=0; i< NumRecordsOtherPredSpecies; ++i) {

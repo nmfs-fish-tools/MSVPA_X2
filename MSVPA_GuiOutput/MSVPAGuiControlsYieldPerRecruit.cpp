@@ -67,7 +67,8 @@ MSVPAGuiControlsYieldPerRecruit::loadSelectFullyRecruitedAgeCMB(nmfDatabase* dat
 
     ageSizePrefix = "Age";
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName +
                "' and SpeName='" + SelectedSpecies + "' and Type=3";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["SpeName"].size() > 0) {
@@ -78,14 +79,17 @@ MSVPAGuiControlsYieldPerRecruit::loadSelectFullyRecruitedAgeCMB(nmfDatabase* dat
 
     if (ageSizePrefix == "Age" ) {
         fields = {"NumAges"};
-        queryStr = "SELECT count(DISTINCT(Age)) as NumAges FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
-                "' and SpeName='" + SelectPredatorCMB->currentText().toStdString() + "'";
+        queryStr = "SELECT count(DISTINCT(Age)) as NumAges FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAName = '" + MSVPAName +
+                   "' and SpeName='" + SelectPredatorCMB->currentText().toStdString() + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NageOrSizeCategories  = std::stoi(dataMap["NumAges"][0]);
 
     } else {
         fields = {"SpeName","NumSizeCats"};
-        queryStr = "SELECT SpeName,NumSizeCats from OtherPredSpecies WHERE SpeName='" + SelectedSpecies + "'";
+        queryStr = "SELECT SpeName,NumSizeCats FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName='" + SelectedSpecies + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeName"].size() > 0) {
             if (dataMap["SpeName"][0] == SelectedSpecies) {

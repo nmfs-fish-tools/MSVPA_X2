@@ -242,19 +242,19 @@ nmfForecastTab4::callback_TableItemChanged(QTableWidgetItem *item)
     switch (varButtonPressed) {
         case 1:
             TableData[SpeciesIndex][row][col] = item->text().toDouble();
-            MarkAsDirty("ScenarioF");
+            MarkAsDirty(nmfConstantsMSVPA::TableScenarioF);
             break;
         case 2:
             TableData[SpeciesIndex][row][col] = item->text().toDouble();
-            MarkAsDirty("ScenarioOthPred");
+            MarkAsDirty(nmfConstantsMSVPA::TableScenarioOthPred);
             break;
         case 3:
             TableData[SpeciesIndex][row][col] = item->text().toDouble();
-            MarkAsDirty("ScenarioOthPrey");
+            MarkAsDirty(nmfConstantsMSVPA::TableScenarioOthPrey);
             break;
         case 4:
             TableData[0][row-1][col] = item->text().toDouble();
-            MarkAsDirty("ScenarioRec");
+            MarkAsDirty(nmfConstantsMSVPA::TableScenarioRec);
             break;
         default:
             break;
@@ -292,7 +292,8 @@ nmfForecastTab4::createScenario(std::string newScenarioName)
     Forecast_Tab4_Load2RB->setChecked(! aScenario->FishAsF);
 
     // Update the database table with the new scenario
-    cmd  = "INSERT INTO Scenarios (MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ('" + \
+    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableScenarios +
+           " (MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ('" +
            MSVPAName + "', '" + ForecastName + "', '" + newScenarioName + "', 0, 0, 0, 0, 1)";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
     if ( nmfUtilsQt::isAnError(errorMsg) ) nmfUtils::printError("Error createScenario",errorMsg);
@@ -327,7 +328,8 @@ nmfForecastTab4::deleteScenario(std::string scenarioToDelete)
     }
 
     // Update the database with the deleted scenario
-    cmd  = "DELETE FROM Scenarios WHERE MSVPAName='" + MSVPAName +
+    cmd  = "DELETE FROM " + nmfConstantsMSVPA::TableScenarios +
+           " WHERE MSVPAName='" + MSVPAName +
            "' AND ForeName='" + ForecastName +
            "' AND Scenario='" + scenarioToDelete + "'";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
@@ -348,8 +350,8 @@ nmfForecastTab4::Save_Scenarios()
     std::string ScenarioName = Forecast_Tab4_ScenarioCMB->currentText().toStdString();
 
     // Update Scenarios data
-    cmd  = "INSERT INTO Scenarios ";
-    cmd += "(MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ";
+    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableScenarios;
+    cmd += " (MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ";
     cmd += "(\"" + MSVPAName + "\"," +
             "\"" + ForecastName + "\"," +
             "\"" + ScenarioName + "\"," +
@@ -386,7 +388,8 @@ nmfForecastTab4::Save_ScenarioF()
     std::string queryStr,queryStr2;
 
 
-    cmd = "DELETE FROM ScenarioF WHERE MSVPAName = '" + MSVPAName + "' " +
+    cmd = "DELETE FROM " + nmfConstantsMSVPA::TableScenarioF +
+          " WHERE MSVPAName = '" + MSVPAName + "' " +
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
@@ -399,7 +402,8 @@ nmfForecastTab4::Save_ScenarioF()
     // Load species combo box
     NPredAge.clear();
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND (Type = 0 or Type = 1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["SpeName"].size();
@@ -410,7 +414,8 @@ nmfForecastTab4::Save_ScenarioF()
         //PredList.push_back(species);
 
         fields2   = {"MaxAge"};
-        queryStr2 = "SELECT MaxAge FROM Species WHERE SpeName = '" + species + "'";
+        queryStr2 = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeName = '" + species + "'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
         NPredAge.push_back(std::stoi(dataMap2["MaxAge"][0]));
     }
@@ -427,8 +432,8 @@ nmfForecastTab4::Save_ScenarioF()
             for (int i=0; i<nrows;++i) {
                 year = Forecast_Tab4_DataTW->verticalHeaderItem(i)->text().toInt() - ForecastFirstYear;
                 val  = TableData[SpeIndex][year][age];
-                cmd += "INSERT INTO ScenarioF ";
-                cmd += "(MSVPAName,ForeName,Scenario,SpeName,SpeIndex,VarType,Age,Year,F) values ";
+                cmd += "INSERT INTO " + nmfConstantsMSVPA::TableScenarioF;
+                cmd += " (MSVPAName,ForeName,Scenario,SpeName,SpeIndex,VarType,Age,Year,F) values ";
                 cmd += "(\"" + MSVPAName + "\", " +
                         "\"" + ForecastName + "\", " +
                         "\"" + ScenarioName + "\", " +
@@ -464,7 +469,8 @@ nmfForecastTab4::Save_ScenarioOthPred()
     int NumCols              = Forecast_Tab4_DataTW->columnCount();
     double val1,val2;
 
-    cmd = "DELETE FROM ScenarioOthPred WHERE MSVPAName = '" + MSVPAName + "' " +
+    cmd = "DELETE FROM " + nmfConstantsMSVPA::TableScenarioOthPred +
+          " WHERE MSVPAName = '" + MSVPAName + "' " +
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
@@ -481,8 +487,8 @@ nmfForecastTab4::Save_ScenarioOthPred()
             year = Forecast_Tab4_DataTW->verticalHeaderItem(row)->text().toInt() - ForecastFirstYear;
             val1 = TableData[SpeciesIndex][year][size];
             val2 = TableData[SpeciesIndex][year][0];
-            cmd += "INSERT INTO ScenarioOthPred ";
-            cmd += "(MSVPAName,ForeName,Scenario,SpeName,SpeIndex,SizeClass,Year,Biomass,PropBM) values ";
+            cmd += "INSERT INTO " + nmfConstantsMSVPA::TableScenarioOthPred;
+            cmd += " (MSVPAName,ForeName,Scenario,SpeName,SpeIndex,SizeClass,Year,Biomass,PropBM) values ";
             cmd += "(\"" + MSVPAName + "\"," + "\"" + ForecastName + "\"," + "\"" + ScenarioName + "\"," +
                     "\"" + SpeciesName + "\"," + std::to_string(SpeciesIndex) + "," +
                     std::to_string(size) + "," + std::to_string(year) + "," +
@@ -516,7 +522,8 @@ nmfForecastTab4::Save_ScenarioOthPrey()
     int NumCols              = Forecast_Tab4_DataTW->columnCount();
     double val;
 
-    cmd = "DELETE FROM ScenarioOthPrey WHERE MSVPAName = '" + MSVPAName + "' " +
+    cmd = "DELETE FROM " + nmfConstantsMSVPA::TableScenarioOthPrey +
+          " WHERE MSVPAName = '" + MSVPAName + "' " +
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
@@ -535,8 +542,8 @@ nmfForecastTab4::Save_ScenarioOthPrey()
             for (int row = 0; row < NumRows; ++row) { // Number of years
                 year = Forecast_Tab4_DataTW->verticalHeaderItem(row)->text().toInt() - ForecastFirstYear;
                 val = TableData[prey][year][season];
-                cmd += "INSERT INTO ScenarioOthPrey ";
-                cmd += "(MSVPAName,ForeName,Scenario,SpeName,SpeIndex,Season,Year,Biomass) values ";
+                cmd += "INSERT INTO " + nmfConstantsMSVPA::TableScenarioOthPrey;
+                cmd += " (MSVPAName,ForeName,Scenario,SpeName,SpeIndex,Season,Year,Biomass) values ";
                 cmd += "(\"" + MSVPAName + "\"," + "\"" + ForecastName + "\"," + "\"" + ScenarioName + "\"," +
                         "\"" + preyName + "\"," + std::to_string(prey) + "," +
                         std::to_string(season) + "," + std::to_string(year) + "," +
@@ -569,7 +576,8 @@ nmfForecastTab4::Save_ScenarioRec()
     QCheckBox *absRecruitsCB;
     QWidget *w;
 
-    cmd = "DELETE FROM ScenarioRec WHERE MSVPAName = '" + MSVPAName + "' " +
+    cmd = "DELETE FROM " + nmfConstantsMSVPA::TableScenarioRec +
+          " WHERE MSVPAName = '" + MSVPAName + "' " +
           "AND ForeName = '" + ForecastName + "' " +
           "AND Scenario = '" + ScenarioName + "' ";
     errorMsg = databasePtr->nmfUpdateDatabase(cmd);
@@ -590,8 +598,8 @@ nmfForecastTab4::Save_ScenarioRec()
             absRecruitsCB = w->findChild<QCheckBox *>();
             valAbsRecruits = absRecruitsCB->isChecked();
             valRecAdjust   = TableData[0][row-1][SpeIndex];
-            cmd += "INSERT INTO ScenarioRec ";
-            cmd += "(MSVPAName,ForeName,Scenario,SpeName,SpeIndex,Year, RecAdjust, AbsRecruits) values ";
+            cmd += "INSERT INTO " + nmfConstantsMSVPA::TableScenarioRec;
+            cmd += " (MSVPAName,ForeName,Scenario,SpeName,SpeIndex,Year, RecAdjust, AbsRecruits) values ";
             cmd += "(\"" + MSVPAName + "\"," + "\"" + ForecastName + "\"," + "\"" + ScenarioName + "\"," +
                     "\"" + SpeName + "\"," + std::to_string(SpeIndex) + "," + std::to_string(year) + "," +
                     std::to_string(valRecAdjust)   + ", "  + // RecAdjust
@@ -615,7 +623,7 @@ nmfForecastTab4::callback_Forecast_Tab4_SavePB(bool unused)
 
     bool skipRow1 = (varButtonPressed == 4);
     std::string msg;
-    std::string tablesSaved = "Scenarios";
+    std::string tablesSaved = nmfConstantsMSVPA::TableScenarios;
 
     Save_Scenarios();
     if (! nmfUtilsQt::allCellsArePopulated(Forecast_Tabs,Forecast_Tab4_DataTW,false,skipRow1)) {
@@ -628,19 +636,19 @@ nmfForecastTab4::callback_Forecast_Tab4_SavePB(bool unused)
     switch (varButtonPressed) {
         case 1:
             Save_ScenarioF();
-            tablesSaved += ", ScenarioF";
+            tablesSaved += ", " + nmfConstantsMSVPA::TableScenarioF;
             break;
         case 2:
             Save_ScenarioOthPred();
-            tablesSaved += ", ScenarioOthPred";
+            tablesSaved += ", " + nmfConstantsMSVPA::TableScenarioOthPred;
             break;
         case 3:
             Save_ScenarioOthPrey();
-            tablesSaved += ", ScenarioOthPrey";
+            tablesSaved += ", " + nmfConstantsMSVPA::TableScenarioOthPrey;
             break;
         case 4:
             Save_ScenarioRec();
-            tablesSaved += ", ScenarioRec";
+            tablesSaved += ", " + nmfConstantsMSVPA::TableScenarioRec;
             break;
         default:
             break;
@@ -669,13 +677,10 @@ nmfForecastTab4::callback_Forecast_Tab4_SavePB(bool unused)
 //nmfForecastTab4::callback_Forecast_Tab4_LoadPB()
 //{
 //    logger->logMsg(nmfConstants::Normal,"nmfForecastTab4::callback_Forecast_Tab4_LoadPB");
-
 //    emit LoadDataTable(MSVPAName,ForecastName,
 //                       "Forecast","ScenarioF",
 //                       "Forecast",3);
-
 //    logger->logMsg(nmfConstants::Normal,"nmfForecastTab4::callback_Forecast_Tab4_LoadPB Complete");
-
 //} // end callback_Forecast_Tab4_LoadPB
 
 void
@@ -923,7 +928,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
 
     // Load species combo box
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND (Type = 0 or Type = 1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["SpeName"].size();
@@ -935,7 +941,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
         Forecast_Tab4_SpeciesCMB->addItem(QString::fromStdString(species));
 
         fields2   = {"MaxAge"};
-        queryStr2 = "SELECT MaxAge FROM Species WHERE SpeName = '" + species + "'";
+        queryStr2 = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeName = '" + species + "'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
         NPredAge.push_back(std::stoi(dataMap2["MaxAge"][0]));
 
@@ -947,7 +954,9 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
         for (int i = 0; i <= NPreds-1; ++i) {
             m = 0;
             fields = {"SpeName","Age","F"};
-            queryStr = "SELECT SpeName, Age, Sum(SeasF) as F FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName + "'" +
+            queryStr = "SELECT SpeName, Age, Sum(SeasF) as F FROM " +
+                        nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAName = '" + MSVPAName + "'" +
                        " AND SpeName = '" + PredList[i] + "'" +
                        " AND Year = " + std::to_string(ForecastFirstYear-MSVPAFirstYear) +
                     " GROUP BY SpeName, Age";
@@ -965,7 +974,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
         for (int i = 0; i <= NPreds-1; ++i) {
             for (int j = 0; j <= NPredAge[i]; ++j) {
                 fields = {"SpeName","Age","Catch"};
-                queryStr = "SELECT SpeName, Age, Catch FROM SpeCatch WHERE SpeName = '" + PredList[i] + "'" +
+                queryStr = "SELECT SpeName, Age, Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+                           " WHERE SpeName = '" + PredList[i] + "'" +
                            " AND Age = " + std::to_string(j) +
                            " AND Year = " + std::to_string(ForecastFirstYear) +
                            " ORDER BY SpeName, Age";
@@ -980,10 +990,11 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
     if (FishAsF) {
 
             fields = {"F"};
-            queryStr = "SELECT F FROM ScenarioF WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + ScenarioName + "'" +
-                    " AND VarType = 'F' ORDER By SpeIndex, Age, Year";
+            queryStr = "SELECT F FROM " + nmfConstantsMSVPA::TableScenarioF +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + ScenarioName + "'" +
+                       " AND VarType = 'F' ORDER By SpeIndex, Age, Year";
             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
             NumRecords = dataMap["F"].size();
             if (NumRecords > 0) {
@@ -1000,10 +1011,11 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1PB(bool unused)
     } else {
 
         fields = {"F"};
-        queryStr = "SELECT F FROM ScenarioF WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND VarType = 'C' ORDER By SpeIndex, Age, Year";
+        queryStr = "SELECT F FROM " + nmfConstantsMSVPA::TableScenarioF +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND VarType = 'C' ORDER By SpeIndex, Age, Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NumRecords = dataMap["F"].size();
         if (NumRecords > 0) {
@@ -1065,7 +1077,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2PB(bool unused)
     nmfUtils::initialize(TableData);
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type = 3";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["SpeName"].size();
@@ -1082,20 +1095,24 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2PB(bool unused)
     for (int i = 0; i < NPreds; ++i) {
 
         fields = {"Biomass"};
-        queryStr = "SELECT Biomass FROM OtherPredBM WHERE SpeName = '" + PredList[i] + "'" +
+        queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableOtherPredBM +
+                   " WHERE SpeName = '" + PredList[i] + "'" +
                    " AND Year = " + std::to_string(ForecastFirstYear);
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         TableData[i][0][0] = std::stod(dataMap["Biomass"][0]);
 
         fields = {"SizeStruc","NumSizeCats"};
-        queryStr = "SELECT SizeStruc,NumSizeCats FROM OtherPredSpecies WHERE SpeName = '" + PredList[i] + "'";
+        queryStr = "SELECT SizeStruc,NumSizeCats FROM " +
+                    nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName = '" + PredList[i] + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NPredAgeVal = (dataMap["SizeStruc"][0] == "1") ? std::stoi(dataMap["NumSizeCats"][0]) : 1;
         NPredAge.push_back(NPredAgeVal);
 
         if (NPredAgeVal > 1) {
             fields = {"PropBM"};
-            queryStr = "SELECT PropBM FROM OthPredSizeData WHERE SpeName = '" + PredList[i] + "'";
+            queryStr = "SELECT PropBM FROM " + nmfConstantsMSVPA::TableOthPredSizeData +
+                       " WHERE SpeName = '" + PredList[i] + "'";
             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
             for (int j = 0; j < NPredAge[i]; ++j) {
                 TableData[i][0][j+1] = std::stod(dataMap["PropBM"][j]);
@@ -1107,11 +1124,13 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2PB(bool unused)
     // initialize data - load data if it exists
     for (int i = 0; i < NPreds; ++i) {
         fields = {"Year","AnnTot"};
-        queryStr = "SELECT Year, Sum(Biomass) as AnnTot FROM ScenarioOthPred WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" + PredList[i] +
-                "' GROUP BY Year";
+        queryStr = "SELECT Year, Sum(Biomass) as AnnTot FROM " +
+                    nmfConstantsMSVPA::TableScenarioOthPred +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" + PredList[i] +
+                   "' GROUP BY Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NumRecords = dataMap["Year"].size();
         if (NumRecords > 0) {
@@ -1121,11 +1140,13 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2PB(bool unused)
         } // end if
 
         fields = {"SpeName","Year","SizeClass","Biomass"};
-        queryStr = "SELECT SpeName,Year,SizeClass,Biomass FROM ScenarioOthPred WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" + \
-                " AND SpeName = '" +  PredList[i] + "'" +
-                " ORDER BY SpeName, Year, SizeClass";
+        queryStr = "SELECT SpeName,Year,SizeClass,Biomass FROM " +
+                     nmfConstantsMSVPA::TableScenarioOthPred +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" + \
+                   " AND SpeName = '" +  PredList[i] + "'" +
+                   " ORDER BY SpeName, Year, SizeClass";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NumRecords = dataMap["Year"].size();
         if (NumRecords > 0) {
@@ -1187,7 +1208,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load3PB(bool unused)
 
     // Load species combo box with prey names
     fields = {"OthPreyName"};
-    queryStr = "SELECT OthPreyName FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName FROM " + nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["OthPreyName"].size();
     for (int i=0; i<NumRecords; ++i)
@@ -1200,17 +1222,19 @@ nmfForecastTab4::callback_Forecast_Tab4_Load3PB(bool unused)
 
     // Find number of seasons
     fields   = {"NSeasons"};
-    queryStr = "SELECT NSeasons FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT NSeasons FROM " + nmfConstantsMSVPA::TableMSVPAlist +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSeasons = std::stoi(dataMap["NSeasons"][0]);
 
     NPreds = PredList.size();
     for (int i = 0; i < NPreds; ++i) {
         fields   = {"Biomass"};
-        queryStr = "SELECT Biomass FROM MSVPAOthPreyAnn WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND OthPreyName = '" + PredList[i] + "'" +
-                " AND Year = " + std::to_string(ForecastFirstYear) +
-                " ORDER BY Season";
+        queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableMSVPAOthPreyAnn +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND OthPreyName = '" + PredList[i] + "'" +
+                   " AND Year = " + std::to_string(ForecastFirstYear) +
+                   " ORDER BY Season";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         for (int j = 0; j < NSeasons; ++j) {
             TableData[i][0][j] = std::stod(dataMap["Biomass"][j]);
@@ -1220,10 +1244,11 @@ nmfForecastTab4::callback_Forecast_Tab4_Load3PB(bool unused)
 
     // initialize data - load data if it exists
     fields   = {"Biomass"};
-    queryStr = "SELECT Biomass FROM ScenarioOthPrey WHERE MSVPAname = '" + MSVPAName + "'" +
-            " AND ForeName = '" + ForecastName + "'" +
-            " AND Scenario = '" + ScenarioName + "'" +
-            " ORDER By SpeIndex, Season, Year";
+    queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableScenarioOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND ForeName = '" + ForecastName + "'" +
+               " AND Scenario = '" + ScenarioName + "'" +
+               " ORDER By SpeIndex, Season, Year";
 
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["Biomass"].size();
@@ -1290,8 +1315,9 @@ nmfForecastTab4::callback_Forecast_Tab4_Load4PB(bool unused)
     // Select the predator list..associated with the MSVPA
     // Load MSVPA predator name list.
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND (Type = 0 or Type = 1)";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND (Type = 0 or Type = 1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NPreds = dataMap["SpeName"].size();
 
@@ -1316,7 +1342,8 @@ nmfForecastTab4::callback_Forecast_Tab4_Load4PB(bool unused)
     QTableWidgetItem *item;
     int m,n;
     fields   = {"AbsRecruits","RecAdjust"};
-    queryStr = "SELECT AbsRecruits,RecAdjust FROM ScenarioRec WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT AbsRecruits,RecAdjust FROM " + nmfConstantsMSVPA::TableScenarioRec +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'" +
                " AND Scenario = '" + ScenarioName + "'" +
                " ORDER By SpeIndex,Year";
@@ -1374,9 +1401,10 @@ nmfForecastTab4::callback_Forecast_Tab4_RecCBs(int state)
 
     if (state == Qt::Checked) {
         fields = {"SpeName","Age","AnnAbund"};
-        queryStr = "SELECT SpeName, Age, AnnAbund FROM MSVPASeasBiomass WHERE SpeName = '" + species + "'" +
-                " AND Year = " + std::to_string(ForecastFirstYear-MSVPAFirstYear) +
-                " AND Season = 0 and Age = 0";
+        queryStr = "SELECT SpeName, Age, AnnAbund FROM " + nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE SpeName = '" + species + "'" +
+                   " AND Year = " + std::to_string(ForecastFirstYear-MSVPAFirstYear) +
+                   " AND Season = 0 and Age = 0";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         val = std::stod(dataMap["AnnAbund"][0]);
 
@@ -1403,7 +1431,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1CB(int state)
         Forecast_Tab4_SpeciesCMB->clear();
     }
     Forecast_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
 }
 
@@ -1412,7 +1440,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2CB(int state)
 {
     Forecast_Tab4_Load2PB->setEnabled(state==Qt::Checked);
     Forecast_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
 }
 
@@ -1421,7 +1449,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load3CB(int state)
 {
     Forecast_Tab4_Load3PB->setEnabled(state==Qt::Checked);
     Forecast_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
 }
 
@@ -1430,7 +1458,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load4CB(int state)
 {
     Forecast_Tab4_Load4PB->setEnabled(state==Qt::Checked);
     Forecast_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
 }
 
@@ -1472,7 +1500,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load1RB()
     Forecast_Tab4_Load1RB->blockSignals(true);
     Forecast_Tab4_Load1RB->setChecked(true);
     Forecast_Tab4_Load1RB->blockSignals(false);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
     processRadioButton();
 
@@ -1489,7 +1517,7 @@ nmfForecastTab4::callback_Forecast_Tab4_Load2RB()
     Forecast_Tab4_Load2RB->blockSignals(true);
     Forecast_Tab4_Load2RB->setChecked(true);
     Forecast_Tab4_Load2RB->blockSignals(false);
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
     processRadioButton();
 
@@ -1604,7 +1632,9 @@ nmfForecastTab4::load(nmfDatabase *theDatabasePtr,
     Forecast_Tab4_ScenarioCMB->clear();
 
     fields = {"Scenario","VarF","VarOthPred","VarOthPrey","VarRec","FishAsF"};
-    queryStr = "SELECT Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF FROM Scenarios WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF FROM " +
+                nmfConstantsMSVPA::TableScenarios +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'" +
                " ORDER By Scenario";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -1646,27 +1676,27 @@ nmfForecastTab4::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "Scenarios";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarios);
     fields    = {"MSVPAName","ForeName","Scenario","VarF",
                  "VarOthPred","VarOthPrey","VarRec","FishAsF"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ScenarioF";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarioF);
     fields    = {"MSVPAName","ForeName","Scenario","VarType",
                  "SpeName","SpeIndex","Age","Year","F"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ScenarioOthPred";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarioOthPred);
     fields    = {"MSVPAName","ForeName","Scenario","SpeName",
                  "SpeIndex","SizeClass","Year","Biomass","PropBM"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ScenarioOthPrey";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarioOthPrey);
     fields    = {"MSVPAName","ForeName","Scenario","SpeName",
                  "SpeIndex","Year","Season","Biomass"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ScenarioRec";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarioRec);
     fields    = {"MSVPAName","ForeName","Scenario","SpeName",
                  "SpeIndex","Year","RecAdjust","AbsRecruits"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -1675,24 +1705,24 @@ nmfForecastTab4::restoreCSVFromDatabase(nmfDatabase *databasePtr)
  *  complicated for users to parse, and users should extract this data
  *  by clicking the camera icon over the desired output table.
  *
-    TableName = "ForeOutput";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForeOutput);
     fields    = {"MSVPAName", "ForeName", "Scenario", "Year", "Season", "SpeName",
                  "Age", "SpeType", "InitAbund", "EndAbund", "InitBiomass", "EndBiomass",
                  "SeasM2", "SeasF", "SeasM1", "AvgSize", "AvgWeight", "TotalSBM",
                  "TotalBMConsumed", "StomCont", "InitWt", "EndWt", "SeasCatch", "SeasYield"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ForeSuitPreyBiomass";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForeSuitPreyBiomass);
     fields    = {"MSVPAName", "ForeName", "Scenario", "PredName", "PredAge", "PreyName", "PreyAge",
                  "Year", "Season", "SuitPreyBiomass", "PropDiet", "EDens", "BMConsumed", "PredType"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 */
-    TableName = "ForePredGrowth";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForePredGrowth);
     fields    = {"MSVPAName", "ForeName", "PredName", "PredIndex", "PredType", "Age",
                  "RAlpha", "RBeta", "RQ", "ACT", "E", "U", "SDA", "LWAlpha", "LWBeta"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ForeEnergyDens";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForeEnergyDens);
     fields    = {"MSVPAName", "ForeName", "SpeName", "SpeType", "SpeIndex",
                  "Age", "Season", "EnergyDens", "AvgDietE"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);

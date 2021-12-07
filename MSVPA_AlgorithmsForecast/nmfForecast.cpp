@@ -67,8 +67,10 @@ nmfForecast::GetAverageTotalSuitableBiomass(nmfDatabase* databasePtr,
 
     // Load average total suitable prey biomass by predator, year, season
     fields   = {"PredName","PredAge","Season","Year","TotSBM"};
-    queryStr = "SELECT PredName, PredAge, Season, Year, Sum(SuitPreyBiomass) as TotSBM FROM MSVPASuitPreyBiomass WHERE MSVPAname='" + MSVPAName + "' " +
-            " AND PredName = '" + Species + "' GROUP BY PredName, PredAge, Season, Year";
+    queryStr = "SELECT PredName, PredAge, Season, Year, Sum(SuitPreyBiomass) as TotSBM FROM " +
+                nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+               " WHERE MSVPAname='" + MSVPAName + "' " +
+               " AND PredName = '" + Species + "' GROUP BY PredName, PredAge, Season, Year";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"MSVPASuitPreyBiomass","PredName",dataMap,queryStr))
         return false;
@@ -104,9 +106,10 @@ nmfForecast::GetTypePreferences(nmfDatabase* databasePtr,
     // Load type preferences with MSVPA species
     for (int k = 0; k < UpperLimK; ++k) {
         fields   = {"PrefVal"};
-        queryStr = "SELECT PrefVal FROM MSVPAprefs WHERE MSVPAname = '" + MSVPAName + "' " +
-                " AND SpeName = '"  + Species + "' " +
-                " AND PreyName = '" + SpeList(k) + "' ORDER By Age";
+        queryStr = "SELECT PrefVal FROM " + nmfConstantsMSVPA::TableMSVPAprefs +
+                   " WHERE MSVPAname = '" + MSVPAName + "' " +
+                   " AND SpeName = '"  + Species + "' " +
+                   " AND PreyName = '" + SpeList(k) + "' ORDER By Age";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPAprefs","PrefVal",dataMap,queryStr))
             return false;
@@ -139,9 +142,10 @@ nmfForecast::GetSeasonSpatialOverlap(nmfDatabase* databasePtr,
     // Load Seasonal Spatial overlap with MSVPASpecies
     for (int k = 0; k < UpperLimK; ++k) {
         fields   = {"SpOverlap"};
-        queryStr = "SELECT SpOverlap FROM MSVPASpaceO WHERE MSVPAname = '" + MSVPAName + "' " +
-                " AND SpeName = '"  + Species + "' " +
-                " AND PreyName = '" + SpeList(k) + "' ORDER By Age, Season";
+        queryStr = "SELECT SpOverlap FROM " + nmfConstantsMSVPA::TableMSVPASpaceO +
+                   " WHERE MSVPAname = '" + MSVPAName + "' " +
+                   " AND SpeName = '"  + Species + "' " +
+                   " AND PreyName = '" + SpeList(k) + "' ORDER By Age, Season";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPASpaceO","SpOverlap",dataMap,queryStr))
             return false;
@@ -247,7 +251,7 @@ nmfForecast::Forecast_NoPredatorGrowth(
 //databasePtr->nmfOpenDatabase(Hostname,Username,Password,errorMsg);
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName from Species";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     std::cout << "num species: " << dataMap["SpeName"].size() << std::endl;
 
@@ -256,17 +260,20 @@ nmfForecast::Forecast_NoPredatorGrowth(
     if (ReadRunStopFile() == "Stop")
         return false;
 
-    if (! databasePtr->nmfDeleteRecordsFromTable("ForeSuitPreyBiomass",MSVPAName,ForecastName,ScenarioName))
+    if (! databasePtr->nmfDeleteRecordsFromTable(
+                nmfConstantsMSVPA::TableForeSuitPreyBiomass,MSVPAName,ForecastName,ScenarioName))
         return false;
 
-    if (! databasePtr->nmfDeleteRecordsFromTable("ForeOutput",MSVPAName,ForecastName,ScenarioName)) {
+    if (! databasePtr->nmfDeleteRecordsFromTable(
+                nmfConstantsMSVPA::TableForeOutput,MSVPAName,ForecastName,ScenarioName)) {
         return false;
     }
 
 // test code
 fields = {"MSVPAName","NSpe","NPreyOnly","NOther","NOtherPred","FirstYear","LastYear","NSeasons"};
-queryStr = "SELECT MSVPAName,NSpe,NPreyOnly,NOther,NOtherPred,FirstYear,LastYear,NSeasons FROM MSVPAlist WHERE MSVPAName = '"
-            + MSVPAName + "'";
+queryStr = "SELECT MSVPAName,NSpe,NPreyOnly,NOther,NOtherPred,FirstYear,LastYear,NSeasons FROM " +
+            nmfConstantsMSVPA::TableMSVPAlist +
+           " WHERE MSVPAName = '" + MSVPAName + "'";
 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 std::cout << queryStr << std::endl;
 std::cout << "size: " << dataMap["NSpe"].size() << std::endl;
@@ -293,7 +300,8 @@ NPreds       = std::stoi(dataMap["NSpe"][0]);
     nmfUtils::initialize(SeasTemp,NSeasons);
 
     fields = {"Value"};
-    queryStr = "SELECT Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "' "
+    queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableMSVPASeasInfo +
+               " WHERE MSVPAname = '" + MSVPAName + "' "
                " AND Variable = 'SeasLen'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"MSVPASeasInfo","Value",dataMap,queryStr))
@@ -316,7 +324,8 @@ NPreds       = std::stoi(dataMap["NSpe"][0]);
     }
 
     fields = {"Value"};
-    queryStr = "SELECT Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "' "
+    queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableMSVPASeasInfo +
+               " WHERE MSVPAname = '" + MSVPAName + "' "
                " AND Year = " + std::to_string(InitYear) +
                " AND Variable = 'SeasTemp'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -328,7 +337,7 @@ NPreds       = std::stoi(dataMap["NSpe"][0]);
 
     // LOAD MSVPA SPECIES both predators and prey Type 0 = Predator, Type 1 = Prey
     fields = {"SpeName","MaxAge","CatchUnits"};
-    queryStr = "SELECT SpeName,MaxAge,CatchUnits FROM Species";
+    queryStr = "SELECT SpeName,MaxAge,CatchUnits FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"Species","SpeName",dataMap,queryStr))
         return false;
@@ -342,7 +351,8 @@ NPreds       = std::stoi(dataMap["NSpe"][0]);
     }
 
     fields = {"Type","SpeName"};
-    queryStr = "SELECT Type,SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "' "
+    queryStr = "SELECT Type,SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "' "
                " AND (Type = 0 or Type = 1)";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"MSVPAspecies","SpeName",dataMap,queryStr))
@@ -372,15 +382,19 @@ NPreds       = std::stoi(dataMap["NSpe"][0]);
         if (SpeType(i) == 0) {
 
             fields   = {"EvacAlpha","EvacBeta","SizeAlpha","SizeBeta"};
-            queryStr = "SELECT EvacAlpha,EvacBeta,SizeAlpha,SizeBeta FROM MSVPASizePref WHERE MSVPAname = '" + MSVPAName + "' " +
-                    " AND SpeName = '" + SpeList(i) + "' ORDER BY Age";
+            queryStr = "SELECT EvacAlpha,EvacBeta,SizeAlpha,SizeBeta FROM " +
+                        nmfConstantsMSVPA::TableMSVPASizePref +
+                       " WHERE MSVPAname = '" + MSVPAName + "' " +
+                       " AND SpeName = '" + SpeList(i) + "' ORDER BY Age";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"MSVPASizePref","EvacAlpha",dataMap,queryStr))
                 return false;
 
             fields2   = {"MeanGutFull"};
-            queryStr2 = "SELECT MeanGutFull FROM MSVPAStomCont WHERE MSVPAname = '" + MSVPAName + "' " +
-                    " AND SpeName = '" + SpeList(i) + "' ORDER BY Age,Season ";
+            queryStr2 = "SELECT MeanGutFull FROM " +
+                         nmfConstantsMSVPA::TableMSVPAStomCont +
+                        " WHERE MSVPAname = '" + MSVPAName + "' " +
+                        " AND SpeName = '" + SpeList(i) + "' ORDER BY Age,Season ";
             dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
             if (nmfUtils::checkForError(logger,"MSVPAStomCont","MeanGutFull",dataMap2,queryStr2))
                 return false;
@@ -429,7 +443,8 @@ std::cout << 44 << std::endl;
 
     for (int i = 0; i < NSpe; ++i) {
         fields   = {"PMature"};
-        queryStr = "SELECT PMature FROM SpeMaturity WHERE SpeName = '" + SpeList(i) + "' " +
+        queryStr = "SELECT PMature FROM " + nmfConstantsMSVPA::TableSpeMaturity +
+                   " WHERE SpeName = '" + SpeList(i) + "' " +
                    " AND Year = " + std::to_string(InitYear) + " ORDER BY Age";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"SpeMaturity","PMature",dataMap,queryStr))
@@ -444,9 +459,10 @@ std::cout << 44 << std::endl;
 
     for (int i = 0; i < NSpe; ++i) {
         fields   = {"SRRType"};
-        queryStr = "SELECT SRRType FROM ForeSRR WHERE MSVPAname = '" + MSVPAName + "' " +
-                " AND ForeName = '" + ForecastName + "' " +
-                " AND SpeName = '"  + SpeList(i) + "'";
+        queryStr = "SELECT SRRType FROM " + nmfConstantsMSVPA::TableForeSRR +
+                   " WHERE MSVPAname = '" + MSVPAName + "' " +
+                   " AND ForeName = '" + ForecastName + "' " +
+                   " AND SpeName = '"  + SpeList(i) + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"ForeSRR","SRRType",dataMap,queryStr))
             return false;
@@ -472,14 +488,16 @@ std::cout << 44 << std::endl;
     if (NOthPred > 0) {
 
         fields   = {"SpeName"};
-        queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
+        queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                   " WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPAspecies","SpeName",dataMap,queryStr))
             return false;
         for (int i = 0; i < NOthPred; ++i) {
             OtherPredList(i) = dataMap["SpeName"][i];
             fields2   = {"NumSizeCats","BMUnits"};
-            queryStr2 = "SELECT NumSizeCats,BMUnits FROM OtherPredSpecies WHERE SpeName = '" + OtherPredList(i) + "'";
+            queryStr2 = "SELECT NumSizeCats,BMUnits FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                        " WHERE SpeName = '" + OtherPredList(i) + "'";
             dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
             if (nmfUtils::checkForError(logger,"OtherPredSpecies","NumSizeCats",dataMap2,queryStr2))
                 return false;
@@ -489,13 +507,17 @@ std::cout << 44 << std::endl;
 
         for (int i = 0; i < NOthPred; ++i) {
             fields   = {"ConsAlpha","ConsBeta","SizeSelAlpha","SizeSelBeta"};
-            queryStr = "SELECT ConsAlpha,ConsBeta,SizeSelAlpha,SizeSelBeta FROM OthPredSizeData WHERE SpeName = '" + OtherPredList(i) + "'" +
-                      " ORDER BY SizeCat";
+            queryStr = "SELECT ConsAlpha,ConsBeta,SizeSelAlpha,SizeSelBeta FROM " +
+                        nmfConstantsMSVPA::TableOthPredSizeData +
+                       " WHERE SpeName = '" + OtherPredList(i) + "'" +
+                       " ORDER BY SizeCat";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"OthPredSizeData","ConsAlpha",dataMap,queryStr))
                 return false;
             fields2   = {"MeanGutFull"};
-            queryStr2 = "SELECT MeanGutFull FROM MSVPAStomCont WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr2 = "SELECT MeanGutFull FROM " +
+                         nmfConstantsMSVPA::TableMSVPAStomCont +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
                         " AND SpeName = '" + OtherPredList(i) + "' ORDER By Age,Season";
             dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
             if (nmfUtils::checkForError(logger,"MSVPAStomCont","MeanGutFull",dataMap2,queryStr2))
@@ -543,7 +565,9 @@ std::cout << 44 << std::endl;
     nmfUtils::initialize(OtherPreyCoeff, NOthPrey, 4); // MinSize, MaxSize, SizeAlpha, SizeBeta
 
     fields   = {"OthPreyName","MinSize","MaxSize","SizeAlpha","SizeBeta"};
-    queryStr = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM " +
+                nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"MSVPAOthPrey","OthPreyName",dataMap,queryStr))
         return false;
@@ -605,9 +629,11 @@ std::cout << 44 << std::endl;
     Scenario.Name = ScenarioName;
 
     fields   = {"FishAsF","VarF","VarOthPred","VarOthPrey","VarRec"};
-    queryStr = "SELECT FishAsF,VarF,VarOthPred,VarOthPrey,VarRec FROM Scenarios WHERE MSVPAname = '" + MSVPAName + "'" +
-            " AND Forename = '" + ForecastName + "'" +
-            " AND Scenario = '" + ScenarioName + "'";
+    queryStr = "SELECT FishAsF,VarF,VarOthPred,VarOthPrey,VarRec FROM " +
+                nmfConstantsMSVPA::TableScenarios +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND Forename = '" + ForecastName + "'" +
+               " AND Scenario = '" + ScenarioName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (nmfUtils::checkForError(logger,"Scenarios","FishAsF",dataMap,queryStr))
         return false;
@@ -631,9 +657,11 @@ std::cout << 44 << std::endl;
 
     for (int i = 0; i < NSpe; ++i) {
         fields   = {"Linf","GrowthK","Tzero","LWAlpha","LWBeta"};
-        queryStr = "SELECT Linf,GrowthK,Tzero,LWAlpha,LWBeta FROM ForePredVonB WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND PredName = '" + SpeList(i) + "'";
+        queryStr = "SELECT Linf,GrowthK,Tzero,LWAlpha,LWBeta FROM " +
+                    nmfConstantsMSVPA::TableForePredVonB +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND PredName = '" + SpeList(i) + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"ForePredVonB","Linf",dataMap,queryStr))
             return false;
@@ -671,8 +699,9 @@ std::cout << 44 << std::endl;
     for (int i = 0; i < NOthPred; ++i) {
 
         fields   = {"Biomass"};
-        queryStr = "SELECT Biomass FROM OtherPredBM WHERE SpeName = '" + OtherPredList(i) + "'" +
-                " AND Year = " + std::to_string(InitYear);
+        queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableOtherPredBM +
+                   " WHERE SpeName = '" + OtherPredList(i) + "'" +
+                   " AND Year = " + std::to_string(InitYear);
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"OtherPredBM","Biomass",dataMap,queryStr))
             return false;
@@ -683,10 +712,12 @@ std::cout << 44 << std::endl;
             }
         } else {
             fields   = { "SpeName", "Year", "AnnTotBM" };
-            queryStr = "SELECT SpeName,Year,Sum(Biomass) as AnnTotBM FROM ScenarioOthPred WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + ScenarioName + "'" +
-                    " AND SpeName = '"  + OtherPredList(i) + "' AND Year > 0 GROUP BY SpeName,Year";
+            queryStr = "SELECT SpeName,Year,Sum(Biomass) as AnnTotBM FROM " +
+                        nmfConstantsMSVPA::TableScenarioOthPred +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + ScenarioName + "'" +
+                       " AND SpeName = '"  + OtherPredList(i) + "' AND Year > 0 GROUP BY SpeName,Year";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"ScenarioOthPred","SpeName",dataMap,queryStr))
                 return false;
@@ -723,7 +754,9 @@ std::cout << 44 << std::endl;
 
         // Partition total biomass into seasonal biomass by age class
         fields   = { "MinLen", "MaxLen", "PropBM" };
-        queryStr = "SELECT MinLen,MaxLen,PropBM FROM OthPredSizeData WHERE SpeName = '" + OtherPredList(i) + "' ORDER By SizeCat";
+        queryStr = "SELECT MinLen,MaxLen,PropBM FROM " +
+                    nmfConstantsMSVPA::TableOthPredSizeData +
+                   " WHERE SpeName = '" + OtherPredList(i) + "' ORDER By SizeCat";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"OthPredSizeData","MinLen",dataMap,queryStr))
             return false;
@@ -742,10 +775,12 @@ std::cout << 44 << std::endl;
             }
         } else {
             fields   = { "SpeName", "Year", "SizeClass", "PropBM"};
-            queryStr = "SELECT SpeName, Year, SizeClass, PropBM FROM ScenarioOthPred WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + Scenario.Name + "'" +
-                    " AND SpeName = '"  + OtherPredList(i) + "' ORDER BY SpeName,SizeClass,Year";
+            queryStr = "SELECT SpeName, Year, SizeClass, PropBM FROM " +
+                        nmfConstantsMSVPA::TableScenarioOthPred +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + Scenario.Name + "'" +
+                       " AND SpeName = '"  + OtherPredList(i) + "' ORDER BY SpeName,SizeClass,Year";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"ScenarioOthPred","SpeName",dataMap,queryStr))
                 return false;
@@ -773,9 +808,10 @@ std::cout << 44 << std::endl;
     for (int i = 0; i < NOthPrey; ++i) {
 
         fields = {"Biomass"};
-        queryStr = "SELECT Biomass FROM MSVPAOthPreyAnn WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND OthPreyName  = '" + OtherPreyList(i) + "'" +
-                " AND Year = " + std::to_string(InitYear) + " ORDER BY Season";
+        queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableMSVPAOthPreyAnn +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND OthPreyName  = '" + OtherPreyList(i) + "'" +
+                   " AND Year = " + std::to_string(InitYear) + " ORDER BY Season";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPAOthPreyAnn","Biomass",dataMap,queryStr))
             return false;
@@ -791,10 +827,11 @@ std::cout << 44 << std::endl;
             }
         } else {
             fields = {"Biomass"};
-            queryStr = "SELECT Biomass FROM ScenarioOthPrey WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + Scenario.Name + "'" +
-                    " AND SpeName = '"  + OtherPreyList(i) + "' AND Year > 0 ORDER By Year,Season";
+            queryStr = "SELECT Biomass FROM " + nmfConstantsMSVPA::TableScenarioOthPrey +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + Scenario.Name + "'" +
+                       " AND SpeName = '"  + OtherPreyList(i) + "' AND Year > 0 ORDER By Year,Season";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"ScenarioOthPrey","Biomass",dataMap,queryStr))
                 return false;
@@ -847,8 +884,9 @@ std::cout << 44 << std::endl;
 //double d1 = 0;
 
     if (NOthPred > 0) {
-        cmd  = "INSERT INTO ForeSuitPreyBiomass (MSVPAname, ForeName, Scenario, PredName, PredAge, PredType, PreyName, ";
-        cmd += "PreyAge, Year, Season, SuitPreyBiomass ) values ";
+        cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                " (MSVPAname, ForeName, Scenario, PredName, PredAge, PredType, PreyName, " +
+                "PreyAge, Year, Season, SuitPreyBiomass ) values ";
         updateDB = false;
         for (int season = 0; season < NSeasons; ++season) {
             for (int predNum = 0; predNum< NOthPred; ++predNum) {
@@ -971,9 +1009,11 @@ std::cout << 44 << std::endl;
     for (int i = 0; i < NSpe; ++i)
     {
         fields = {"SpeName","Age","AnnF","AnnM2","AnnM1"};
-        queryStr = "SELECT SpeName, Age, SUM(SeasF) as AnnF, SUM(SeasM2) as AnnM2, Sum(SeasM1) as AnnM1 FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND Spename = '" + SpeList(i) + "'" +
-                " AND Year = " + std::to_string(InitYear-MSVPAFirstYear) + " GROUP BY SpeName, Age";
+        queryStr = "SELECT SpeName, Age, SUM(SeasF) as AnnF, SUM(SeasM2) as AnnM2, Sum(SeasM1) as AnnM1 FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND Spename = '" + SpeList(i) + "'" +
+                   " AND Year = " + std::to_string(InitYear-MSVPAFirstYear) + " GROUP BY SpeName, Age";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPASeasBiomass","SpeName",dataMap,queryStr))
             return false;
@@ -1008,9 +1048,12 @@ std::cout << 44 << std::endl;
         for (int i = 0; i < NSpe; ++i)
         {
             fields = {"SpeName","Age","Season","SeasF"};
-            queryStr = "SELECT SpeName, Age, Season, SeasF FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND Spename = '" + SpeList(i) + "'" +
-                    " AND Year = " + std::to_string(InitYear - MSVPAFirstYear) + " ORDER BY SpeName, Age, Season";
+            queryStr = "SELECT SpeName, Age, Season, SeasF FROM " +
+                        nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND Spename = '" + SpeList(i) + "'" +
+                       " AND Year = " + std::to_string(InitYear - MSVPAFirstYear) +
+                       " ORDER BY SpeName, Age, Season";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"MSVPASeasBiomass","SpeName",dataMap,queryStr))
                 return false;
@@ -1037,10 +1080,11 @@ std::cout << 44 << std::endl;
 
             for (int i = 0; i < NSpe; ++i) {
                 fields = {"Age","Year","F"};
-                queryStr = "SELECT Age,Year,F FROM ScenarioF WHERE MSVPAname = '" + MSVPAName + "'" +
-                        " AND ForeName = '" + ForecastName + "'" +
-                        " AND Scenario = '" + Scenario.Name + "'" +
-                        " AND SpeName = '"  + SpeList(i) + "' AND Year > 0 ORDER By Age, Year";
+                queryStr = "SELECT Age,Year,F FROM " + nmfConstantsMSVPA::TableScenarioF +
+                           " WHERE MSVPAname = '" + MSVPAName + "'" +
+                           " AND ForeName = '" + ForecastName + "'" +
+                           " AND Scenario = '" + Scenario.Name + "'" +
+                           " AND SpeName = '"  + SpeList(i) + "' AND Year > 0 ORDER By Age, Year";
 //std::cout << queryStr << std::endl;
                 dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (nmfUtils::checkForError(logger,"ScenarioF","Age",dataMap,queryStr))
@@ -1083,9 +1127,10 @@ std::cout << 44 << std::endl;
 
          for (int j = 0; j <= NSpeAge(i); ++j) {
              fields = {"SpeName", "Age", "Catch"};
-             queryStr = "SELECT SpeName, Age, Catch FROM SpeCatch WHERE SpeName = '" + SpeList(i) + "'" +
-                     " AND Age = "  + std::to_string(j) +
-                     " AND Year = " + std::to_string(InitYear) + " ORDER BY SpeName, Age";
+             queryStr = "SELECT SpeName, Age, Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+                        " WHERE SpeName = '" + SpeList(i) + "'" +
+                        " AND Age = "  + std::to_string(j) +
+                        " AND Year = " + std::to_string(InitYear) + " ORDER BY SpeName, Age";
              dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
              if (nmfUtils::checkForError(logger,"SpeCatch","SpeName",dataMap,queryStr))
                  return false;
@@ -1100,10 +1145,11 @@ std::cout << 44 << std::endl;
              } // end for j
          } else {
              fields = {"F"};
-             queryStr = "SELECT F FROM ScenarioF WHERE MSVPAname = '" + MSVPAName + "'" +
-                     " AND ForeName = '" + ForecastName + "'" +
-                     " AND Scenario = '" + Scenario.Name + "'" +
-                     " AND SpeName = '"  + SpeList(i) + "' AND Year > 0 ORDER By Age, Year";
+             queryStr = "SELECT F FROM " + nmfConstantsMSVPA::TableScenarioF +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
+                        " AND ForeName = '" + ForecastName + "'" +
+                        " AND Scenario = '" + Scenario.Name + "'" +
+                        " AND SpeName = '"  + SpeList(i) + "' AND Year > 0 ORDER By Age, Year";
              dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
              if (nmfUtils::checkForError(logger,"ScenarioF","F",dataMap,queryStr))
                  return false;
@@ -1131,10 +1177,12 @@ std::cout << 44 << std::endl;
     if (Scenario.VarRec == 1) {
         for (int i = 0; i < NSpe; ++i) {
             fields = {"AbsRecruits","RecAdjust"};
-            queryStr = "SELECT AbsRecruits,RecAdjust FROM ScenarioRec WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + Scenario.Name + "'" +
-                    " AND SpeName = '"  + SpeList(i) + "' ORDER By Year";
+            queryStr = "SELECT AbsRecruits,RecAdjust FROM " +
+                        nmfConstantsMSVPA::TableScenarioRec +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + Scenario.Name + "'" +
+                       " AND SpeName = '"  + SpeList(i) + "' ORDER By Year";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"ScenarioRec","AbsRecruits",dataMap,queryStr))
                 return false;
@@ -1169,9 +1217,12 @@ std::cout << 44 << std::endl;
 
     for (int i = 0; i < NSpe; ++i) {
         fields = {"AnnBiomass","AnnAbund"};
-        queryStr = "SELECT AnnBiomass,AnnAbund FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND Spename = '" + SpeList(i) + "'" +
-                " AND Season = 0 and Year = " + std::to_string(InitYear-MSVPAFirstYear) + " ORDER By Age";
+        queryStr = "SELECT AnnBiomass,AnnAbund FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND Spename = '" + SpeList(i) + "'" +
+                   " AND Season = 0 and Year = " + std::to_string(InitYear-MSVPAFirstYear) +
+                   " ORDER By Age";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (nmfUtils::checkForError(logger,"MSVPASeasBiomass","AnnBiomass",dataMap,queryStr))
             return false;
@@ -1308,13 +1359,15 @@ std::cout << 44 << std::endl;
                 for (int i = 0; i < NOthPred; ++i) {
                     for (int j = 0; j < NOthPrey; ++j) {
                         fields = {"PredAge","SuitPreyBiomass"};
-                        queryStr = "SELECT PredAge,SuitPreyBiomass FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                                " AND ForeName = '" + ForecastName +     "'" +
-                                " AND Scenario = '" + Scenario.Name +  "'" +
-                                " AND PredName = '" + OtherPredList(i) + "'" +
-                                " AND PreyName = '" + OtherPreyList(j) + "'" +
-                                " AND Year = "   + std::to_string(Year) +
-                                " AND Season = " + std::to_string(Seas) + " ORDER BY PredAge";
+                        queryStr = "SELECT PredAge,SuitPreyBiomass FROM " +
+                                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                                   " AND ForeName = '" + ForecastName +     "'" +
+                                   " AND Scenario = '" + Scenario.Name +  "'" +
+                                   " AND PredName = '" + OtherPredList(i) + "'" +
+                                   " AND PreyName = '" + OtherPreyList(j) + "'" +
+                                   " AND Year = "   + std::to_string(Year) +
+                                   " AND Season = " + std::to_string(Seas) + " ORDER BY PredAge";
                         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
                         if (nmfUtils::checkForError(logger,"ForeSuitPreyBiomass","PredAge",dataMap,queryStr))
                             return false;
@@ -1748,7 +1801,8 @@ std::cout << 44 << std::endl;
                     //
 
 
-                    cmd  = "INSERT INTO ForeOutput (MSVPAname, ForeName, Scenario, Year, Season, SpeName, Age, ";
+                    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForeOutput +
+                           " (MSVPAname, ForeName, Scenario, Year, Season, SpeName, Age, ";
                     cmd += "SpeType, InitAbund, EndAbund, InitBiomass, EndBiomass, SeasM2, SeasF, SeasM1, ";
                     cmd += "AvgSize, AvgWeight, InitWt, EndWt, TotalSBM, TotalBMConsumed, StomCont, SeasCatch, SeasYield) values ";
                     outputFields.clear();
@@ -1797,7 +1851,8 @@ std::cout << 44 << std::endl;
                     cmd = "";
                     updateDB = false;
                     if (SpeType(i) == 0) {
-                        cmd  = "INSERT INTO ForeSuitPreyBiomass (MSVPAname, ForeName, Scenario, Year, Season, PredName, PredAge, ";
+                        cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                               " (MSVPAname, ForeName, Scenario, Year, Season, PredName, PredAge, ";
                         cmd += "PredType, PreyName, PreyAge, PropDiet, SuitPreyBiomass, BMConsumed) values ";
                         for (int l = 0; l < NSpe; ++l) {
                             for (int nn = 0; nn <= NSpeAge(l); ++nn) {
@@ -1868,7 +1923,8 @@ std::cout << 44 << std::endl;
 
                 for (int i = 0; i < NOthPred; ++i) {
                     for (int j = 0; j <= NOtherPredAge(i); ++j) {
-                        cmd1  = "INSERT INTO ForeOutput (MSVPAname, ForeName, Scenario, Year, Season, SpeName, Age, ";
+                        cmd1  = "INSERT INTO " + nmfConstantsMSVPA::TableForeOutput +
+                                " (MSVPAname, ForeName, Scenario, Year, Season, SpeName, Age, ";
                         cmd1 += "SpeType, InitBiomass, TotalSBM, TotalBMConsumed, StomCont) values ";
 
                         TotalBMConsumed = 0.0;
@@ -1924,7 +1980,8 @@ std::cout << 44 << std::endl;
                         }
 
                         updateDB = false;
-                        cmd2  = "INSERT INTO ForeSuitPreyBiomass (MSVPAname, ForeName, Scenario, Year, Season, PredName, PredAge, ";
+                        cmd2  = "INSERT INTO " + nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                                " (MSVPAname, ForeName, Scenario, Year, Season, PredName, PredAge, ";
                         cmd2 += "PredType, PreyName, PreyAge, PropDiet, SuitPreyBiomass, BMConsumed) values ";
                         for (int l = 0; l < NSpe; ++l) {
                             for (int nn = 0; nn <= NSpeAge(l); ++nn) {
@@ -1963,7 +2020,7 @@ std::cout << 44 << std::endl;
 
                         Forecast: Error - Check ForeSuitPreyBiomass table.
                         Forecast: Error - No data found for cmd: SELECT MSVPAName,ForeName,Scenario,PredName,PredAge,PreyName,
-                              PreyAge,Year,Season,SuitPreyBiomass FROM ForeSuitPreyBiomass WHERE MSVPAname = 'MSVPA2'
+                              PreyAge,Year,Season,SuitPreyBiomass FROM " + nmfConstantsMSVPA::TableForeSuitPreyBiomass + " WHERE MSVPAname = 'MSVPA2'
                               AND ForeName = 'zero_men_F' AND Scenario = 'No_men_F'
                               AND PredName = 'Bluefish' AND PredAge = 0
                               AND PreyName = 'clupeids' AND Year = 0  AND Season = 2
@@ -1971,20 +2028,22 @@ std::cout << 44 << std::endl;
                                      */
                         for (int l = 0; l < NOthPrey; ++l) {
                             // Write for other prey...will already have suitpreybiomass saved here
-                            cmd3  = "REPLACE INTO ForeSuitPreyBiomass ";
-                            cmd3 += "(MSVPAName,ForeName,Scenario,PredName,PredAge,PreyName,PreyAge,Year,";
+                            cmd3  = "REPLACE INTO " + nmfConstantsMSVPA::TableForeSuitPreyBiomass;
+                            cmd3 += " (MSVPAName,ForeName,Scenario,PredName,PredAge,PreyName,PreyAge,Year,";
                             cmd3 += "Season,PropDiet,BMConsumed) values ";
 
                             updateDB = false;
                             fields = {"MSVPAName","ForeName","Scenario","PredName","PredAge","PreyName","PreyAge","Year","Season","SuitPreyBiomass"};
-                            queryStr = "SELECT MSVPAName,ForeName,Scenario,PredName,PredAge,PreyName,PreyAge,Year,Season,SuitPreyBiomass FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName +
-                                    "' AND ForeName = '" + ForecastName +
-                                    "' AND Scenario = '" + Scenario.Name +
-                                    "' AND PredName = '" + OtherPredList(i) +
-                                    "' AND PredAge = " + std::to_string(j) +
-                                    "  AND PreyName = '" + OtherPreyList(l) +
-                                    "' AND Year = " + std::to_string(Year) +
-                                    "  AND Season = " + std::to_string(Seas);
+                            queryStr = "SELECT MSVPAName,ForeName,Scenario,PredName,PredAge,PreyName,PreyAge,Year,Season,SuitPreyBiomass FROM " +
+                                        nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                                       " WHERE MSVPAname = '" + MSVPAName +
+                                       "' AND ForeName = '" + ForecastName +
+                                       "' AND Scenario = '" + Scenario.Name +
+                                       "' AND PredName = '" + OtherPredList(i) +
+                                       "' AND PredAge = " + std::to_string(j) +
+                                       "  AND PreyName = '" + OtherPreyList(l) +
+                                       "' AND Year = " + std::to_string(Year) +
+                                       "  AND Season = " + std::to_string(Seas);
                             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RSK FIX this.....
@@ -2124,11 +2183,14 @@ std::cout << 44 << std::endl;
         // Reset mortality values for the next iteration to use when scaling catch
         for (int i = 0; i < NSpe; ++i) {
             fields = {"Year","SpeName","Age","AnnM1","AnnM2","AnnF"};
-            queryStr = "SELECT Year, SpeName, Age, SUM(SeasM1) as AnnM1, SUM(SeasM2) as AnnM2, SUM(SeasF) As AnnF FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + Scenario.Name + "'" +
-                    " AND SpeName = '" + SpeList(i) + "'" +
-                    " AND Year = " + std::to_string(Year) + " GROUP BY Year,SpeName,Age";
+            queryStr = "SELECT Year, SpeName, Age, SUM(SeasM1) as AnnM1, SUM(SeasM2) as AnnM2, SUM(SeasF) As AnnF FROM " +
+                        nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + Scenario.Name + "'" +
+                       " AND SpeName = '" + SpeList(i) + "'" +
+                       " AND Year = " + std::to_string(Year) +
+                       " GROUP BY Year,SpeName,Age";
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             if (nmfUtils::checkForError(logger,"ForeOutput","SpeName",dataMap,queryStr))
                 return false;
@@ -2153,11 +2215,13 @@ std::cout << 44 << std::endl;
         TotalInitBiomass.clear();
         for (int i = 0; i < NSpe; ++i) {
             fields = {"Year","TotalInitBiomass"};
-            queryStr = "SELECT SpeName, SUM(InitBiomass) as TotalInitBiomass FROM ForeOutput WHERE MSVPAName = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + Scenario.Name + "'" +
-                    " AND SpeName = '" + SpeList(i) + "'" +
-                    " AND Year = " + std::to_string(Year);
+            queryStr = "SELECT SpeName, SUM(InitBiomass) as TotalInitBiomass FROM " +
+                        nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAName = '" + MSVPAName + "'" +
+                       " AND ForeName = '" + ForecastName + "'" +
+                       " AND Scenario = '" + Scenario.Name + "'" +
+                       " AND SpeName = '" + SpeList(i) + "'" +
+                       " AND Year = " + std::to_string(Year);
             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
             SpeciesName.push_back(SpeList(i));
             if (dataMap["Year"].size() > 0) {
@@ -2265,7 +2329,9 @@ nmfForecast::WriteCurrentLoopFile(nmfDatabase *databasePtr,
 
     // Find which species is the Prey Only MSVPA Species and use that species
     fields = {"MSVPAName","SpeName","Type"};
-    queryStr = "SELECT MSVPAName,SpeName,Type FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'" +
+    queryStr = "SELECT MSVPAName,SpeName,Type FROM " +
+                nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'" +
                " AND Type = 1";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["SpeName"].size() > 0) {
@@ -2387,7 +2453,8 @@ nmfForecast::GetSize(nmfDatabase* databasePtr, int NYears,
         case 0: // fixed VB..calculate size at age for each year from same VB equations
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeSize WHERE SpeName='" + SpeName +
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeSize +
+                           " WHERE SpeName='" + SpeName +
                            "' AND Variable = '" + Variables[i] + "'";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (nmfUtils::checkForError(logger,"SpeSize","Value",dataMap,queryStr))
@@ -2404,7 +2471,8 @@ nmfForecast::GetSize(nmfDatabase* databasePtr, int NYears,
 
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeSize WHERE SpeName='" + SpeName + "' " +
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeSize +
+                           " WHERE SpeName='" + SpeName + "' " +
                            " AND Year = " + YearStr +
                            " AND Variable = '" + Variables[i] + "' ";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2422,7 +2490,8 @@ nmfForecast::GetSize(nmfDatabase* databasePtr, int NYears,
 
         default: // fixed size or annual ...everything is already saved by year and age
             fields = { "Value"};
-            queryStr = "SELECT Value FROM SpeSize WHERE SpeName='" + SpeName + "' " +
+            queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeSize +
+                       " WHERE SpeName='" + SpeName + "' " +
                        " AND Year = " + YearStr +
                        " AND Variable='Size' ORDER BY Age";
             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2469,7 +2538,8 @@ nmfForecast::GetWt(nmfDatabase* databasePtr, int NYears,
         case 0: // fixed VB
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeWeight WHERE SpeName='" + SpeName +
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeWeight +
+                           " WHERE SpeName='" + SpeName +
                            "' AND Variable = '" + Variables[i] + "'";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (nmfUtils::checkForError(logger,"SpeWeight","Value",dataMap,queryStr))
@@ -2485,7 +2555,8 @@ nmfForecast::GetWt(nmfDatabase* databasePtr, int NYears,
         case 1: // ann VB
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeWeight WHERE SpeName='" + SpeName + "' " +
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeWeight +
+                           " WHERE SpeName='" + SpeName + "' " +
                            " AND Year = " + YearStr +
                            " AND Variable = '" + Variables[i] + "' ";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2504,7 +2575,8 @@ nmfForecast::GetWt(nmfDatabase* databasePtr, int NYears,
         case 2: // fix WL
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeWeight WHERE SpeName='" + SpeName + "' " +
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeWeight +
+                           " WHERE SpeName='" + SpeName + "' " +
                            " AND Variable = '" + FixWlVariables[i] + "'";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (nmfUtils::checkForError(logger,"SpeWeight","Value",dataMap,queryStr))
@@ -2520,9 +2592,10 @@ nmfForecast::GetWt(nmfDatabase* databasePtr, int NYears,
         case 3: // ann WL
             fields = {"Value"};
             for (unsigned int i=0; i<Variables.size(); ++i) {
-                queryStr = "SELECT Value FROM SpeWeight WHERE SpeName = '" + SpeName + "' " +
-                        " AND Year = " + YearStr +
-                        " AND Variable = '" + FixWlVariables[i] +"' ";
+                queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeWeight +
+                           " WHERE SpeName = '" + SpeName + "' " +
+                           " AND Year = " + YearStr +
+                           " AND Variable = '" + FixWlVariables[i] +"' ";
                 dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (nmfUtils::checkForError(logger,"SpeWeight","Value",dataMap,queryStr))
                     return false;
@@ -2537,7 +2610,8 @@ nmfForecast::GetWt(nmfDatabase* databasePtr, int NYears,
         case 4: // wt at age
         case 5:
             fields = {"Value"};
-            queryStr = "SELECT Value FROM SpeWeight WHERE SpeName = '" + SpeName + "' " +
+            queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeWeight +
+                       " WHERE SpeName = '" + SpeName + "' " +
                        " AND Year = " + YearStr +
                        " AND Variable = 'Weight' ORDER BY Age";
             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2567,7 +2641,8 @@ nmfForecast::Ricker(nmfDatabase* databasePtr,
    std::map<std::string, std::vector<std::string> > dataMap;
 
    fields = { "SRRA","SRRB"};
-   queryStr = "SELECT SRRA,SRRB FROM ForeSRR WHERE MSVPAName='" + MSVPAName + "' " +
+   queryStr = "SELECT SRRA,SRRB FROM " + nmfConstantsMSVPA::TableForeSRR +
+              " WHERE MSVPAName='" + MSVPAName + "' " +
               " AND ForeName = '" + ForecastName + "' " +
               " AND SpeName = '" + SpeName + "' ";
    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2594,7 +2669,8 @@ nmfForecast::BevertonHolt(nmfDatabase* databasePtr,
    std::map<std::string, std::vector<std::string> > dataMap;
 
    fields = { "SRRA","SRRB"};
-   queryStr = "SELECT SRRA,SRRB FROM ForeSRR WHERE MSVPAName='" + MSVPAName + "' " +
+   queryStr = "SELECT SRRA,SRRB FROM " + nmfConstantsMSVPA::TableForeSRR +
+              " WHERE MSVPAName='" + MSVPAName + "' " +
               " AND ForeName = '" + ForecastName + "' " +
               " AND SpeName = '" + SpeName + "' ";
    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2625,7 +2701,8 @@ nmfForecast::Shepherd(nmfDatabase* databasePtr,
    std::map<std::string, std::vector<std::string> > dataMap;
 
    fields = { "SRRA","SRRB","SRRK"};
-   queryStr = "SELECT SRRA,SRRB,SRRK FROM ForeSRR WHERE MSVPAName='" + MSVPAName + "' " +
+   queryStr = "SELECT SRRA,SRRB,SRRK FROM " + nmfConstantsMSVPA::TableForeSRR +
+              " WHERE MSVPAName='" + MSVPAName + "' " +
               " AND ForeName = '" + ForecastName + "' " +
               " AND SpeName = '" + SpeName + "' ";
    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2659,7 +2736,9 @@ nmfForecast::SRQuartile(nmfDatabase* databasePtr,
    std::map<std::string, std::vector<std::string> > dataMap;
 
    fields = { "MinSSB","MaxSSB","MinRec","MaxRec"};
-   queryStr = "SELECT MinSSB,MaxSSB,MinRec,MaxRec FROM ForeSRQ WHERE MSVPAName='" + MSVPAName + "' " +
+   queryStr = "SELECT MinSSB,MaxSSB,MinRec,MaxRec FROM " +
+               nmfConstantsMSVPA::TableForeSRQ +
+              " WHERE MSVPAName='" + MSVPAName + "' " +
               " AND ForeName = '" + ForecastName + "' " +
               " AND SpeName = '" + SpeName + "' ";
    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2679,7 +2758,7 @@ nmfForecast::SRQuartile(nmfDatabase* databasePtr,
        }
    }
 
-   returnVal = QuartMinRec[QuartNum] + nmfUtils::getRandomNumber(-1,0.0,1.0)*(QuartMaxRec[QuartNum]-QuartMinRec[QuartNum]);
+   returnVal = QuartMinRec[QuartNum] + nmfUtils::getRandomNumber(nmfConstants::RandomSeed,0.0,1.0)*(QuartMaxRec[QuartNum]-QuartMinRec[QuartNum]);
 
    return true;
 

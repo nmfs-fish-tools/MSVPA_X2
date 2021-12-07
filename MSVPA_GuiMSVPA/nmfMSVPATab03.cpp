@@ -233,12 +233,12 @@ nmfMSVPATab3::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     std::vector<std::string> fields;
 
     // Restore Biomass Data
-    TableName = "OtherPredBM";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableOtherPredBM);
     fields    = {"SpeName","Year","Biomass"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
     // Restore Feeding Data
-    TableName = "OthPredSizeData";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableOthPredSizeData);
     fields    = {"SpeIndex","SpeName","SizeCat","MinLen","MaxLen","PropBM",
                  "ConsAlpha","ConsBeta","SizeSelAlpha","SizeSelBeta"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -263,7 +263,7 @@ nmfMSVPATab3::loadBiomassData()
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("OtherPredBM.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableOtherPredBM)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load Other Predator Biomass CSV File");
@@ -331,7 +331,7 @@ nmfMSVPATab3::loadFeedingData()
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("OthPredSizeData.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableOthPredSizeData)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load Other Predator Size Data CSV File");
@@ -437,7 +437,7 @@ nmfMSVPATab3::saveBiomassData()
     QStringList qfields;
     std::string cmd;
     std::string errorMsg;
-    QString TableName = "OtherPredBM";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableOtherPredBM);
     QString OtherPredBMCSVFile;
     QString OtherPredSpecies;
     int OtherPredSpeciesIndex;
@@ -459,7 +459,7 @@ nmfMSVPATab3::saveBiomassData()
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
     if (OtherPredBMCSVFile.isEmpty()) {
-        OtherPredBMCSVFile = "OtherPredBM.csv";
+        OtherPredBMCSVFile = QString::fromStdString(nmfConstantsMSVPA::TableOtherPredBM)+".csv";
         filePath = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::InputDataDir));
         fileNameWithPath    = QDir(filePath).filePath(OtherPredBMCSVFile);
         tmpFileNameWithPath = QDir(filePath).filePath("."+OtherPredBMCSVFile);
@@ -612,7 +612,7 @@ nmfMSVPATab3::saveFeedingData()
     QStringList qfields;
     std::string cmd;
     std::string errorMsg;
-    QString TableName = "OthPredSizeData";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableOthPredSizeData);
     QString OtherPredSizeDataCSVFile;
     QString OtherPredSpecies;
     int OtherPredSpeciesIndex;
@@ -634,7 +634,7 @@ nmfMSVPATab3::saveFeedingData()
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
     if (OtherPredSizeDataCSVFile.isEmpty()) {
-        OtherPredSizeDataCSVFile = "OthPredSizeData.csv";
+        OtherPredSizeDataCSVFile = QString::fromStdString(nmfConstantsMSVPA::TableOthPredSizeData)+".csv";
         filePath = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::InputDataDir));
         fileNameWithPath    = QDir(filePath).filePath(OtherPredSizeDataCSVFile);
         tmpFileNameWithPath = QDir(filePath).filePath("."+OtherPredSizeDataCSVFile);
@@ -818,7 +818,7 @@ nmfMSVPATab3::callback_MSVPA_Tab3SubTab1_ItemChanged(QStandardItem *currItem)
     item->setTextAlignment(Qt::AlignCenter);
     smodelBiomass[OtherPredSpeciesIndex]->setItem(item->row(), item->column(), item);
 
-    MarkAsDirty("OtherPredBM");
+    MarkAsDirty(nmfConstantsMSVPA::TableOtherPredBM);
 
     MSVPA_Tab3_BiomassTV->resizeColumnsToContents();
     MSVPA_Tab3_SavePB->setEnabled(true);
@@ -849,7 +849,7 @@ nmfMSVPATab3::callback_MSVPA_Tab3SubTab2_ItemChanged(QStandardItem *currItem)
         updateFeedingTableHeader();
     }
 
-    MarkAsDirty("OthPredSizeData");
+    MarkAsDirty(nmfConstantsMSVPA::TableOthPredSizeData);
 
     MSVPA_Tab3_FeedingDataTV->resizeColumnsToContents();
 
@@ -900,7 +900,7 @@ nmfMSVPATab3::loadWidgets(nmfDatabase *theDatabasePtr,
     MSVPA_Tab3_OtherPredSpeciesCMB->blockSignals(true);
     // Load OtherPredSpecies to combobox
     fields   = {"SpeIndex","SpeName","FirstYear"};
-    queryStr = "SELECT SpeIndex,SpeName,FirstYear FROM OtherPredSpecies;";
+    queryStr = "SELECT SpeIndex,SpeName,FirstYear FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     MSVPA_Tab3_OtherPredSpeciesCMB->clear();
     NumOtherPredSpecies = dataMap["SpeName"].size();
@@ -996,7 +996,9 @@ nmfMSVPATab3::loadSubTab1(QString dataSource,
     if (dataSource == "fromTable") {
         // Get table data for Biomass tableView and load into model
         fields   = {"SpeIndex","SpeName","Year","Biomass"};
-        queryStr = "SELECT SpeIndex,SpeName,Year,Biomass FROM OtherPredBM WHERE SpeName='" + OtherPredSpecies.toStdString() +"'";
+        queryStr = "SELECT SpeIndex,SpeName,Year,Biomass FROM " +
+                    nmfConstantsMSVPA::TableOtherPredBM +
+                   " WHERE SpeName='" + OtherPredSpecies.toStdString() +"'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
         csvFileEmpty = (dataMap["SpeIndex"].size() == 0);
         for (int i=0; i<NumYears; ++i) {
@@ -1077,7 +1079,9 @@ nmfMSVPATab3::loadSubTab2(QString dataSource,
 
     // Load table data for Feeding
     fields   = {"SpeIndex","SpeName","SizeCat","MinLen","MaxLen","PropBM","ConsAlpha","ConsBeta","SizeSelAlpha","SizeSelBeta"};
-    queryStr = "SELECT SpeIndex,SpeName,SizeCat,MinLen,MaxLen,PropBM,ConsAlpha,ConsBeta,SizeSelAlpha,SizeSelBeta FROM OthPredSizeData WHERE SpeName='" +
+    queryStr = "SELECT SpeIndex,SpeName,SizeCat,MinLen,MaxLen,PropBM,ConsAlpha,ConsBeta,SizeSelAlpha,SizeSelBeta FROM " +
+                nmfConstantsMSVPA::TableOthPredSizeData +
+               " WHERE SpeName='" +
                 OtherPredSpecies.toStdString() +"'" +
                " ORDER by SizeCat";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
@@ -1200,8 +1204,9 @@ nmfMSVPATab3::loadSubTab2(QString dataSource,
 
     if (NumCats == 0) {
         fields2   = {"SpeIndex","SpeName","NumSizeCats"};
-        queryStr2 = "SELECT SpeIndex,SpeName,NumSizeCats FROM OtherPredSpecies WHERE SpeName='" +
-                OtherPredSpecies.toStdString() +"'";
+        queryStr2 = "SELECT SpeIndex,SpeName,NumSizeCats FROM " +
+                     nmfConstantsMSVPA::TableOtherPredSpecies +
+                    " WHERE SpeName='" + OtherPredSpecies.toStdString() +"'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2,fields2);
         if (dataMap2["SpeIndex"].size() == 0) {
             msg  = "\nCould not find NumSizeCats data in OtherPredSPecies table for Species: ";
@@ -1242,8 +1247,9 @@ nmfMSVPATab3::getInitData(QString OtherPredSpecies,
     int BMUnits;
 
     fields   = { "SpeIndex", "SpeName", "BMUnits", "NumSizeCats", "FirstYear", "LastYear" };
-    queryStr = "SELECT SpeIndex,SpeName,BMUnits,NumSizeCats,FirstYear,LastYear FROM OtherPredSpecies WHERE SpeName='" +
-                OtherPredSpecies.toStdString() + "'";
+    queryStr = "SELECT SpeIndex,SpeName,BMUnits,NumSizeCats,FirstYear,LastYear FROM " +
+                nmfConstantsMSVPA::TableOtherPredSpecies +
+               " WHERE SpeName='" + OtherPredSpecies.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     if (dataMap["SpeIndex"].size() == 0) {
         std::cout << "Error: nmfMSVPATab3::getInitData. No data found with following cmd:\n" << queryStr << std::endl;
@@ -1283,8 +1289,9 @@ nmfMSVPATab3::callback_MSVPA_Tab3_OtherPredSpeciesCMB(QString species)
     std::string queryStr;
 
     fields   = { "SpeIndex", "SpeName", "BMUnits", "NumSizeCats", "FirstYear", "LastYear" };
-    queryStr = "SELECT SpeIndex,SpeName,BMUnits,NumSizeCats,FirstYear,LastYear FROM OtherPredSpecies WHERE SpeName='" +
-                species.toStdString() + "'";
+    queryStr = "SELECT SpeIndex,SpeName,BMUnits,NumSizeCats,FirstYear,LastYear FROM " +
+                nmfConstantsMSVPA::TableOtherPredSpecies +
+               " WHERE SpeName='" + species.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     if (dataMap["SpeIndex"].size() > 0) {
 //        NumYears = std::stoi(dataMap["LastYear"][0]) -

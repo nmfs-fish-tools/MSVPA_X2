@@ -95,7 +95,7 @@ nmfMSVPATab6::callback_MSVPA_Tab6_ClearPB(bool unused)
 {
     std::string errorMsg;
     QString qcmd;
-    QString TableNameSpaceO = "MSVPASpaceO";
+    QString TableNameSpaceO = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO);
     bool clearedOK = true;
     QMessageBox::StandardButton reply;
 
@@ -151,7 +151,7 @@ nmfMSVPATab6::callback_MSVPA_Tab6_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPASpaceO.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Spatial Overlap CSV File");
@@ -269,8 +269,9 @@ nmfMSVPATab6::callback_MSVPA_Tab6_SavePB(bool unused)
     std::map<std::string,int> SpeciesIndexMap;
     std::map<std::string,int> SpeciesTypeMap;
     fields   = {"MSVPAName", "SpeName", "SpeIndex", "Type"};
-    queryStr = "SELECT MSVPAName,SpeName,SpeIndex,Type FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'";
-
+    queryStr = "SELECT MSVPAName,SpeName,SpeIndex,Type FROM " +
+                nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
 
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
@@ -282,14 +283,14 @@ nmfMSVPATab6::callback_MSVPA_Tab6_SavePB(bool unused)
 //    std::map<int,QString> SSVPANameMap;
 //    std::map<int,QString> SSVPAIndexMap;
 //    fields   = {"SpeIndex","SSVPAName","SSVPAIndex"};
-//    queryStr = "SELECT SpeIndex,SSVPAName,SSVPAIndex FROM SpeSSVPA";
+//    queryStr = "SELECT SpeIndex,SSVPAName,SSVPAIndex FROM " + nmfConstantsMSVPA::TableSpeSSVPA;
 //    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
 //    for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
 //        SSVPANameMap[dataMap["SpeName"][i]]  = QString::fromStdString(dataMap["SSVPAName"][i]);
 //        SSVPAIndexMap[dataMap["SpeName"][i]] = QString::fromStdString(dataMap["SSVPAIndex"][i]);
 //    }
 
-    TableNameSpaceO = "MSVPASpaceO";
+    TableNameSpaceO = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -482,7 +483,7 @@ nmfMSVPATab6::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "MSVPASpaceO";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO);
     fields    = {"MSVPAName","Season","SpeIndex","SpeType","SpeName",
                 "Age","PreyIndex","PreyName","SpOverlap"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -496,7 +497,7 @@ nmfMSVPATab6::callback_MSVPA_Tab6_ItemChanged(QStandardItem *item)
     item->setTextAlignment(Qt::AlignCenter);
     smodel->setItem(item->row(), item->column(), item);
 
-    MarkAsDirty("MSVPASpaceO");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPASpaceO);
     MSVPA_Tab6_SavePB->setEnabled(true);
     MSVPA_Tab6_NextPB->setEnabled(false);
 
@@ -549,7 +550,9 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // First get some initial data
     fields       = {"NPreyOnly","NSpe","NOther","NOtherPred","NSeasons","SeasSpaceO"};
-    queryStr     = "SELECT NPreyOnly,NSpe,NOther,NOtherPred,NSeasons,SeasSpaceO FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr     = "SELECT NPreyOnly,NSpe,NOther,NOtherPred,NSeasons,SeasSpaceO FROM " +
+                    nmfConstantsMSVPA::TableMSVPAlist +
+                   " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap      = databasePtr->nmfQueryDatabase(queryStr, fields);
     NPrey        = std::stoi(dataMap["NPreyOnly"][0]);
     NSpecies     = std::stoi(dataMap["NSpe"][0]);
@@ -576,7 +579,8 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Load the species combo box in Tab5
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type=0";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
@@ -587,7 +591,8 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
 
     fields = {"MaxAge","SpeIndex"};
     for (int i = 0; i < NSpecies; ++i) {
-        queryStr = "SELECT MaxAge,SpeIndex FROM Species WHERE Spename = '" + Species[i] + "'";
+        queryStr = "SELECT MaxAge,SpeIndex FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE Spename = '" + Species[i] + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
          Nage.push_back(std::stoi(dataMap["MaxAge"][0]));
         //PredIndex.push_back(std::stoi(dataMap["SpeIndex"][0]));
@@ -595,8 +600,9 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
     } // end for i
 
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
-            " AND Type=3";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND Type=3";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         species = dataMap["SpeName"][i];
@@ -606,7 +612,9 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
     // Add other preds to the lists
     fields = {"NumSizeCats","SpeIndex"};
     for (int i = NSpecies; i < NPreds; ++i) {
-        queryStr = "SELECT NumSizeCats,SpeIndex FROM OtherPredSpecies WHERE SpeName = '" + OthPred[i-NSpecies] + "'";
+        queryStr = "SELECT NumSizeCats,SpeIndex FROM " +
+                    nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName = '" + OthPred[i-NSpecies] + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         Nage.push_back(std::stoi(dataMap["NumSizeCats"][0])-1);
         //PredIndex.push_back(std::stoi(dataMap["SpeIndex"][0]));
@@ -614,7 +622,8 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
     } // end for i
 
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type=1";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
@@ -624,7 +633,8 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
     }
 
     fields   = {"OthPreyName"};
-    queryStr = "SELECT OthPreyName FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName FROM " + nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["OthPreyName"].size(); ++i) {
         species = dataMap["OthPreyName"][i];
@@ -677,10 +687,11 @@ nmfMSVPATab6::loadWidgets(nmfDatabase *theDatabasePtr,
     int m = 0;
 
     fields = {"SpOverlap"};
-    queryStr = "SELECT SpOverlap FROM MSVPASpaceO WHERE MSVPAname = '" + MSVPAName + "'" +
-            " AND SpeName = '"  + SpeName  + "'" +
-            " AND Season = 1" +
-            " ORDER By Age";
+    queryStr = "SELECT SpOverlap FROM " + nmfConstantsMSVPA::TableMSVPASpaceO +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " AND SpeName = '"  + SpeName  + "'" +
+               " AND Season = 1" +
+               " ORDER By Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["SpOverlap"].size();
     if (NumRecords > 0) {
@@ -781,7 +792,8 @@ nmfMSVPATab6::callback_MSVPA_Tab6_SpeciesCMB(int index)
 
     // Load the model which will then load the table
     fields   = {"SpOverlap"};
-    queryStr = "SELECT SpOverlap FROM MSVPASpaceO WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpOverlap FROM " + nmfConstantsMSVPA::TableMSVPASpaceO +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND SpeName = '" + SpeName + "'" +
                " AND Season = "   + Season +
                " ORDER By Age";
@@ -839,7 +851,8 @@ nmfMSVPATab6::callback_MSVPA_Tab6_SeasonCMB(int index)
 
     // Load the model which will then load the table
     fields   = {"SpOverlap"};
-    queryStr = "SELECT SpOverlap FROM MSVPASpaceO WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpOverlap FROM " + nmfConstantsMSVPA::TableMSVPASpaceO +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND SpeName = '" + SpeName + "'" +
                " AND Season = "   + Season +
                " ORDER By Age";

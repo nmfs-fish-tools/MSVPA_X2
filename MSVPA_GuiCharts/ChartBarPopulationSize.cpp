@@ -162,7 +162,8 @@ ChartBarPopulationSize::getConversionScaleFactorAndYLabel(
 
     // Find NConversion scale factor which is used in some cases
     fields = {"WtUnits","CatchUnits"};
-    queryStr = "SELECT WtUnits,CatchUnits from Species where SpeName='" + SelectedPredator + "'";
+    queryStr = "SELECT WtUnits,CatchUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName='" + SelectedPredator + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["WtUnits"].size() > 0) {
         CatchUnits = std::stod(dataMap["CatchUnits"][0]);
@@ -343,7 +344,9 @@ ChartBarPopulationSize::getAndLoadBiomassByAgeData(
     m = 0;
     ColumnLabels.clear();
     fields = {"Year", "SumField"};
-    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'"
+    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAname = '" + MSVPAName + "'"
                " AND SpeName = '" + SelectedPredator + "'" +
                seasonStr + " GROUP BY Year, Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -587,7 +590,9 @@ ChartBarPopulationSize::getAndLoadAbundanceByAgeData(
     m = 0;
     ColumnLabels.clear();
     fields = {"Year", "SumField"};
-    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'"
+    queryStr = "Select Year, Sum(" + fieldToSum + ") As SumField FROM " +
+                nmfConstantsMSVPA::TableMSVPASeasBiomass +
+               " WHERE MSVPAname = '" + MSVPAName + "'"
                " AND SpeName = '" + SelectedPredator + "'" +
                seasonStr + " GROUP BY Year, Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);

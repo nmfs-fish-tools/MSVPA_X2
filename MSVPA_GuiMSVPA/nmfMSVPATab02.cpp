@@ -127,14 +127,14 @@ void nmfMSVPATab2::clearWidgets()
 void
 nmfMSVPATab2::callback_StripFirstYearLE()
 {
-    MarkAsDirty("MSVPAlist");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAlist);
     MSVPA_Tab2_FirstYearLE->setText(MSVPA_Tab2_FirstYearLE->text().trimmed());
 }
 
 void
 nmfMSVPATab2::callback_StripLastYearLE()
 {
-    MarkAsDirty("MSVPAlist");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAlist);
     MSVPA_Tab2_LastYearLE->setText(MSVPA_Tab2_LastYearLE->text().trimmed());
 }
 
@@ -147,7 +147,7 @@ nmfMSVPATab2::callback_StripNumberSeasonsLE()
 void
 nmfMSVPATab2::callback_MSVPA_Tab2_AnnTempVariCB(int state)
 {
-    MarkAsDirty("MSVPAlist");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAlist);
 
     MSVPA_Tab2_SavePB->setEnabled(true);
     MSVPA_Tab2_NextPB->setEnabled(true);
@@ -159,7 +159,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_AnnTempVariCB(int state)
 void
 nmfMSVPATab2::callback_MSVPA_Tab2_SeasonalOverlapCB(int state)
 {
-    MarkAsDirty("MSVPAlist");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAlist);
 
     MSVPA_Tab2_SavePB->setEnabled(true);
     MSVPA_Tab2_NextPB->setEnabled(true);
@@ -177,7 +177,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_ItemChanged_SeasonLength(QStandardItem *item)
         SeasonLength[item->row()] = qstr.toStdString();
     }
 
-    MarkAsDirty("MSVPASeasInfo");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPASeasInfo);
 
     MSVPA_Tab2_SavePB->setEnabled(true);
     MSVPA_Tab2_NextPB->setEnabled(false);
@@ -205,7 +205,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_ItemChanged_SeasonTemps(QStandardItem *item)
     int col = item->column();
     SeasonTemps[row*NSeasons+col] = qstr.toStdString();
 
-    MarkAsDirty("MSVPASeasInfo");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPASeasInfo);
 
     MSVPA_Tab2_SavePB->setEnabled(true);
     MSVPA_Tab2_NextPB->setEnabled(false);
@@ -277,7 +277,8 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     // Load year widgets
     // Get the species collection
     fields   = {"SpeIndex"};
-    queryStr = "SELECT SpeIndex FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName +
+    queryStr = "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName +
                "' AND (Type = 0 or Type = 1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSpecies = dataMap["SpeIndex"].size();
@@ -288,7 +289,8 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     // Get the minimum and maximum years from the species collection
     for (int i = 0; i < NSpecies; ++i) {
         fields    = {"FirstYear","LastYear"};
-        queryStr  = "SELECT FirstYear,LastYear FROM Species WHERE SpeIndex = " + std::to_string(SpeIndex[i]);
+        queryStr  = "SELECT FirstYear,LastYear FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeIndex = " + std::to_string(SpeIndex[i]);
         dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
         firstYear = std::stoi(dataMap["FirstYear"][0]);
         lastYear  = std::stoi(dataMap["LastYear"][0]);
@@ -298,7 +300,8 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Do same for other preds...
     fields   = {"SpeIndex"};
-    queryStr = "SELECT SpeIndex FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName +
+    queryStr = "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName +
                "' AND Type = 3";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["SpeIndex"].size();
@@ -311,7 +314,8 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
         // Get the minimum and maximum years from the species collection
          for (int i = 0; i < NSpecies; ++i) {
              fields    = {"FirstYear","LastYear"};
-             queryStr  = "SELECT FirstYear,LastYear FROM OtherPredSpecies WHERE SpeIndex = " + std::to_string(SpeIndex[i]);
+             queryStr  = "SELECT FirstYear,LastYear FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                         " WHERE SpeIndex = " + std::to_string(SpeIndex[i]);
              dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
              firstYear = std::stoi(dataMap["FirstYear"][0]);
              lastYear  = std::stoi(dataMap["LastYear"][0]);
@@ -327,7 +331,9 @@ nmfMSVPATab2::loadWidgets(nmfDatabase *theDatabasePtr,
     MSVPA_Tab2_LastYearLE->setText(QString::number(MaxYear));
 
     fields   = {"NSeasons","FirstYear","LastYear","AnnTemps","SeasSpaceO","GrowthModel"};
-    queryStr = "SELECT NSeasons,FirstYear,LastYear,AnnTemps,SeasSpaceO,GrowthModel FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT NSeasons,FirstYear,LastYear,AnnTemps,SeasSpaceO,GrowthModel FROM " +
+                nmfConstantsMSVPA::TableMSVPAlist +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (! dataMap["NSeasons"].empty()) {
         NSeasons = std::stoi(dataMap["NSeasons"][0]);
@@ -461,7 +467,8 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SetSeasonalLengthPB(bool unused)
 
     // Check first if there are current data in table.  If not, display empty table.
     fields   = {"Value"};
-    queryStr = "SELECT Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableMSVPASeasInfo +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Variable='SeasLen' AND Year=0";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["Value"].size();
@@ -540,7 +547,8 @@ std::cout << "in resave, MSVPAName = " << MSVPAName << std::endl;
 
     // Find NSpe, NPreyOnly, and NOtherPred from MSVPAspecies
     fields   = {"MSVPAName","Type"};
-    queryStr = "SELECT MSVPAName,Type FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'";
+    queryStr = "SELECT MSVPAName,Type FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["MSVPAName"].size();
     for (int i=0; i<NumRecords; ++i) {
@@ -559,8 +567,8 @@ std::cout << "in resave, MSVPAName = " << MSVPAName << std::endl;
     int SeasSpaceO  = MSVPA_Tab2_SeasonalOverlapCB->isChecked();
     int GrowthModel = MSVPA_Tab2_PredatorGrowthCB->isChecked();
 
-    cmd += "INSERT INTO MSVPAlist ";
-    cmd += "(MSVPAName,NSpe,NPreyOnly,NOtherPred,FirstYear,LastYear,NSeasons,AnnTemps,SeasSpaceO,GrowthModel) values ";
+    cmd += "INSERT INTO " + nmfConstantsMSVPA::TableMSVPAlist;
+    cmd += " (MSVPAName,NSpe,NPreyOnly,NOtherPred,FirstYear,LastYear,NSeasons,AnnTemps,SeasSpaceO,GrowthModel) values ";
     cmd +=  "(\"" + MSVPAName + "\"" +
             "," + std::to_string(NSpe) +
             "," + std::to_string(NPreyOnly) +
@@ -659,7 +667,8 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SetSeasonalTempPB(bool unused)
     // Check first if there are current data in table.  If not, display empty table.
     m = 0;
     fields   = {"Year","Season","Value"};
-    queryStr = "SELECT Year,Season,Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT Year,Season,Value FROM " + nmfConstantsMSVPA::TableMSVPASeasInfo +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Variable='SeasTemp' ORDER BY Year,Season";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumRecords = dataMap["Value"].size();
@@ -765,7 +774,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPASeasInfo.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPASeasInfo) + ".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Seasonal Information CSV File");
@@ -906,7 +915,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
         return;
 
     // Save MSVPA general data to MSVPAlist
-    TableNameList = "MSVPAlist";
+    TableNameList = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAlist);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -952,7 +961,8 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
     int NPreyOnlyVal  = 0;
     int NOtherPredVal = 0;
     fields   = {"MSVPAName","Type"};
-    queryStr = "SELECT MSVPAName,Type FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'";
+    queryStr = "SELECT MSVPAName,Type FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["MSVPAName"].size();
     for (int i=0; i<NumRecords; ++i) {
@@ -1041,7 +1051,7 @@ nmfMSVPATab2::callback_MSVPA_Tab2_SavePB(bool unused)
    // --------------------------------------------------------------------------
 
     // Save season length data to MSVPASeasInfo
-    TableNameSeasInfo = "MSVPASeasInfo";
+    TableNameSeasInfo = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASeasInfo);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -1292,13 +1302,13 @@ nmfMSVPATab2::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "MSVPAlist";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAlist);
     fields    = {"MSVPAName","NSpe","NPreyOnly","NOther","NOtherPred",
                  "FirstYear","LastYear","NSeasons","AnnTemps",
                  "SeasSpaceO","GrowthModel","Complete"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "MSVPASeasInfo";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASeasInfo);
     fields    = {"MSVPAName","Year","Season","Variable","Value"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 

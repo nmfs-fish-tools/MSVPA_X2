@@ -315,7 +315,8 @@ ChartLine::getYAxisUnits(nmfDatabase* databasePtr,
 
     // Find units
     fields = {"WtUnits"};
-    queryStr = "SELECT WtUnits FROM Species WHERE SpeName = '" + selectedSpecies + "' ";
+    queryStr = "SELECT WtUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName = '" + selectedSpecies + "' ";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
     double units = std::stod(dataMap["WtUnits"][0]);

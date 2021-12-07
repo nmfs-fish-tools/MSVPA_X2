@@ -96,7 +96,7 @@ nmfMSVPATab11::callback_MSVPA_Tab11_SavePB(bool unused)
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
     std::string queryStr;
-    QString TableName = "MSVPAspecies";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAspecies);
 
     logger->logMsg(nmfConstants::Normal,"nmfMSVPATab11::callback_MSVPA_Tab11_SavePB");
 
@@ -304,18 +304,18 @@ nmfMSVPATab11::restoreCSVFromDatabase(nmfDatabase *databasePtr)
  *  complicated for users to parse, and users should extract these data
  *  by clicking the camera icon over the desired output table.
  *
-    TableName = "MSVPASeasBiomass";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASeasBiomass);
     fields    = {"MSVPAName", "SpeName", "Season", "SpeType", "Year", "Age", "Biomass",
                  "TotalPredCons", "SeasM2", "AnnAbund", "SeasAbund", "SeasF",
                  "SeasM1", "SeasWt", "SeasSize", "AnnBiomass", "StomCont"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "MSVPASuitPreyBiomass";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASuitPreyBiomass);
     fields    = {"MSVPAName", "PredName", "PredAge", "PreyName", "PreyAge", "Year",
                  "Season", "SuitPreyBiomass", "PropDiet", "BMConsumed", "PreyEDens"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 */
-    TableName = "MSVPAEnergyDens";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAEnergyDens);
     fields    = {"MSVPAName", "SpeName", "SpeType", "SpeIndex",
                  "Age", "Season", "EnergyDens", "AvgDietE"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -354,7 +354,7 @@ nmfMSVPATab11::callback_MSVPA_Tab11_LoadPB(bool unused)
     QString csvMSVPAName,csvSpeName,csvSSVPAname,csvSSVPAindex;
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPAspecies.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPAspecies)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA species CSV File");
@@ -440,8 +440,9 @@ nmfMSVPATab11::loadWidgets(nmfDatabase *theDatabasePtr,
     SpeName.clear();
 
     fields   = {"SpeIndex","SpeName"};
-    queryStr = "SELECT SpeIndex,SpeName FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'" +
-                    " AND (Type = 0 or Type = 1) ORDER By SpeIndex";
+    queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'" +
+               " AND (Type = 0 or Type = 1) ORDER By SpeIndex";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSpecies = dataMap["SpeName"].size();
 
@@ -474,7 +475,7 @@ nmfMSVPATab11::loadWidgets(nmfDatabase *theDatabasePtr,
     for (int rowIndex=1; rowIndex<=numRows; ++rowIndex) {
         cbox       = new QComboBox();
         fields     = {"SSVPAName","SSVPAIndex","Type"};
-        queryStr   = "SELECT SSVPAName,SSVPAIndex,Type FROM MSVPAspecies " ;
+        queryStr   = "SELECT SSVPAName,SSVPAIndex,Type FROM " + nmfConstantsMSVPA::TableMSVPAspecies;
         queryStr  += " WHERE MSVPAName = '" + MSVPAName + "' ";
         queryStr  += " AND SpeIndex = " + std::to_string(rowIndex);
         queryStr  += " AND (Type = 1 OR Type = 0)";

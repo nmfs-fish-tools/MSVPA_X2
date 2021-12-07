@@ -97,12 +97,14 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
     // Select the predator list..associated with the MSVPA
     // Load MSVPA predator name and age lists for use later
     fields   = {"NSeasons"};
-    queryStr = "SELECT NSeasons FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT NSeasons FROM " + nmfConstantsMSVPA::TableMSVPAlist +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSeasons = std::stoi(dataMap["NSeasons"][0]);
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type = 0";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
 
@@ -111,7 +113,8 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
     for (int i = 0; i < NPreds; ++i) {
         PredList.push_back(dataMap["SpeName"][i]);
         fields2   = {"MaxAge"};
-        queryStr2 = "SELECT MaxAge FROM Species WHERE SpeName = '" + PredList[i] + "'";
+        queryStr2 = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeName = '" + PredList[i] + "'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
         NPredAge.push_back(std::stoi(dataMap2["MaxAge"][0]));
 
@@ -120,7 +123,8 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
 
     // Load MSVPA Prey Names and Ages
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type = 1";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NPrey    = dataMap["SpeName"].size();
@@ -129,7 +133,8 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
         PredList.push_back(dataMap["SpeName"][i]);
         PredType.push_back(2);
         fields2   = {"MaxAge"};
-        queryStr2 = "SELECT MaxAge FROM Species WHERE SpeName = '" + PredList[i+NSpecies] + "'";
+        queryStr2 = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeName = '" + PredList[i+NSpecies] + "'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
         NPredAge.push_back(std::stoi(dataMap2["MaxAge"][0]));
     } // end for i
@@ -137,7 +142,8 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
 
     // Load Other Prey
     fields   = {"OthPreyName"};
-    queryStr = "SELECT OthPreyName FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName FROM " + nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NOthPrey = dataMap["OthPreyName"].size();
 
@@ -153,8 +159,9 @@ void nmfMSVPATab9::loadWidgets(nmfDatabase *databasePtr, std::string MSVPAName)
 
     // initialize data - will need to have these routines to load data if it exists
     fields   = {"EnergyDens"};
-    queryStr = "SELECT EnergyDens FROM MSVPAEnergyDens WHERE MSVPAname = '" + MSVPAName + "'" +
-            " ORDER BY SpeIndex, Age, Season";
+    queryStr = "SELECT EnergyDens FROM " + nmfConstantsMSVPA::TableMSVPAEnergyDens +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
+               " ORDER BY SpeIndex, Age, Season";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["EnergyDens"].size() > 0) {
         m = 0;

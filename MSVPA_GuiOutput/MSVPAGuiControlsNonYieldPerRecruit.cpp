@@ -104,7 +104,8 @@ MSVPAGuiControlsNonYieldPerRecruit::loadSelectSeasonCMB(nmfDatabase* databasePtr
     SelectSeasonCMB->blockSignals(true);
     SelectSeasonCMB->clear();
 
-    std::map<std::string,int> initMap = databasePtr->nmfQueryInitFields("MSVPAlist", MSVPAName);
+    std::map<std::string,int> initMap = databasePtr->nmfQueryInitFields(
+                nmfConstantsMSVPA::TableMSVPAlist, MSVPAName);
     NumSeasons = initMap["NSeasons"];
     for (int i=0; i<NumSeasons; ++i) {
         SeasonText = "Season " + std::to_string(i+1);
@@ -131,7 +132,8 @@ MSVPAGuiControlsNonYieldPerRecruit::loadSelectPredatorAgeSizeClassCMB(nmfDatabas
 
     ageSizePrefix = "Age";
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName +
                "' and SpeName='" + SelectedSpecies + "' and Type=3";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["SpeName"].size() > 0) {
@@ -142,14 +144,16 @@ MSVPAGuiControlsNonYieldPerRecruit::loadSelectPredatorAgeSizeClassCMB(nmfDatabas
 
     if (ageSizePrefix == "Age" ) {
         fields = {"NumAges"};
-        queryStr = "SELECT count(DISTINCT(Age)) as NumAges FROM MSVPASeasBiomass WHERE MSVPAName = '" + MSVPAName +
-                "' and SpeName='" + SelectPredatorCMB->currentText().toStdString() + "'";
+        queryStr = "SELECT count(DISTINCT(Age)) as NumAges FROM " + nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAName = '" + MSVPAName +
+                   "' and SpeName='" + SelectPredatorCMB->currentText().toStdString() + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NageOrSizeCategories  = std::stoi(dataMap["NumAges"][0]);
 
     } else {
         fields = {"SpeName","NumSizeCats"};
-        queryStr = "SELECT SpeName,NumSizeCats from OtherPredSpecies WHERE SpeName='" + SelectedSpecies + "'";
+        queryStr = "SELECT SpeName,NumSizeCats FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName='" + SelectedSpecies + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeName"].size() > 0) {
             if (dataMap["SpeName"][0] == SelectedSpecies) {

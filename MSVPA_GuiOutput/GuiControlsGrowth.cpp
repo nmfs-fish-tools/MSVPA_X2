@@ -168,7 +168,8 @@ GuiControlsGrowth::loadSelectPredatorCMB(nmfDatabase* databasePtr,
 
     // Load Type=0 species from MSVPAspecies table
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies where MSVPAName='" + MSVPAName +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName +
                "' and Type = 0";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
@@ -176,7 +177,7 @@ GuiControlsGrowth::loadSelectPredatorCMB(nmfDatabase* databasePtr,
     }
 
     // Then also load species from OtherPredSpecies
-    queryStr = "SELECT SpeName FROM OtherPredSpecies";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         speciesList << QString::fromStdString(dataMap["SpeName"][i]);

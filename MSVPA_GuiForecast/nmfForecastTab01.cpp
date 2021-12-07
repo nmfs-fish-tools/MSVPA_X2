@@ -110,8 +110,8 @@ nmfForecastTab1::saveTheForecast(std::string MSVPAName,
     std::string errorMsg= "";
 
     // Add the Forecast to the Forecast table
-    cmd  = "INSERT INTO Forecasts ";
-    cmd += "(MSVPAName,ForeName,InitYear,NYears,Growth) values ";
+    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForecasts;
+    cmd += " (MSVPAName,ForeName,InitYear,NYears,Growth) values ";
     cmd += "(\"" + MSVPAName + "\",\"" + Forecast + "\"" +
             "," + std::to_string(InitYear) +
             "," + std::to_string(NumYears) +
@@ -124,8 +124,8 @@ nmfForecastTab1::saveTheForecast(std::string MSVPAName,
     }
 
     // Add the Scenario to the Scenario table
-    cmd  = "INSERT INTO Scenarios ";
-    cmd += "(MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ";
+    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableScenarios;
+    cmd += " (MSVPAName,ForeName,Scenario,VarF,VarOthPred,VarOthPrey,VarRec,FishAsF) values ";
     cmd += "(\"" + MSVPAName + "\",\"" + Forecast + "\",\"" + Scenario + "\"" +
             ", 1, 0, 0, 0, 1) ";
     cmd += "ON DUPLICATE KEY UPDATE ";
@@ -150,11 +150,11 @@ nmfForecastTab1::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "Scenarios";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableScenarios);
     fields    = {"MSVPAName","ForeName","Scenario","VarF", "VarOthPrey","VarRec","FishAsF"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "Forecasts";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForecasts);
     fields    = {"MSVPAName","ForeName","InitYear","NYears", "Growth"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
@@ -165,8 +165,8 @@ void
 nmfForecastTab1::callback_StripMsvpaNameLE()
 {
     Forecast_Tab1_MsvpaNameLE->setText(Forecast_Tab1_MsvpaNameLE->text().trimmed());
-    MarkAsDirty("Forecasts");
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableForecasts);
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 
 }
 
@@ -174,22 +174,22 @@ void
 nmfForecastTab1::callback_StripForecastNameLE()
 {
     Forecast_Tab1_ForecastNameLE->setText(Forecast_Tab1_ForecastNameLE->text().trimmed());
-    MarkAsDirty("Forecasts");
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableForecasts);
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 }
 
 void
 nmfForecastTab1::callback_StripScenarioNameLE()
 {
     Forecast_Tab1_ScenarioNameLE->setText(Forecast_Tab1_ScenarioNameLE->text().trimmed());
-    MarkAsDirty("Scenarios");
+    MarkAsDirty(nmfConstantsMSVPA::TableScenarios);
 }
 
 void
 nmfForecastTab1::callback_StripNumYearsLE()
 {
     Forecast_Tab1_NumYearsLE->setText(Forecast_Tab1_NumYearsLE->text().trimmed());
-    MarkAsDirty("Forecasts");
+    MarkAsDirty(nmfConstantsMSVPA::TableForecasts);
 }
 
 
@@ -235,7 +235,7 @@ nmfForecastTab1::callback_Forecast_Tab1_SavePB(bool unused)
 
         // Check if Forecast already exists
 //        fields   = {"MSVPAName"};
-//        queryStr = "SELECT MSVPAName FROM Forecasts WHERE MSVPAName = '" + MSVPAName + "'" +
+//        queryStr = "SELECT MSVPAName FROM " + nmfConstantsMSVPA::TableForecasts + " WHERE MSVPAName = '" + MSVPAName + "'" +
 //                   " AND ForeName = '" + Forecast + "'";
 //        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
 //        NumRecords = dataMap["MSVPAName"].size();
@@ -249,7 +249,8 @@ nmfForecastTab1::callback_Forecast_Tab1_SavePB(bool unused)
 //            } else {
 
                 fields   = {"MSVPAName"};
-                queryStr = "SELECT MSVPAName FROM Scenarios WHERE MSVPAName = '" + MSVPAName + "'" +
+                queryStr = "SELECT MSVPAName FROM " + nmfConstantsMSVPA::TableScenarios +
+                           " WHERE MSVPAName = '" + MSVPAName + "'" +
                            " AND ForeName = '" + Forecast + "'" +
                            " AND Scenario = '" + Scenario + "'";
                 dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -302,7 +303,8 @@ nmfForecastTab1::setupNewForecast(nmfDatabase *theDatabasePtr,
 
     // Get MSVPA info
     fields    = {"FirstYear","LastYear"};
-    queryStr  = "SELECT FirstYear,LastYear FROM MSVPAlist WHERE MSVPAName = '" + MSVPAName + "'";
+    queryStr  = "SELECT FirstYear,LastYear FROM " + nmfConstantsMSVPA::TableMSVPAlist +
+                " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     FirstYear = std::stod(dataMap["FirstYear"][0]);
     LastYear  = std::stod(dataMap["LastYear"][0]);
@@ -337,7 +339,8 @@ nmfForecastTab1::refresh(std::string MSVPAName,
     Forecast_Tab1_ScenarioNameLE->setText(QString::fromStdString(ScenarioName));
 
     fields = {"InitYear","NYears","Growth"};
-    queryStr = "SELECT InitYear,NYears,Growth FROM Forecasts WHERE MSVPAName='" + MSVPAName + "'" +
+    queryStr = "SELECT InitYear,NYears,Growth FROM " + nmfConstantsMSVPA::TableForecasts +
+               " WHERE MSVPAName='" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     Forecast_Tab1_InitialYearCMB->setCurrentText(QString::fromStdString(dataMap["InitYear"][0]));
@@ -349,14 +352,14 @@ nmfForecastTab1::refresh(std::string MSVPAName,
 void
 nmfForecastTab1::callback_TableDataChanged()
 {    
-    MarkAsDirty("Forecasts");
+    MarkAsDirty(nmfConstantsMSVPA::TableForecasts);
 
 } // end callback_TableDataChanged
 
 void
 nmfForecastTab1::callback_TableDataChanged(int unused)
 {
-    MarkAsDirty("Forecasts");
+    MarkAsDirty(nmfConstantsMSVPA::TableForecasts);
 
 } // end callback_TableDataChanged
 
@@ -409,7 +412,9 @@ nmfForecastTab1::loadWidgets(nmfDatabase *theDatabasePtr,
     LastYear  = theLastYear;
 
     fields = {"InitYear","NYears","Growth"};
-    queryStr = "SELECT InitYear,NYears,Growth FROM Forecasts WHERE MSVPAName='" + MSVPAName + "'" +
+    queryStr = "SELECT InitYear,NYears,Growth FROM " +
+                nmfConstantsMSVPA::TableForecasts +
+               " WHERE MSVPAName='" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     InitYear = std::stoi(dataMap["InitYear"][0]);

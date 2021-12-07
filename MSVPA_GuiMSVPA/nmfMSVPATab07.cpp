@@ -121,13 +121,15 @@ nmfMSVPATab7::callback_MSVPA_Tab7_SavePB(bool unused)
     // Build a Species index map
     std::map<std::string,int> SpeciesIndexMap;
     fields   = {"MSVPAName", "SpeName", "SpeIndex", "Type"};
-    queryStr = "SELECT MSVPAName,SpeName,SpeIndex,Type FROM MSVPAspecies WHERE MSVPAName = '" + MSVPAName + "'";
+    queryStr = "SELECT MSVPAName,SpeName,SpeIndex,Type FROM " +
+                nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         SpeciesIndexMap[dataMap["SpeName"][i]] = std::stoi(dataMap["SpeIndex"][i]);
     }
 
-    TableNameSizePref = "MSVPASizePref";
+    TableNameSizePref = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASizePref);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -316,7 +318,7 @@ nmfMSVPATab7::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "MSVPASizePref";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPASizePref);
     fields    = {"MSVPAName","SpeIndex","SpeName","Age",
                  "EvacAlpha","EvacBeta","SizeAlpha","SizeBeta"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -340,7 +342,7 @@ nmfMSVPATab7::callback_MSVPA_Tab7_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPASizePref.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPASizePref)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Size Pref CSV File");
@@ -415,7 +417,7 @@ nmfMSVPATab7::callback_MSVPA_Tab7_ItemChanged(QStandardItem *item)
     item->setTextAlignment(Qt::AlignCenter);
     smodel->setItem(item->row(), item->column(), item);
 
-    MarkAsDirty("MSVPASizePref");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPASizePref);
     MSVPA_Tab7_SavePB->setEnabled(true);
     MSVPA_Tab7_NextPB->setEnabled(false);
 
@@ -459,7 +461,9 @@ nmfMSVPATab7::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // First get some initial data
     fields       = {"NPreyOnly","NSpe","NOther","NOtherPred","NSeasons","SeasSpaceO"};
-    queryStr     = "SELECT NPreyOnly,NSpe,NOther,NOtherPred,NSeasons,SeasSpaceO FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr     = "SELECT NPreyOnly,NSpe,NOther,NOtherPred,NSeasons,SeasSpaceO FROM " +
+                    nmfConstantsMSVPA::TableMSVPAlist +
+                   " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap      = databasePtr->nmfQueryDatabase(queryStr, fields);
     NPrey        = std::stoi(dataMap["NPreyOnly"][0]);
     NSpecies     = std::stoi(dataMap["NSpe"][0]);
@@ -475,7 +479,8 @@ nmfMSVPATab7::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Load the species combo box in Tab6
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND Type=0";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
@@ -486,7 +491,8 @@ nmfMSVPATab7::loadWidgets(nmfDatabase *theDatabasePtr,
     // Get more data
     fields   = {"MaxAge","SpeIndex"};
     for (int i = 0; i < NSpecies; ++i) {
-     queryStr = "SELECT MaxAge,SpeIndex FROM Species WHERE Spename = '" + Species[i] + "'";
+     queryStr = "SELECT MaxAge,SpeIndex FROM " + nmfConstantsMSVPA::TableSpecies +
+                " WHERE Spename = '" + Species[i] + "'";
      dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
      Nage.push_back(std::stoi(dataMap["MaxAge"][0]));
      //SpeIndex.push_back(std::stoi(dataMap["SpeIndex"][0]));
@@ -510,7 +516,9 @@ nmfMSVPATab7::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Load the model which will then load the table
     fields   = {"SpeName","EvacAlpha","EvacBeta","SizeAlpha","SizeBeta","SpeIndex","Age"};
-    queryStr = "SELECT SpeName,EvacAlpha,EvacBeta,SizeAlpha,SizeBeta,SpeIndex,Age FROM MSVPASizePref WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName,EvacAlpha,EvacBeta,SizeAlpha,SizeBeta,SpeIndex,Age FROM " +
+                nmfConstantsMSVPA::TableMSVPASizePref +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND SpeName = '" + SpeName + "'" +
                " ORDER BY SpeIndex, Age";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -601,7 +609,9 @@ nmfMSVPATab7::callback_MSVPA_Tab7_SpeciesCMB(int index)
 
     // Load the model which will then load the table
     fields   = {"Age","SpeName","EvacAlpha","EvacBeta","SizeAlpha","SizeBeta"};
-    queryStr = "SELECT Age,SpeName,EvacAlpha,EvacBeta,SizeAlpha,SizeBeta FROM MSVPASizePref WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT Age,SpeName,EvacAlpha,EvacBeta,SizeAlpha,SizeBeta FROM " +
+                nmfConstantsMSVPA::TableMSVPASizePref +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND SpeName = '" + SpeName + "'" +
                " ORDER By Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);

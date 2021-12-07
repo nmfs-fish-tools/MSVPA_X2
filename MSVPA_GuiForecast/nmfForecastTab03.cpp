@@ -109,7 +109,6 @@ nmfForecastTab3::updateProjectDir(std::string newProjectDir)
 //nmfForecastTab2::callback_TableDataChanged(QModelIndex unused)
 //{
 //    emit TableDataChanged("ForeSRR");
-
 //} // end callback_TableDataChanged
 
 void
@@ -774,7 +773,8 @@ std::cout << "Loading widgets for forecast: " << ForecastName << std::endl;
 
     // Load species combo box
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND (Type = 0 or Type = 1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     Forecast_Tab3_SpeciesCMB->blockSignals(true);
@@ -789,7 +789,8 @@ std::cout << "Loading widgets for forecast: " << ForecastName << std::endl;
         Forecast_Tab3_SpeciesCMB->addItem(QString::fromStdString(species));
 
         fields2   = {"MaxAge"};
-        queryStr2 = "SELECT MaxAge FROM Species WHERE SpeName = '" + species + "'";
+        queryStr2 = "SELECT MaxAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                    " WHERE SpeName = '" + species + "'";
         dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
         SpeNAge.push_back(std::stoi(dataMap2["MaxAge"][0]));
     }
@@ -807,7 +808,9 @@ std::cout << "Loading widgets for forecast: " << ForecastName << std::endl;
 
     // Will eventually read stuff from the database ... really just SRType
     fields = {"SpeName","SpeIndex","SRRType","SRRA","SRRB","SRRK","Userdefined"};
-    queryStr = "SELECT SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined FROM ForeSRR WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined FROM " +
+                nmfConstantsMSVPA::TableForeSRR +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'" +
                " ORDER By SpeIndex";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
@@ -892,7 +895,8 @@ nmfForecastTab3::loadSRTable() // aka Get_SRData() from frmStockRec2.bas
 
         // Get maturity matrix
         fields = {"PMature"};
-        queryStr = "SELECT PMature FROM SpeMaturity WHERE SpeName = '" + SpeName + "'" +
+        queryStr = "SELECT PMature FROM " + nmfConstantsMSVPA::TableSpeMaturity +
+                   " WHERE SpeName = '" + SpeName + "'" +
                    " ORDER By Age, Year";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
@@ -904,7 +908,9 @@ nmfForecastTab3::loadSRTable() // aka Get_SRData() from frmStockRec2.bas
 
         // Get annual biomass by age class
         fields = {"Year","Age","Biomass"};
-        queryStr = "Select Year, Age, Sum(AnnBiomass) As Biomass FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "Select Year, Age, Sum(AnnBiomass) As Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND SpeName = '" + SpeName + "'" +
                    " AND Season = 0 GROUP BY Age, Year";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -934,7 +940,9 @@ nmfForecastTab3::loadSRTable() // aka Get_SRData() from frmStockRec2.bas
 
         // Then get numbers of age 0...
         fields = {"Year","Abundance"};
-        queryStr = "Select Year, Sum(AnnAbund) As Abundance FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "Select Year, Sum(AnnAbund) As Abundance FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND SpeName = '" + SpeName + "'" +
                    " AND Age = 0 AND Season = 0 GROUP BY Year";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -1070,7 +1078,9 @@ nmfForecastTab3::callback_Forecast_Tab3_FitSRCurveSavePB(bool unused)
 
     // User values in ForeSRR as default if they exist
     fields   = {"MSVPAName","ForeName","SpeName","SpeIndex","SRRType","SRRA","SRRB","SRRK","Userdefined"};
-    queryStr = "SELECT MSVPAName,ForeName,SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined FROM ForeSRR WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT MSVPAName,ForeName,SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined FROM " +
+                nmfConstantsMSVPA::TableForeSRR +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND ForeName = '" + ForecastName + "'" +
                " ORDER By SpeIndex";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -1095,8 +1105,8 @@ nmfForecastTab3::callback_Forecast_Tab3_FitSRCurveSavePB(bool unused)
 
 
     // Update ForeSRR database table
-    cmd  = "INSERT INTO ForeSRR ";
-    cmd += "(MSVPAName,ForeName,SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined) values ";
+    cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableForeSRR;
+    cmd += " (MSVPAName,ForeName,SpeName,SpeIndex,SRRType,SRRA,SRRB,SRRK,Userdefined) values ";
     cmd += "(\"" + MSVPAName + "\", " +
             "\"" + ForecastName + "\", " +
             "\"" + SpeciesName + "\", " +
@@ -1129,12 +1139,12 @@ nmfForecastTab3::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "ForeSRR";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForeSRR);
     fields    = {"MSVPAName","ForeName","SpeName","SpeIndex",
                  "SRRType","SRRA","SRRB","SRRK","Userdefined"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "ForeSRQ";  // RSK - Find out where this is used?
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableForeSRQ);  // RSK - Find out where this is used?
     fields    = {"MSVPAName","ForeName","SpeName","SpeIndex","Quartile",
                  "MinSSB","MaxSSB","MinRec","MaxRec","MeanRec"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);

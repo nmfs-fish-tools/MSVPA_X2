@@ -138,7 +138,7 @@ GuiControlsYieldPerRecruitForecast::loadSelectPredatorCMB(nmfDatabase* databaseP
     SelectPredatorCMB->clear();
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM Species";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         speciesList << QString::fromStdString(dataMap["SpeName"][i]);
@@ -163,8 +163,9 @@ GuiControlsYieldPerRecruitForecast::loadSelectYearsLW(nmfDatabase* databasePtr,
     SelectYearsLW->clear();
 
     fields = {"InitYear", "NYears"};
-    queryStr = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName ='" + MSVPAName +
-            "' and ForeName = '" + ForecastName + "'";
+    queryStr = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+               " WHERE MSVPAName ='" + MSVPAName +
+               "' and ForeName = '" + ForecastName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["InitYear"].size() == 1) {
         FirstYear = std::stoi(dataMap["InitYear"][0]);

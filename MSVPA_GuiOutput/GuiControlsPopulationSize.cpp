@@ -165,9 +165,10 @@ GuiControlsPopulationSize::loadSelectPredatorCMB(nmfDatabase* databasePtr,
     SelectPredatorCMB->clear();
 
     fields = {"SpeName"};
-//  queryStr = "SELECT SpeName FROM Species";
-    queryStr = "SELECT SpeName FROM MSVPAspecies where MSVPAName='" + MSVPAName +
-            "' and (Type = 0 or Type = 1)";
+//  queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAName='" + MSVPAName +
+               "' and (Type = 0 or Type = 1)";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
         speciesList << QString::fromStdString(dataMap["SpeName"][i]);

@@ -112,9 +112,11 @@ nmfMSVPATab1::loadList(QListWidget *listWidget,
     listWidget->clear();
     fields   = {"SpeName"};
     if (Type == -1)
-        queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName + "'";
+        queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                   " WHERE MSVPAName='" + MSVPAName + "'";
     else
-        queryStr = "SELECT SpeName from MSVPAspecies WHERE MSVPAName='" + MSVPAName +
+        queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                   " WHERE MSVPAName='" + MSVPAName +
                    "' and Type=" + std::to_string(Type);
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeName"].size(); ++i) {
@@ -185,7 +187,7 @@ nmfMSVPATab1::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Then check and load any other species into the tables on the left
     fields   = {"SpeIndex","SpeName"};
-    queryStr = "SELECT SpeIndex,SpeName FROM Species" ;
+    queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         SpeName  = QString::fromStdString(dataMap["SpeName"][i]);
@@ -195,7 +197,7 @@ nmfMSVPATab1::loadWidgets(nmfDatabase *theDatabasePtr,
         }
     }
 
-    queryStr = "SELECT SpeIndex,SpeName FROM OtherPredSpecies" ;
+    queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         SpeName  = QString::fromStdString(dataMap["SpeName"][i]);
@@ -236,7 +238,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPAspecies.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPAspecies) + ".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Species CSV File");
@@ -280,7 +282,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_LoadPB(bool unused)
 
         // Now load any unassigned species into the Select list widgets on left
         fields2   = {"SpeIndex","SpeName"};
-        queryStr = "SELECT SpeIndex,SpeName FROM Species" ;
+        queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
         for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
             Species  = QString::fromStdString(dataMap["SpeName"][i]);
@@ -288,7 +290,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_LoadPB(bool unused)
                 MSVPA_Tab1_SelectSpeciesLW->addItem(QString::fromStdString(dataMap["SpeName"][i]));
             }
         }
-        queryStr = "SELECT SpeIndex,SpeName FROM OtherPredSpecies" ;
+        queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
         for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
             Species  = QString::fromStdString(dataMap["SpeName"][i]);
@@ -347,7 +349,7 @@ nmfMSVPATab1::callback_MSVPA_Tab1_SavePB(bool unused)
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
     std::string queryStr;
-    QString TableName = "MSVPAspecies";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAspecies);
 
     logger->logMsg(nmfConstants::Normal,"nmfMSVPATab1::callback_MSVPA_Tab1_SavePB");
 
@@ -357,7 +359,9 @@ nmfMSVPATab1::callback_MSVPA_Tab1_SavePB(bool unused)
     // Build a Species and OtherPredSpecies name and index map, you'll need these.
     std::map<std::string,int> SpeciesIndexMap;
     fields   = {"SpeIndex", "SpeName"};
-    for (std::string SpeciesTable : {"Species", "OtherPredSpecies"}) {
+    for (std::string SpeciesTable : {nmfConstantsMSVPA::TableSpecies,
+                                     nmfConstantsMSVPA::TableOtherPredSpecies})
+    {
         queryStr = "SELECT SpeIndex,SpeName FROM " + SpeciesTable;
         dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
         for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
@@ -537,7 +541,7 @@ nmfMSVPATab1::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "MSVPAspecies";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAspecies);
     fields    = {"MSVPAName","SpeName","SpeIndex","Type","TimeRec",
                  "LenRec","WtRec","SSVPAname","SSVPAindex"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
@@ -581,7 +585,7 @@ nmfMSVPATab1::moveItemsFromTo(std::vector<QListWidget *> &listWidgets,
         }
     }
 
-    MarkAsDirty("MSVPAspecies");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAspecies);
 
 } // end moveItemsFromTo
 

@@ -547,8 +547,10 @@ ChartBarGrowth::getChartData(
     // Find number of Forecast years
     if (! ForecastName.empty()) {
         fields    = {"InitYear","NYears"};
-        queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+        queryStr  = "SELECT InitYear,NYears FROM " +
+                     nmfConstantsMSVPA::TableForecasts +
+                    " WHERE MSVPAName = '" + MSVPAName +
+                    "' AND ForeName = '" + ForecastName + "'";
         dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["NYears"].size() > 0) {
             Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -564,14 +566,16 @@ ChartBarGrowth::getChartData(
     double WtConversion = 1.0;
     double SizeConversion = 1.0;
     fields = {"WtUnits","SizeUnits"};
-    queryStr = "SELECT WtUnits,SizeUnits FROM Species WHERE SpeName = '" + selectedSpecies + "'";
+    queryStr = "SELECT WtUnits,SizeUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName = '" + selectedSpecies + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["WtUnits"].size() != 0) {
         WtConversion   = std::stod(dataMap["WtUnits"][0]);
         SizeConversion = std::stod(dataMap["SizeUnits"][0]);
     } else {
         fields = {"WtUnits","SizeUnits"};
-        queryStr = "SELECT WtUnits,SizeUnits FROM OtherPredSpecies WHERE SpeName = '" + selectedSpecies + "'";
+        queryStr = "SELECT WtUnits,SizeUnits FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName = '" + selectedSpecies + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["WtUnits"].size() != 0) {
             WtConversion   = std::stod(dataMap["WtUnits"][0]);
@@ -609,11 +613,15 @@ ChartBarGrowth::getChartData(
 
         fields = {"Age","Weight"};
         if (ModelName == "MSVPA") {
-            queryStr = "SELECT Age, Avg(SeasWt) as Weight FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Age, Avg(SeasWt) as Weight FROM " +
+                        nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +
                        seasonStr + " Group By Age";
         } else if (ModelName == "Forecast") {
-            queryStr = "SELECT Age, Avg(InitWt) as Weight FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Age, Avg(InitWt) as Weight FROM " +
+                        nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND ForeName = '" + ForecastName + "'" +
                        " AND Scenario = '" + ScenarioName + "'" +
                        " AND SpeName  = '" + selectedSpecies + "'" +
@@ -630,11 +638,15 @@ ChartBarGrowth::getChartData(
         nmfUtils::initialize(GridData,  Nage, 1);
         fields = {"Age","ASize"};
         if (ModelName == "MSVPA") {
-            queryStr = "SELECT Age, Avg(SeasSize) as ASize FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Age, Avg(SeasSize) as ASize FROM " +
+                        nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +
                        seasonStr + " Group By Age";
         } else if (ModelName == "Forecast") {
-            queryStr = "SELECT Age, Avg(AvgSize) as ASize FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Age, Avg(AvgSize) as ASize FROM " +
+                        nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND ForeName = '" + ForecastName + "'" +
                        " AND Scenario = '" + ScenarioName + "'" +
                        " AND SpeName  = '" + selectedSpecies + "'" +
@@ -651,12 +663,14 @@ ChartBarGrowth::getChartData(
         nmfUtils::initialize(ChartData, nYears, 1);
         nmfUtils::initialize(GridData,  nYears, 1);
         if (ModelName == "MSVPA") {
-            queryStr = "SELECT Year, SeasWt FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Year, SeasWt FROM " + nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +
                        ageStr + seasonStr +
                        " Order By Year";
         } else if (ModelName == "Forecast") {
-            queryStr = "SELECT Year, AvgWeight FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Year, AvgWeight FROM " + nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND ForeName = '" + ForecastName + "'" +
                        " AND Scenario = '" + ScenarioName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +
@@ -675,12 +689,14 @@ ChartBarGrowth::getChartData(
         nmfUtils::initialize(GridData,  nYears, 1);
 
         if (ModelName == "MSVPA") {
-            queryStr = "SELECT Year, SeasSize FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Year, SeasSize FROM " + nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +
                        ageStr + seasonStr +
                        " Order By Year";
         } else if (ModelName == "Forecast") {
-            queryStr = "SELECT Year, AvgSize FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
+            queryStr = "SELECT Year, AvgSize FROM " + nmfConstantsMSVPA::TableForeOutput +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
                        " AND ForeName = '" + ForecastName + "'" +
                        " AND Scenario = '" + ScenarioName + "'" +
                        " AND SpeName = '"  + selectedSpecies + "'" +

@@ -1,0 +1,857 @@
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp://databasePtr->nmfCloseDatabase();
+MSVPA_AlgorithmsForecast/nmfForecast.cpp://databasePtr->nmfOpenDatabase(Hostname,Username,Password,errorMsg);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp://dataMap = databasePtr->nmfQueryDatabase(queryStr, fields, nmfConstants::nullAsZero);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    databasePtr->nmfGetInitialData(MSVPAName,
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:             dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                        errorMsg = databasePtr->nmfUpdateDatabase(cmd1);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                            errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                                errorMsg = databasePtr->nmfUpdateDatabase(cmd3);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:   dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:   dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:   dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsForecast/nmfForecast.cpp:   dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp://    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    std::map<std::string, std::vector<std::string> > dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    std::map<std::string, std::vector<std::string> > dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields1);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(nmfConstantsMSVPA::TableMSVPASeasBiomass,MSVPAName))
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(nmfConstantsMSVPA::TableMSVPASuitPreyBiomass,MSVPAName)) {
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfGetInitialData(MSVPAName,
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    bool openOK = databasePtr->nmfOpenDatabase(Hostname,Username,Password,errorMsg);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    databasePtr->nmfSetDatabase(ProjectDatabase);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(nmfConstantsMSVPA::TableMSVPASeasBiomass,MSVPAName)) {
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfDeleteRecordsFromTable(nmfConstantsMSVPA::TableMSVPASuitPreyBiomass,MSVPAName)) {
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    if (! databasePtr->nmfGetInitialData(MSVPAName,
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp://    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields, nmfConstants::nullsAsEmptyString);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    errorMsg = databasePtr->nmfUpdateDatabase(queryStr);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                            dataMap3 = databasePtr->nmfQueryDatabase(queryStr, fields3);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                            dataMap3 = databasePtr->nmfQueryDatabase(queryStr, fields3);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                errorMsg = databasePtr->nmfUpdateDatabase(cmd2);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                    dataMap2 = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:        //databasePtr->nmfSaveDatabase();
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsMSVPA/nmfMSVPA.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:            databasePtr->nmfQueryAgeFields(nmfConstantsMSVPA::TableSpecies,SpeIndex);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    databasePtr->nmfQueryCatchFields(nmfConstantsMSVPA::TableSpeCatch,
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    databasePtr->nmfQueryAlphaBetaFields(nmfConstantsMSVPA::TableSpeXSAIndices,SpeIndex,
+MSVPA_AlgorithmsSSVPA/nmfSSVPA.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarConsumptionRates.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap3 = databasePtr->nmfQueryDatabase(queryStr3, fields3);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        databasePtr->nmfQueryMsvpaPreyList(selectedSpecies, MSVPAName, false,
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp://         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap3 = databasePtr->nmfQueryDatabase(queryStr3, fields3);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp://         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBar.cpp:             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:             dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBar.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:        databasePtr->nmfQueryMsvpaPreyList(selectedSpecies,
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:        databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarFoodAvailability.cpp:    dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarGrowth.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);  // RSK - error message here if queried table is empty
+MSVPA_GuiCharts/ChartBarPopulationSize.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartBarPopulationSize.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarPopulationSize.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartBarPopulationSize.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLine.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineMultispeciesPopulations.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        ok = databasePtr->nmfQueryWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastAgeCatchData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryMaturityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastWeightAtAgeData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastMortalityData(
+MSVPA_GuiCharts/ChartLineYieldPerRecruit.cpp:        databasePtr->nmfQueryForecastAgeCatchData(
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryMsvpaPreyList(SelectedSpecies, MSVPAName, false,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryMsvpaPreyList(SelectedSpecies, MSVPAName, true,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryMsvpaPreyList(SelectedSpecies, MSVPAName, true,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryMsvpaPreyList(SelectedSpecies, MSVPAName, true,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap2    = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_GuiCharts/ChartStackedBarDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp://        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab01.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab02.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab02.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab02.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab02.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    databasePtr->getSpeciesToIndexMap(SpeciesToIndexMap);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp://    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:                dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiForecast/nmfForecastTab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    databasePtr->checkForTableAndCreate(TableName);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab01.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:        dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:             dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp://    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab02.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2,fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    //databasePtr->checkForTableAndCreate(TableNameOthPreyAnn);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    //databasePtr->checkForTableAndCreate(TableNamePrefs);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab05.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp://    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    databasePtr->checkForTableAndCreate(TableNameSpaceO);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap      = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab06.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    //databasePtr->checkForTableAndCreate(TableNameSizePref);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    dataMap      = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab07.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    databasePtr->checkForTableAndCreate(TableNameStomCont);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap     = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:            dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap     = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab08.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab09.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab10.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab10.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab10.cpp:        dataMap2  = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_GuiMSVPA/nmfMSVPATab10.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    databasePtr->checkForTableAndCreate(TableName);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiMSVPA/nmfMSVPATab11.cpp:        dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsConsumptionRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsConsumptionRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsConsumptionRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsDietComposition.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsFoodAvailability.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsFoodAvailability.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsFoodAvailability.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsGrowth.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsGrowth.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsMortalityRates.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsMortalityRatesForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsPopulationSize.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsYieldPerRecruit.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsYieldPerRecruit.cpp:    std::map<std::string,int> initMap = databasePtr->nmfQueryInitFields(
+MSVPA_GuiOutput/GuiControlsYieldPerRecruitForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/GuiControlsYieldPerRecruitForecast.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsNonYieldPerRecruit.cpp:    std::map<std::string,int> initMap = databasePtr->nmfQueryInitFields(
+MSVPA_GuiOutput/MSVPAGuiControlsNonYieldPerRecruit.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsNonYieldPerRecruit.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsNonYieldPerRecruit.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsYieldPerRecruit.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsYieldPerRecruit.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiOutput/MSVPAGuiControlsYieldPerRecruit.cpp:        dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab02.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab02.cpp:    if (databasePtr->getListOfAuthenticatedDatabaseNames(authenticatedDatabases)) {
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    //databasePtr->nmfSetDatabase(db.toStdString());
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:       errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:                errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    databasePtr->checkForTableAndCreate("Species");
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    //databasePtr->checkForTableAndCreate("OtherPredSpecies");
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSetup/nmfSetupTab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSetup/nmfSetupTab04.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(createCmd.toStdString());
+MSVPA_GuiSetup/nmfSetupTab04.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(replaceCmd);
+MSVPA_GuiSetup/nmfSetupTab05.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSetup/nmfSetupTab05.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(createCmd.toStdString());
+MSVPA_GuiSetup/nmfSetupTab05.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(replaceCmd);
+MSVPA_GuiSetup/nmfSetupTab06.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSetup/nmfSetupTab06.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(createCmd.toStdString());
+MSVPA_GuiSetup/nmfSetupTab06.cpp:        errorMsgStr = databasePtr->nmfUpdateDatabase(replaceCmd);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp: Can't use databasePtr->RestoreCSVFile(...) here since the format of this CSV
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp://std::cout << "~~~~~~~~ 1 current db name: " << databasePtr->nmfGetCurrentDatabase() << std::endl;
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp://std::cout << "~~~~~~~~ 2 current db name: " << databasePtr->nmfGetCurrentDatabase() << std::endl;
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:        dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab01.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:        dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab02.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:                dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:        dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab03.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        errorMsg = databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp://        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:    dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_GuiSSVPA/nmfSSVPATab04.cpp:        dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->nmfSetConnectionByName(db.connectionName());
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->nmfSetDatabase(ProjectDatabase);
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->getSpecies(m_logger,species);
+MSVPA_Main/nmfMainWindow.cpp:        m_databasePtr->checkForTableAndCreate(QString::fromStdString(nmfConstantsMSVPA::AllTables[i]));
+MSVPA_Main/nmfMainWindow.cpp:    if (! m_databasePtr->nmfGetCurrentDatabase().empty()) {
+MSVPA_Main/nmfMainWindow.cpp:        m_databasePtr->saveApplicationTable(this,m_logger,tableName);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName,
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    databasePtr->nmfQueryMsvpaPreyList(
+MSVPA_Main/nmfMainWindow.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    databasePtr->nmfGetMSVPAInitData(MSVPAName, MSVPA_FirstYear, MSVPA_LastYear,
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap2 = databasePtr->nmfQueryDatabase(queryStr2, fields2);
+MSVPA_Main/nmfMainWindow.cpp:    databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
+MSVPA_Main/nmfMainWindow.cpp:            dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    int SpeciesIndex = m_databasePtr->getSpeciesIndex(SpeciesName);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryAgeFields("Species",SpeciesIndex);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp://            databasePtr->nmfQueryInitFields(nmfConstantsMSVPA::TableMSVPAlist, MSVPAName);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp://    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryInitFields(
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryInitFields(
+MSVPA_Main/nmfMainWindow.cpp://         databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryInitFields(
+MSVPA_Main/nmfMainWindow.cpp:    dataMap   = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap2   = m_databasePtr->nmfQueryDatabase(queryStr2,fields2);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap1   = m_databasePtr->nmfQueryDatabase(queryStr1,fields1);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap    = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);  // RSK - error message here if queried table is empty
+MSVPA_Main/nmfMainWindow.cpp:    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr,fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp://    dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->getSpecies(m_logger,species);
+MSVPA_Main/nmfMainWindow.cpp:    errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    //dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryPredatorPreyFields("MSVPAspecies", MSVPAName);
+MSVPA_Main/nmfMainWindow.cpp:        SpeciesIndex = m_databasePtr->getSpeciesIndex(Species);
+MSVPA_Main/nmfMainWindow.cpp:            m_databasePtr->nmfQueryAgeFields("Species", SpeciesIndex);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp://    dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap   = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:            errorMsg = m_databasePtr->nmfUpdateDatabase(qcmd.toStdString());
+MSVPA_Main/nmfMainWindow.cpp:    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:    dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:        errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:            dataMap  = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp:                errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:                errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:            errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:            errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:    errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:        errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+MSVPA_Main/nmfMainWindow.cpp:    bool openOK = databasePtr->nmfOpenDatabase(
+MSVPA_Main/nmfMainWindow.cpp:        m_databasePtr->nmfSetDatabase(newDatabaseName);
+MSVPA_Main/nmfMainWindow.cpp://    databasePtr->nmfSaveDatabase();
+MSVPA_Main/nmfMainWindow.cpp://    databasePtr->nmfStartTransaction();
+MSVPA_Main/nmfMainWindow.cpp:    QString dbName = m_databasePtr->importDatabase(this,
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->exportDatabase(this,m_ProjectDir,
+MSVPA_Main/nmfMainWindow.cpp:    m_databasePtr->getListOfAuthenticatedDatabaseNames(authDBs);
+MSVPA_Main/nmfMainWindow.cpp:        m_databasePtr->exportDatabase(this,
+MSVPA_Main/nmfMainWindow.cpp:    dataMap = m_databasePtr->nmfQueryDatabase(queryStr, fields);
+MSVPA_Main/nmfMainWindow.cpp://        databasePtr->nmfCloseDatabase();

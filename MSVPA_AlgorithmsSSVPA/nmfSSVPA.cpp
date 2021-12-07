@@ -525,7 +525,8 @@ nmfSSVPA::Effort_Tune_VPA(
 //std::cout.precision(10);
     m = 0;
     fields   = {"Catch"};
-    queryStr = "SELECT Catch FROM SpeCatch WHERE SpeIndex = " + std::to_string(SpeIndex) +
+    queryStr = "SELECT Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+               " WHERE SpeIndex = " + std::to_string(SpeIndex) +
                " ORDER BY Year, Age";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (int i = 0; i < NYears; ++i) {
@@ -548,7 +549,8 @@ nmfSSVPA::Effort_Tune_VPA(
 //std::cout << "lclM total: " << checksum << std::endl;
 
     fields     = {"NFleets","FullRecAge"};
-    queryStr   = "SELECT NFleets,FullRecAge FROM SpeSSVPA WHERE SpeIndex = " + std::to_string(SpeIndex) +
+    queryStr   = "SELECT NFleets,FullRecAge FROM " + nmfConstantsMSVPA::TableSpeSSVPA +
+                 " WHERE SpeIndex = " + std::to_string(SpeIndex) +
                  " AND SSVPAName = '" + SSVPAName + "'";
     dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
     NFleets    = std::stod(dataMap["NFleets"][0]);
@@ -582,8 +584,9 @@ nmfSSVPA::Effort_Tune_VPA(
 //std::cout << "A" << std::endl;
         // Get all the effort data, by fleet for each fleet, year
         fields   = {"Effort"};
-        queryStr = "SELECT Effort FROM SpeTuneEffort WHERE SpeIndex = " + std::to_string(SpeIndex) +
-                " AND SSVPAName = '" + SSVPAName + "'";
+        queryStr = "SELECT Effort FROM " + nmfConstantsMSVPA::TableSpeTuneEffort +
+                   " WHERE SpeIndex = " + std::to_string(SpeIndex) +
+                   " AND SSVPAName = '" + SSVPAName + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
         for (int i = 0; i < NFleets; ++i) {
@@ -611,8 +614,9 @@ nmfSSVPA::Effort_Tune_VPA(
     if (1) { //EffortTunedGuiData.empty()) {
         m = 0;
         fields   = {"Catch"};
-        queryStr = "SELECT Catch FROM SpeTuneCatch WHERE SpeIndex = " + std::to_string(SpeIndex) +
-                " AND SSVPAName = '" + SSVPAName + "' ORDER BY Fleet, Year, Age";
+        queryStr = "SELECT Catch FROM " + nmfConstantsMSVPA::TableSpeTuneCatch +
+                   " WHERE SpeIndex = " + std::to_string(SpeIndex) +
+                   " AND SSVPAName = '" + SSVPAName + "' ORDER BY Fleet, Year, Age";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         for (int i = 0; i < NFleets; ++i) {
             for (int j = 0; j < NYears; ++j) {
@@ -1058,7 +1062,8 @@ nmfSSVPA::CandSVPA(
     // Load the Catch matrix from the Database
     m = 0;
     fields = {"Catch"};
-    queryStr = "SELECT Catch FROM SpeCatch WHERE SpeIndex = " + std::to_string(SpeIndex) +
+    queryStr = "SELECT Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+               " WHERE SpeIndex = " + std::to_string(SpeIndex) +
                " ORDER BY Year, Age";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["Catch"].size();
@@ -1077,8 +1082,10 @@ nmfSSVPA::CandSVPA(
     if (CohortAnalysisGuiData.empty()) {
         // Load the SSVPA configuration from the database and associated information
         fields   = {"FullRecAge","pSVPANCatYrs","pSVPANMortYrs","pSVPARefAge"};
-        queryStr = "SELECT FullRecAge,pSVPANCatYrs,pSVPANMortYrs,pSVPARefAge FROM SpeSSVPA WHERE SpeIndex = " + std::to_string(SpeIndex) +
-                " AND SSVPAName = '" + SSVPAname + "'";
+        queryStr = "SELECT FullRecAge,pSVPANCatYrs,pSVPANMortYrs,pSVPARefAge FROM " +
+                    nmfConstantsMSVPA::TableSpeSSVPA +
+                   " WHERE SpeIndex = " + std::to_string(SpeIndex) +
+                   " AND SSVPAName = '" + SSVPAname + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         FullRecAge    = std::stoi(dataMap["FullRecAge"][0]);
         pSVPANYrs     = std::stoi(dataMap["pSVPANCatYrs"][0]);
@@ -1335,7 +1342,7 @@ void nmfSSVPA::XSA(
     // RSK continue with implementing nmfXSA; create functions to get required matrices of the model (i.e. Catch)
     // and also required variables (i.e., MaxAge, FirstCatchAge)
     std::tie(MaxAge, FirstCatchAge, LastCatchAge, isPlusClass) =
-            databasePtr->nmfQueryAgeFields("Species",SpeIndex);
+            databasePtr->nmfQueryAgeFields(nmfConstantsMSVPA::TableSpecies,SpeIndex);
 //std::cout << MaxAge << "," << FirstCatchAge << "," << LastCatchAge << std::endl;
 
     int NYears = LastYear - FirstYear + 1;
@@ -1351,7 +1358,7 @@ void nmfSSVPA::XSA(
     nmfUtils::initialize(tmpF,     NYears, NCatAge);
     nmfUtils::initialize(tmpN,     NYears, NCatAge);
     nmfUtils::initialize(tmpM,     NYears, NCatAge);
-    databasePtr->nmfQueryCatchFields("SpeCatch",
+    databasePtr->nmfQueryCatchFields(nmfConstantsMSVPA::TableSpeCatch,
                                      SpeIndex,
                                      std::to_string(FirstCatchAge),
                                      std::to_string(LastCatchAge),
@@ -1367,8 +1374,10 @@ void nmfSSVPA::XSA(
 
     fields = {"NXSAIndex","Shrink","DownWeight","DownWeightType","DownWeightYear",
               "ShrinkYears","ShrinkAge","ShrinkCV"};
-    queryStr = "SELECT NXSAIndex,Shrink,DownWeight,DownWeightType,DownWeightYear,ShrinkYears,ShrinkAge,ShrinkCV FROM SpeSSVPA WHERE SpeIndex = " +
-               std::to_string(SpeIndex) + " AND SSVPAName = '" + SSVPAName + "'";
+    queryStr = "SELECT NXSAIndex,Shrink,DownWeight,DownWeightType,DownWeightYear,ShrinkYears,ShrinkAge,ShrinkCV FROM " +
+                nmfConstantsMSVPA::TableSpeSSVPA +
+               " WHERE SpeIndex = " + std::to_string(SpeIndex) +
+               " AND SSVPAName = '" + SSVPAName + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NIndex = std::stoi(dataMap["NXSAIndex"][0]);
     int Shrink = std::stoi(dataMap["Shrink"][0]);
@@ -1461,11 +1470,13 @@ void nmfSSVPA::XSA(
     nmfUtils::initialize(Alpha, MaxNIndex);
     nmfUtils::initialize(Beta,  MaxNIndex);
 
-    databasePtr->nmfQueryAlphaBetaFields("SpeXSAIndices",SpeIndex,SSVPAName, NIndex, Alpha, Beta);
+    databasePtr->nmfQueryAlphaBetaFields(nmfConstantsMSVPA::TableSpeXSAIndices,SpeIndex,
+                                         SSVPAName, NIndex, Alpha, Beta);
     if (Alpha.size() == 0)
         return;
     fields = {"Value"};
-    queryStr = "SELECT Value FROM SpeXSAData WHERE SpeIndex = " + std::to_string(SpeIndex) +
+    queryStr = "SELECT Value FROM " + nmfConstantsMSVPA::TableSpeXSAData +
+               " WHERE SpeIndex = " + std::to_string(SpeIndex) +
                "  AND SSVPAName = '" + SSVPAName +
                "' AND Age >= " + std::to_string(FirstCatchAge) +
                "  AND Age <= " + std::to_string(LastCatchAge) +

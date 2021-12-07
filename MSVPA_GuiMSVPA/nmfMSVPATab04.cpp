@@ -160,7 +160,9 @@ nmfMSVPATab4::callback_MSVPA_Tab4_AddPreyPB(bool unused)
 
         // First get the first and last years, number of seasons etc for the MSVPA
         fields   = {"FirstYear","LastYear","NSeasons"};
-        queryStr = "SELECT FirstYear,LastYear,NSeasons FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+        queryStr = "SELECT FirstYear,LastYear,NSeasons FROM " +
+                    nmfConstantsMSVPA::TableMSVPAlist +
+                   " WHERE MSVPAname = '" + MSVPAName + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         int FirstYear = std::stoi(dataMap["FirstYear"][0]);
         int LastYear  = std::stoi(dataMap["LastYear"][0]);
@@ -183,10 +185,12 @@ nmfMSVPATab4::callback_MSVPA_Tab4_AddPreyPB(bool unused)
         MSVPA_Tab4_SavePB->setEnabled(true);
 
         // Need to update MSVPAprefs.csv for MSVPA Tab 5. Prey Preferences
-        updatePreyDatabaseTablesForOtherTabs("MSVPAprefs", NewPreyName);
+        updatePreyDatabaseTablesForOtherTabs(
+                    QString::fromStdString(nmfConstantsMSVPA::TableMSVPAprefs), NewPreyName);
 
         // Need to update MSVPASpaceO.csv for MSVPA Tab 6. Spatial Overlap
-        updatePreyDatabaseTablesForOtherTabs("MSVPASpaceO",NewPreyName);
+        updatePreyDatabaseTablesForOtherTabs(
+                    QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO),NewPreyName);
 
         msg = "Added Prey: " + NewPreyName;
         logger->logMsg(nmfConstants::Normal,msg.toStdString());
@@ -223,12 +227,14 @@ nmfMSVPATab4::updatePreyDatabaseTablesForOtherTabs(QString tableName,
 
     // Find number of species in auxiliary prey tables (i.e., MSVPAprefs, MSVPASpaceO);
     fields   = {"SpeName"};
-    queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "'" +
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+               " WHERE MSVPAname = '" + MSVPAName + "'" +
                " AND (Type=0 OR Type=1)";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpeciesToSkip = dataMap["SpeName"].size();
     fields   = {"OthPreyName"};
-    queryStr = "SELECT OthPreyName FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName FROM " + nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpeciesToSkip += dataMap["OthPreyName"].size();
 
@@ -270,7 +276,7 @@ nmfMSVPATab4::updatePreyDatabaseTablesForOtherTabs(QString tableName,
         if (num == NumSpeciesToSkip) {
             outStream << line << "\n";
             qfields = line.split(",");
-            if (tableName == "MSVPAprefs") {
+            if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPAprefs) {
                 lastPreyIndex = qfields[5].trimmed().toInt();
                 outStream << qfields[0].trimmed() + "," +
                              qfields[1].trimmed() + ", " +
@@ -281,7 +287,7 @@ nmfMSVPATab4::updatePreyDatabaseTablesForOtherTabs(QString tableName,
                              newPreyName + ", " +
                              "0" + ", " +
                              "0" + "\n";
-            } else if (tableName == "MSVPASpaceO") {
+            } else if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPASpaceO) {
                 lastPreyIndex = qfields[6].trimmed().toInt();
                 outStream << qfields[0].trimmed() + "," +
                              qfields[1].trimmed() + ", " +
@@ -349,9 +355,9 @@ std::cout << "TRUNCATE TABLE " << tableName.toStdString() << std::endl;
 
     // Write the contents from the CSV file into the MySQL table
     cmd  = "INSERT INTO " + tableName.toStdString();
-    if (tableName == "MSVPAprefs")
+    if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPAprefs)
         cmd += " (MSVPAName,SpeIndex,SpeType,SpeName,Age,PreyIndex,PreyName,PrefRank,PrefVal) VALUES ";
-    else if (tableName == "MSVPASpaceO")
+    else if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPASpaceO)
         cmd += " (MSVPAName,Season,SpeIndex,SpeType,SpeName,Age,PreyIndex,PreyName,SpOverlap) VALUES ";
 
     QFile fin(filename);
@@ -375,7 +381,7 @@ std::cout << "line: " << line.toStdString() << std::endl;
             continue;
         }
         qfields = line.split(",");
-        if (tableName == "MSVPAprefs") {
+        if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPAprefs) {
             dataCmd += "(\"" + qfields[0].trimmed().toStdString() + "\",";
             dataCmd +=         qfields[1].trimmed().toStdString() + ",";
             dataCmd +=         qfields[2].trimmed().toStdString() + ",";
@@ -385,7 +391,7 @@ std::cout << "line: " << line.toStdString() << std::endl;
             dataCmd +=  "\"" + qfields[6].trimmed().toStdString() + "\",";
             dataCmd +=         qfields[7].trimmed().toStdString() + ",";
             dataCmd +=         qfields[8].trimmed().toStdString() + "), ";
-        } else if (tableName == "MSVPASpaceO") {
+        } else if (tableName.toStdString() == nmfConstantsMSVPA::TableMSVPASpaceO) {
             dataCmd += "(\"" + qfields[0].trimmed().toStdString() + "\",";
             dataCmd +=         qfields[1].trimmed().toStdString() + ",";
             dataCmd +=         qfields[2].trimmed().toStdString() + ",";
@@ -463,12 +469,16 @@ nmfMSVPATab4::callback_MSVPA_Tab4_DelPreyPB(bool unused)
         std::vector<QString> tmpFileNameVec;
         std::map<QString,QString> tableFileMap;
 
-        for (QString TableName : {"MSVPAOthPrey.csv","MSVPAOthPreyAnn.csv","MSVPAprefs.csv","MSVPASpaceO.csv"})
+        for (QString CSVFileName : {
+             QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey)+".csv",
+             QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn)+".csv",
+             QString::fromStdString(nmfConstantsMSVPA::TableMSVPAprefs)+".csv",
+             QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO)+".csv"})
         {
             filePath = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::InputDataDir));
-            fileNameWithPath    = QDir(filePath).filePath(TableName);
-            tmpFileNameWithPath = QDir(filePath).filePath("." + TableName);
-            tableFileMap[TableName] = fileNameWithPath;
+            fileNameWithPath    = QDir(filePath).filePath(CSVFileName);
+            tmpFileNameWithPath = QDir(filePath).filePath("." + CSVFileName);
+            tableFileMap[CSVFileName] = fileNameWithPath;
 
             fileNameVec.push_back(fileNameWithPath);
             tmpFileNameVec.push_back(tmpFileNameWithPath);
@@ -500,13 +510,13 @@ nmfMSVPATab4::callback_MSVPA_Tab4_DelPreyPB(bool unused)
                     qfields = line.split(",");
                     csvPreyName.clear();
                     csvMSVPAName = qfields[0].trimmed();
-                    if ((TableName == "MSVPAOthPrey.csv") ||
-                        (TableName == "MSVPAOthPreyAnn.csv"))
+                    if ((CSVFileName == QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey)+".csv") ||
+                        (CSVFileName == QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn)+".csv"))
                     {
                         csvPreyName  = qfields[1].trimmed();
-                    } else if (TableName == "MSVPAprefs.csv") {
+                    } else if (CSVFileName == QString::fromStdString(nmfConstantsMSVPA::TableMSVPAprefs)+".csv") {
                         csvPreyName  = qfields[6].trimmed();
-                    } else if (TableName == "MSVPASpaceO.csv") {
+                    } else if (CSVFileName == QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO)+".csv") {
                         csvPreyName  = qfields[7].trimmed();
                     }
                     if ((csvMSVPAName != QString::fromStdString(MSVPAName)) ||
@@ -536,8 +546,10 @@ nmfMSVPATab4::callback_MSVPA_Tab4_DelPreyPB(bool unused)
                                  QMessageBox::Ok);
 
         // Update related tables on other tabs
-        UpdatePreyDatabaseTable("MSVPAprefs", tableFileMap["MSVPAprefs.csv"]);
-        UpdatePreyDatabaseTable("MSVPASpaceO",tableFileMap["MSVPASpaceO.csv"]);
+        UpdatePreyDatabaseTable(QString::fromStdString(nmfConstantsMSVPA::TableMSVPAprefs),
+                                tableFileMap[QString::fromStdString(nmfConstantsMSVPA::TableMSVPAprefs)+".csv"]);
+        UpdatePreyDatabaseTable(QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO),
+                                tableFileMap[QString::fromStdString(nmfConstantsMSVPA::TableMSVPASpaceO)+".csv"]);
 
     } // end if OK to delete
 
@@ -559,7 +571,7 @@ nmfMSVPATab4::loadMSVPAOthPrey(QString Prey)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPAOthPrey.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Other Prey CSV File");
@@ -625,9 +637,10 @@ nmfMSVPATab4::getPreyMinMaxInfo(QString Prey,
     std::string queryStr;
 
     fields    = {"OthPreyName","MinSize","MaxSize","SizeAlpha","SizeBeta"};
-    queryStr  = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM MSVPAOthPrey WHERE ";
-    queryStr += "MSVPAName = '" + MSVPAName + "' ";
-    queryStr += " AND OthPreyName = '" + Prey.toStdString() + "'";
+    queryStr  = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM " +
+                 nmfConstantsMSVPA::TableMSVPAOthPrey +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND OthPreyName = '" + Prey.toStdString() + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
 
     if (dataMap["OthPreyName"].size() > 0) {
@@ -667,7 +680,7 @@ nmfMSVPATab4::loadMSVPAOthPreyAnn(QString Prey)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("MSVPAOthPreyAnn.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load MSVPA Other Prey Ann (Biomass) CSV File");
@@ -706,7 +719,9 @@ nmfMSVPATab4::loadMSVPAOthPreyAnn(QString Prey)
         file.close();
 
         fields   = {"NSeasons","FirstYear","LastYear"};
-        queryStr = "SELECT NSeasons,FirstYear,LastYear FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+        queryStr = "SELECT NSeasons,FirstYear,LastYear FROM " +
+                    nmfConstantsMSVPA::TableMSVPAlist +
+                   " WHERE MSVPAname = '" + MSVPAName + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if ( dataMap["FirstYear"].empty()) {
             QMessageBox::information(MSVPA_Tabs,
@@ -797,7 +812,9 @@ nmfMSVPATab4::getYearSeasonData(int &FirstYear,
 
     // First get the first and last years, number of seasons etc for the MSVPA
     fields   = {"FirstYear","LastYear","NSeasons"};
-    queryStr = "SELECT FirstYear,LastYear,NSeasons FROM MSVPAlist WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr = "SELECT FirstYear,LastYear,NSeasons FROM " +
+                nmfConstantsMSVPA::TableMSVPAlist +
+               " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["FirstYear"].size() == 0) {
         std::cout << "Error: No data found in MSVPAlist for MSVPA config: " << MSVPAName << std::endl;
@@ -864,7 +881,7 @@ nmfMSVPATab4::callback_MSVPA_Tab4_SavePB(bool unused)
         return;
     }
 
-    TableNameOthPrey = "MSVPAOthPrey";
+    TableNameOthPrey = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -957,7 +974,7 @@ nmfMSVPATab4::callback_MSVPA_Tab4_SavePB(bool unused)
     //
     // Save data to MSVPAOthPreyAnn
     //
-    TableNameOthPreyAnn = "MSVPAOthPreyAnn";
+    TableNameOthPreyAnn = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn);
 
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
@@ -1079,11 +1096,11 @@ nmfMSVPATab4::restoreCSVFromDatabase(nmfDatabase *databasePtr)
     QString TableName;
     std::vector<std::string> fields;
 
-    TableName = "MSVPAOthPrey";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey);
     fields    = {"MSVPAName","OthPreyName","MinSize","MaxSize","SizeAlpha","SizeBeta"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "MSVPAOthPreyAnn";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn);
     fields    = {"MSVPAName","OthPreyName","Year","Season","Biomass"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
@@ -1104,9 +1121,9 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     std::string errorMsg;
     QString qcmd;
     QString line;
-    QString TableNameOthPrey    = "MSVPAOthPrey";
-    QString TableNameOthPreyAnn = "MSVPAOthPreyAnn";
-    QString TableNamelist       = "MSVPAlist";
+    QString TableNameOthPrey    = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPrey);
+    QString TableNameOthPreyAnn = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAOthPreyAnn);
+    QString TableNamelist       = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAlist);
     QString tableLine;
     QString filePath;
     QString fileName;
@@ -1243,7 +1260,9 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     // Need to also update MSVPAlist with the total number of Prey for the MSVPAName
 
     fields     = {"MSVPAName","OthPreyName"};
-    queryStr   = "SELECT MSVPAName,OthPreyName FROM MSVPAOthPrey WHERE MSVPAname = '" + MSVPAName + "'";
+    queryStr   = "SELECT MSVPAName,OthPreyName FROM " +
+                  nmfConstantsMSVPA::TableMSVPAOthPrey +
+                 " WHERE MSVPAname = '" + MSVPAName + "'";
     dataMap    = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NOther = dataMap["OthPreyName"].size();
 
@@ -1252,7 +1271,7 @@ nmfMSVPATab4::updatePreyDatabaseTables(QString fileNameWithPathOthPrey,
     //
     // Save data to MSVPAOthPreyAnn
     //
-    TableNamelist = "MSVPAlist";
+    TableNamelist = QString::fromStdString(nmfConstantsMSVPA::TableMSVPAlist);
 
 
     // Save back to csv file in case user changed anything inline.
@@ -1433,7 +1452,7 @@ nmfMSVPATab4::callback_MSVPA_Tab4_ItemChanged(QStandardItem *item)
     item->setTextAlignment(Qt::AlignCenter|Qt::AlignHCenter);
     smodel->setItem(item->row(), item->column(), item);
 
-    MarkAsDirty("MSVPAOthPreyAnn");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPreyAnn);
 
     MSVPA_Tab4_SavePB->setEnabled(true);
     MSVPA_Tab4_NextPB->setEnabled(false);
@@ -1490,7 +1509,9 @@ nmfMSVPATab4::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // If there's other species stored..then get 'em and put 'em in the species list
     fields   = {"OthPreyName","MinSize","MaxSize","SizeAlpha","SizeBeta"};
-    queryStr = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM MSVPAOthPrey WHERE MSVPAName = '" + MSVPAName + "'";
+    queryStr = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM " +
+                nmfConstantsMSVPA::TableMSVPAOthPrey +
+               " WHERE MSVPAName = '" + MSVPAName + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NSpecies = dataMap["OthPreyName"].size();
 //    m = 0;
@@ -1539,7 +1560,7 @@ nmfMSVPATab4::callback_theMinSettingWasChanged(QString value)
 //    int species = MSVPA_Tab4_PreySpeciesCMB->currentIndex();
 //    MinLen[species] = value.toDouble();
     MSVPA_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("MSVPAOthPrey");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPrey);
 
 }
 void
@@ -1548,7 +1569,7 @@ nmfMSVPATab4::callback_theMaxSettingWasChanged(QString value)
 //    int species = MSVPA_Tab4_PreySpeciesCMB->currentIndex();
 //    MaxLen[species] = value.toDouble();
     MSVPA_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("MSVPAOthPrey");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPrey);
 
 }
 void
@@ -1557,7 +1578,7 @@ nmfMSVPATab4::callback_theAlphaSettingWasChanged(QString value)
     //int species = MSVPA_Tab4_PreySpeciesCMB->currentIndex();
     //Alpha[species] = value.toDouble();
     MSVPA_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("MSVPAOthPrey");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPrey);
 }
 void
 nmfMSVPATab4::callback_theBetaSettingWasChanged(QString value)
@@ -1565,7 +1586,7 @@ nmfMSVPATab4::callback_theBetaSettingWasChanged(QString value)
     //int species = MSVPA_Tab4_PreySpeciesCMB->currentIndex();
     //Beta[species] = value.toDouble();
     MSVPA_Tab4_SavePB->setEnabled(true);
-    MarkAsDirty("MSVPAOthPrey");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPrey);
 }
 
 
@@ -1600,9 +1621,10 @@ nmfMSVPATab4::callback_MSVPA_Tab4_PreySpeciesCMB(int index)
 
     // Load the 4 lineEdits from the database table data
     fields   = {"OthPreyName","MinSize","MaxSize","SizeAlpha","SizeBeta"};
-    queryStr  = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM MSVPAOthPrey WHERE ";
-    queryStr += "MSVPAName = '" + MSVPAName + "' ";
-    queryStr += " AND OthPreyName = '" + Prey.toStdString() + "'";
+    queryStr  = "SELECT OthPreyName,MinSize,MaxSize,SizeAlpha,SizeBeta FROM " +
+                 nmfConstantsMSVPA::TableMSVPAOthPrey +
+                " WHERE MSVPAName = '" + MSVPAName +
+                "' AND OthPreyName = '" + Prey.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["OthPreyName"].size() > 0) {
         MSVPA_Tab4_MinLenLE->setText(QString::fromStdString(dataMap["MinSize"][0]));
@@ -1629,9 +1651,9 @@ nmfMSVPATab4::callback_MSVPA_Tab4_PreySpeciesCMB(int index)
     // Load the tableview model from the database table data
     m = 0;
     fields   = {"MSVPAName","OthPreyName","Year","Season","Biomass"};
-    queryStr = "SELECT MSVPAName,OthPreyName,Year,Season,Biomass FROM MSVPAOthPreyAnn WHERE ";
-    queryStr += "MSVPAName = '" + MSVPAName + "' ";
-    queryStr += "AND OthPreyName = '" + Prey.toStdString() + "'";
+    queryStr = "SELECT MSVPAName,OthPreyName,Year,Season,Biomass FROM " + nmfConstantsMSVPA::TableMSVPAOthPreyAnn +
+               " WHERE MSVPAName = '" + MSVPAName +
+               "' AND OthPreyName = '" + Prey.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     int NumRecords = dataMap["MSVPAName"].size();
     if (NumRecords == NYears*NSeasons) {
@@ -1658,7 +1680,7 @@ nmfMSVPATab4::callback_MSVPA_Tab4_PreySpeciesCMB(int index)
     connect(smodel, SIGNAL(itemChanged(QStandardItem *)),
             this,   SLOT(callback_MSVPA_Tab4_ItemChanged(QStandardItem *)));
 
-    MarkAsDirty("MSVPAOthPrey");
+    MarkAsDirty(nmfConstantsMSVPA::TableMSVPAOthPrey);
 
 } // end callback_MSVPA_Tab4_PreySpeciesCMB
 

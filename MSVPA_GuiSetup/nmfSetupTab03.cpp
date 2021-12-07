@@ -31,45 +31,45 @@ nmfSetup_Tab3::nmfSetup_Tab3(QTabWidget  *tabs,
     Setup_Tabs->addTab(Setup_Tab3_Widget, tr("3. Species Setup"));
 
     // Setup The FunctionMap map so don't have to use if...else...if...else... statement.
-    FunctionMap["ForeEnergyDens"]       = buildCSVFileForeEnergyDens;       // Table  1 of 39
-    FunctionMap["ForeOutput"]           = buildCSVFileForeOutput;           // Table  2 of 39
-    FunctionMap["ForePredGrowth"]       = buildCSVFileForePredGrowth;       // Table  3 of 39
-    FunctionMap["ForePredVonB"]         = buildCSVFileForePredVonB;         // Table  4 of 39
-    FunctionMap["ForeSRQ"]              = buildCSVFileForeSRQ;              // Table  5 of 39
-    FunctionMap["ForeSRR"]              = buildCSVFileForeSRR;              // Table  6 of 39
-    FunctionMap["ForeSuitPreyBiomass"]  = buildCSVFileForeSuitPreyBiomass;  // Table  7 of 39
-    FunctionMap["Forecasts"]            = buildCSVFileForecasts;            // Table  8 of 39
-    FunctionMap["MSVPAEnergyDens"]      = buildCSVFileMSVPAEnergyDens;      // Table  9 of 39
-    FunctionMap["MSVPAOthPrey"]         = buildCSVFileMSVPAOthPrey;         // Table 10 of 39
-    FunctionMap["MSVPAOthPreyAnn"]      = buildCSVFileMSVPAOthPreyAnn;      // Table 11 of 39
-    FunctionMap["MSVPASeasBiomass"]     = buildCSVFileMSVPASeasBiomass;     // Table 12 of 39
-    FunctionMap["MSVPASeasInfo"]        = buildCSVFileMSVPASeasInfo;        // Table 13 of 39
-    FunctionMap["MSVPASizePref"]        = buildCSVFileMSVPASizePref;        // Table 14 of 39
-    FunctionMap["MSVPASpaceO"]          = buildCSVFileMSVPASpaceO;          // Table 15 of 39
-    FunctionMap["MSVPAStomCont"]        = buildCSVFileMSVPAStomCont;        // Table 16 of 39
-    FunctionMap["MSVPASuitPreyBiomass"] = buildCSVFileMSVPASuitPreyBiomass; // Table 17 of 39
-    FunctionMap["MSVPAlist"]            = buildCSVFileMSVPAlist;            // Table 18 of 39
-    FunctionMap["MSVPAprefs"]           = buildCSVFileMSVPAprefs;           // Table 19 of 39
-    FunctionMap["MSVPAspecies"]         = buildCSVFileMSVPAspecies;         // Table 20 of 39
-    FunctionMap["OthPredSizeData"]      = buildCSVFileOthPredSizeData;      // Table 21 of 39
-    FunctionMap["OtherPredBM"]          = buildCSVFileOtherPredBM;          // Table 22 of 39
-    FunctionMap["OtherPredSpecies"]     = buildCSVFileOtherPredSpecies;     // Table 23 of 39
-    FunctionMap["SSVPAAgeM"]            = buildCSVFileSSVPAAgeM;            // Table 24 of 39
-    FunctionMap["ScenarioF"]            = buildCSVFileScenarioF;            // Table 25 of 39
-    FunctionMap["ScenarioOthPred"]      = buildCSVFileScenarioOthPred;      // Table 26 of 39
-    FunctionMap["ScenarioOthPrey"]      = buildCSVFileScenarioOthPrey;      // Table 27 of 39
-    FunctionMap["ScenarioRec"]          = buildCSVFileScenarioRec;          // Table 28 of 39
-    FunctionMap["Scenarios"]            = buildCSVFileScenarios;            // Table 29 of 39
-    FunctionMap["SpeCatch"]             = buildCSVFileSpeCatch;             // Table 30 of 39
-    FunctionMap["SpeMaturity"]          = buildCSVFileSpeMaturity;          // Table 31 of 39
-    FunctionMap["SpeSSVPA"]             = buildCSVFileSpeSSVPA;             // Table 32 of 39
-    FunctionMap["SpeSize"]              = buildCSVFileSpeSize;              // Table 33 of 39
-    FunctionMap["SpeTuneCatch"]         = buildCSVFileSpeTuneCatch;         // Table 34 of 39
-    FunctionMap["SpeTuneEffort"]        = buildCSVFileSpeTuneEffort;        // Table 35 of 39
-    FunctionMap["SpeWeight"]            = buildCSVFileSpeWeight;            // Table 36 of 39
-    FunctionMap["SpeXSAData"]           = buildCSVFileSpeXSAData;           // Table 37 of 39
-    FunctionMap["SpeXSAIndices"]        = buildCSVFileSpeXSAIndices;        // Table 38 of 39
-    FunctionMap["Species"]              = buildCSVFileSpecies;              // Table 39 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForeEnergyDens]       = buildCSVFileForeEnergyDens;       // Table  1 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForeOutput]           = buildCSVFileForeOutput;           // Table  2 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForePredGrowth]       = buildCSVFileForePredGrowth;       // Table  3 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForePredVonB]         = buildCSVFileForePredVonB;         // Table  4 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForeSRQ]              = buildCSVFileForeSRQ;              // Table  5 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForeSRR]              = buildCSVFileForeSRR;              // Table  6 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForeSuitPreyBiomass]  = buildCSVFileForeSuitPreyBiomass;  // Table  7 of 39
+    FunctionMap[nmfConstantsMSVPA::TableForecasts]            = buildCSVFileForecasts;            // Table  8 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAEnergyDens]      = buildCSVFileMSVPAEnergyDens;      // Table  9 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAOthPrey]         = buildCSVFileMSVPAOthPrey;         // Table 10 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAOthPreyAnn]      = buildCSVFileMSVPAOthPreyAnn;      // Table 11 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPASeasBiomass]     = buildCSVFileMSVPASeasBiomass;     // Table 12 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPASeasInfo]        = buildCSVFileMSVPASeasInfo;        // Table 13 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPASizePref]        = buildCSVFileMSVPASizePref;        // Table 14 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPASpaceO]          = buildCSVFileMSVPASpaceO;          // Table 15 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAStomCont]        = buildCSVFileMSVPAStomCont;        // Table 16 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPASuitPreyBiomass] = buildCSVFileMSVPASuitPreyBiomass; // Table 17 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAlist]            = buildCSVFileMSVPAlist;            // Table 18 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAprefs]           = buildCSVFileMSVPAprefs;           // Table 19 of 39
+    FunctionMap[nmfConstantsMSVPA::TableMSVPAspecies]         = buildCSVFileMSVPAspecies;         // Table 20 of 39
+    FunctionMap[nmfConstantsMSVPA::TableOthPredSizeData]      = buildCSVFileOthPredSizeData;      // Table 21 of 39
+    FunctionMap[nmfConstantsMSVPA::TableOtherPredBM]          = buildCSVFileOtherPredBM;          // Table 22 of 39
+    FunctionMap[nmfConstantsMSVPA::TableOtherPredSpecies]     = buildCSVFileOtherPredSpecies;     // Table 23 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSSVPAAgeM]            = buildCSVFileSSVPAAgeM;            // Table 24 of 39
+    FunctionMap[nmfConstantsMSVPA::TableScenarioF]            = buildCSVFileScenarioF;            // Table 25 of 39
+    FunctionMap[nmfConstantsMSVPA::TableScenarioOthPred]      = buildCSVFileScenarioOthPred;      // Table 26 of 39
+    FunctionMap[nmfConstantsMSVPA::TableScenarioOthPrey]      = buildCSVFileScenarioOthPrey;      // Table 27 of 39
+    FunctionMap[nmfConstantsMSVPA::TableScenarioRec]          = buildCSVFileScenarioRec;          // Table 28 of 39
+    FunctionMap[nmfConstantsMSVPA::TableScenarios]            = buildCSVFileScenarios;            // Table 29 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeCatch]             = buildCSVFileSpeCatch;             // Table 30 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeMaturity]          = buildCSVFileSpeMaturity;          // Table 31 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeSSVPA]             = buildCSVFileSpeSSVPA;             // Table 32 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeSize]              = buildCSVFileSpeSize;              // Table 33 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeTuneCatch]         = buildCSVFileSpeTuneCatch;         // Table 34 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeTuneEffort]        = buildCSVFileSpeTuneEffort;        // Table 35 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeWeight]            = buildCSVFileSpeWeight;            // Table 36 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeXSAData]           = buildCSVFileSpeXSAData;           // Table 37 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpeXSAIndices]        = buildCSVFileSpeXSAIndices;        // Table 38 of 39
+    FunctionMap[nmfConstantsMSVPA::TableSpecies]              = buildCSVFileSpecies;              // Table 39 of 39
 
     //nmfUtils::readTableNames(TableNames);
 
@@ -154,14 +154,14 @@ nmfSetup_Tab3::callback_LoadDatabase(QString db)
     //databasePtr->nmfSetDatabase(db.toStdString());
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM Species";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     Setup_Tab3_NumSpeciesSB->setValue(NumSpecies);
     Setup_Tab3_SpeciesCB->setChecked(NumSpecies > 0);
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM OtherPredSpecies";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     Setup_Tab3_NumOtherPredatorsSB->setValue(NumSpecies);
@@ -542,8 +542,8 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
     bool renameSpeName;
 
     // Check if Species table exists and if it doesn't create it.
-    qcmd  = "CREATE TABLE IF NOT EXISTS Species ";
-    qcmd += "(SpeIndex      int(11) NOT NULL,";
+    qcmd  = "CREATE TABLE IF NOT EXISTS " + QString::fromStdString(nmfConstantsMSVPA::TableSpecies);
+    qcmd += " (SpeIndex      int(11) NOT NULL,";
     qcmd += " SpeName       VARCHAR(255),";
     qcmd += " MaxAge        int(11),";
     qcmd += " MinCatAge     int(11),";
@@ -566,7 +566,7 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
 
     // Find all Species indexes
     fields = {"SpeIndex"};
-    queryStr = "SELECT SpeIndex FROM Species";
+    queryStr = "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         SpeciesSet.insert(dataMap["SpeIndex"][i]);
@@ -633,7 +633,8 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
         // Check if user updated Species name and then propagate name change through all tables.
         renameSpeName = false;
         fields = {"SpeIndex","SpeName"};
-        queryStr = "SELECT SpeIndex,SpeName FROM Species WHERE SpeIndex = " + SpeciesIndex;
+        queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE SpeIndex = " + SpeciesIndex;
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeName"].size() == 1) {
             newSpeName = Setup_Tab3_SpeciesTW->item(i,Column_SpeName)->text();
@@ -645,8 +646,8 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
         }
 
         // Update the Species table
-        cmd  = "INSERT INTO Species ";
-        cmd += "(SpeIndex,SpeName,MaxAge,MinCatAge,MaxCatAge,FirstYear,LastYear,PlusClass,";
+        cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableSpecies;
+        cmd += " (SpeIndex,SpeName,MaxAge,MinCatAge,MaxCatAge,FirstYear,LastYear,PlusClass,";
         cmd += "CatchUnits,WtTypeIndex,WtUnits,SizeTypeIndex,SizeUnits,FixedMaturity) values ";
         cmd += "("   + SpeciesIndex + ", " +
                 "\"" + Setup_Tab3_SpeciesTW->item(i,Column_SpeName)->text().toStdString() + "\", " +
@@ -684,8 +685,8 @@ nmfSetup_Tab3::UpdateSpeciesTable(int NumSpecies)
             // If there's an Index in the database table that isn't in the GUI table,
             // then delete it from the database table.  It means the user doesn't want it anymore.
             if (SpeciesIndexesToKeep.find(IndexInTable) == SpeciesIndexesToKeep.end()) {
-                cmd = "DELETE FROM Species where SpeIndex = " + IndexInTable;
-//std::cout << cmd << std::endl;
+                cmd = "DELETE FROM " + nmfConstantsMSVPA::TableSpecies +
+                      " WHERE SpeIndex = " + IndexInTable;
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
                 if (nmfUtilsQt::isAnError(errorMsg)) {
                     std::cout << cmd << std::endl;
@@ -733,8 +734,8 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
     OtherPredatorsIndexesToKeep.clear();
 
     // Check if OtherPredSpecies table exists and if it doesn't create it.
-    qcmd  = "CREATE TABLE IF NOT EXISTS OtherPredSpecies ";
-    qcmd += "(SpeIndex      int(11) NOT NULL,";
+    qcmd  = "CREATE TABLE IF NOT EXISTS " + QString::fromStdString(nmfConstantsMSVPA::TableOtherPredSpecies);
+    qcmd += " (SpeIndex      int(11) NOT NULL,";
     qcmd += " SpeName       VARCHAR(255),";
     qcmd += " FirstYear     int(11),";
     qcmd += " LastYear      int(11),";
@@ -756,7 +757,7 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
 
     // Find all OtherPredators indexes
     fields = {"SpeIndex"};
-    queryStr = "SELECT SpeIndex FROM OtherPredSpecies";
+    queryStr = "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         OtherPredatorsSet.insert(dataMap["SpeIndex"][i]);
@@ -820,7 +821,9 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
         // Check if user updated Species name and then propagate name change through all tables.
         renameSpeName = false;
         fields = {"SpeIndex","SpeName"};
-        queryStr = "SELECT SpeIndex,SpeName FROM OtherPredSpecies WHERE SpeIndex = " + OtherPredatorsIndex;
+        queryStr = "SELECT SpeIndex,SpeName FROM " +
+                    nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeIndex = " + OtherPredatorsIndex;
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeName"].size() == 1) {
             newSpeName = Setup_Tab3_OtherPredatorsTW->item(i,Column_SpeName)->text();
@@ -832,8 +835,8 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
         }
 
         // Update the OtherPredators table
-        cmd  = "INSERT INTO OtherPredSpecies ";
-        cmd += "(SpeIndex,SpeName,FirstYear,LastYear,BMUnitIndex,BMUnits,";
+        cmd  = "INSERT INTO " + nmfConstantsMSVPA::TableOtherPredSpecies;
+        cmd += " (SpeIndex,SpeName,FirstYear,LastYear,BMUnitIndex,BMUnits,";
         cmd += "WtUnitIndex,WtUnits,SizeUnitIndex,SizeUnits,MinSize,MaxSize,SizeStruc,NumSizeCats) values ";
         cmd += "("   + OtherPredatorsIndex + ", " +
                 "\"" + Setup_Tab3_OtherPredatorsTW->item(i,Column_OthName)->text().toStdString() + "\", " +
@@ -873,7 +876,8 @@ nmfSetup_Tab3::UpdateOtherPredatorsTable(int NumOtherPredators)
             // If there's an Index in the database table that isn't in the GUI table,
             // then delete it from the database table.  It means the user doesn't want it anymore.
             if (OtherPredatorsIndexesToKeep.find(IndexInTable) == OtherPredatorsIndexesToKeep.end()) {
-                cmd = "DELETE FROM OtherPredSpecies where SpeIndex = " + IndexInTable;
+                cmd = "DELETE FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                      " WHERE SpeIndex = " + IndexInTable;
                 errorMsg = databasePtr->nmfUpdateDatabase(cmd);
                 if (nmfUtilsQt::isAnError(errorMsg)) {
                     std::cout << cmd << std::endl;
@@ -941,7 +945,7 @@ nmfSetup_Tab3::callback_Setup_Tab3_LoadPB(bool unused)
 
        // Setup Load dialog
        fileDlgSpecies->setDirectory(path);
-       fileDlgSpecies->selectFile("Species.csv");
+       fileDlgSpecies->selectFile(QString::fromStdString(nmfConstantsMSVPA::TableSpecies)+".csv");
        fileDlgSpecies->setNameFilters(NameFilters);
        fileDlgSpecies->setWindowTitle("Load Species CSV File");
        if (fileDlgSpecies->exec()) {
@@ -1067,7 +1071,7 @@ nmfSetup_Tab3::callback_Setup_Tab3_LoadPB(bool unused)
 
        // Setup Load dialog
        fileDlgOtherPredSpecies->setDirectory(path);
-       fileDlgOtherPredSpecies->selectFile("OtherPredSpecies.csv");
+       fileDlgOtherPredSpecies->selectFile(QString::fromStdString(nmfConstantsMSVPA::TableOtherPredSpecies)+".csv");
        fileDlgOtherPredSpecies->setNameFilters(NameFilters);
        fileDlgOtherPredSpecies->setWindowTitle("Load the Other Predator Species CSV File");
        if (fileDlgOtherPredSpecies->exec()) {
@@ -1230,13 +1234,13 @@ nmfSetup_Tab3::restoreCSVFromDatabase(nmfDatabase *databasePtr)
 std::cout << "ProjectDir: " << ProjectDir << std::endl;
 
 
-    TableName = "Species";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableSpecies);
     fields    = {"SpeIndex","SpeName","MaxAge","MinCatAge","MaxCatAge",
                  "FirstYear","LastYear","PlusClass","CatchUnits","WtTypeIndex",
                  "WtUnits","SizeTypeIndex","SizeUnits","FixedMaturity"};
     databasePtr->RestoreCSVFile(TableName,ProjectDir,fields);
 
-    TableName = "OtherPredSpecies";
+    TableName = QString::fromStdString(nmfConstantsMSVPA::TableOtherPredSpecies);
     fields    = {"SpeIndex","SpeName","FirstYear","LastYear",
                  "BMUnitIndex","BMUnits","WtUnitIndex","WtUnits",
                  "SizeUnitIndex","SizeUnits","MinSize","MaxSize","SizeStruc","NumSizeCats"};
@@ -1831,13 +1835,14 @@ nmfSetup_Tab3::LoadSpeciesTable()
     QComboBox *cmbCatchUnits;
     QComboBox *cmbSzUnits;
 
-    databasePtr->checkForTableAndCreate("Species");
+    databasePtr->checkForTableAndCreate(QString::fromStdString(nmfConstantsMSVPA::TableSpecies));
 
     // Get Species data from database
     fields = {"SpeIndex","SpeName","MaxAge","MinCatAge","MaxCatAge","FirstYear","LastYear","PlusClass",
               "CatchUnits","WtTypeIndex","WtUnits","SizeTypeIndex","SizeUnits","FixedMaturity"};
     queryStr =  "SELECT SpeIndex,SpeName,MaxAge,MinCatAge,MaxCatAge,FirstYear,LastYear,PlusClass,";
-    queryStr += "CatchUnits,WtTypeIndex,WtUnits,SizeTypeIndex,SizeUnits,FixedMaturity FROM Species";
+    queryStr += "CatchUnits,WtTypeIndex,WtUnits,SizeTypeIndex,SizeUnits,FixedMaturity FROM " +
+                 nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeIndex"].size();
 
@@ -1934,13 +1939,14 @@ nmfSetup_Tab3::LoadOtherPredatorsTable()
     std::string SizeUnits;
     std::string BMUnits;
 
-    //databasePtr->checkForTableAndCreate("OtherPredSpecies");
+    //databasePtr->checkForTableAndCreate(QString::fromStdString(nmfConstantsMSVPA::TableOtherPredSpecies));
 
     // Get Other Predators data from database
     fields = {"SpeIndex","SpeName","FirstYear","LastYear","BMUnitIndex","BMUnits","WtUnitIndex","WtUnits",
               "SizeUnitIndex","SizeUnits","MinSize","MaxSize","SizeStruc","NumSizeCats"};
     queryStr  = "SELECT SpeIndex,SpeName,FirstYear,LastYear,BMUnitIndex,BMUnits,WtUnitIndex,WtUnits,";
-    queryStr += "SizeUnitIndex,SizeUnits,MinSize,MaxSize,SizeStruc,NumSizeCats FROM OtherPredSpecies";
+    queryStr += "SizeUnitIndex,SizeUnits,MinSize,MaxSize,SizeStruc,NumSizeCats FROM " +
+                 nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumOtherPredators = dataMap["SpeIndex"].size();
 
@@ -2021,7 +2027,7 @@ nmfSetup_Tab3::loadWidgets(nmfDatabase *theDatabasePtr)
 
     // Find number of Species
     fields = {"SpeIndex"};
-    queryStr =  "SELECT SpeIndex FROM Species";
+    queryStr =  "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeIndex"].size();
     if (NumSpecies > 0)
@@ -2029,7 +2035,7 @@ nmfSetup_Tab3::loadWidgets(nmfDatabase *theDatabasePtr)
     //Setup_Tab3_NumSpeciesSB->setEnabled(NumSpecies == 0);
 
     // Find number of Other Predator Species
-    queryStr =  "SELECT SpeIndex FROM OtherPredSpecies";
+    queryStr =  "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumOtherPredators = dataMap["SpeIndex"].size();
     if (NumOtherPredators > 0)
@@ -2054,7 +2060,7 @@ nmfSetup_Tab3::callback_Setup_Tab3_SpeciesCB(bool state)
     std::string queryStr;
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM Species";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
 
@@ -2088,7 +2094,7 @@ nmfSetup_Tab3::callback_Setup_Tab3_OtherPredatorsCB(bool state)
     std::string queryStr;
 
     fields = {"SpeName"};
-    queryStr = "SELECT SpeName FROM OtherPredSpecies";
+    queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumPredSpecies = dataMap["SpeName"].size();
 
@@ -2155,7 +2161,8 @@ nmfSetup_Tab3::createTheTemplates(const std::vector<std::string> &tableVec,
 
     // Load data structures from tables.  Start with Species data.
     fields   = {"SpeName","MinCatAge","MaxCatAge","FirstYear","LastYear"};
-    queryStr = "SELECT SpeName,MinCatAge,MaxCatAge,FirstYear,LastYear FROM Species";
+    queryStr = "SELECT SpeName,MinCatAge,MaxCatAge,FirstYear,LastYear FROM " +
+                nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     for (int i=0; i<NumSpecies; ++i) {
@@ -2169,7 +2176,8 @@ nmfSetup_Tab3::createTheTemplates(const std::vector<std::string> &tableVec,
 
     // Next load Other Predator data
     fields   = {"SpeName","FirstYear","LastYear","NumSizeCats"};
-    queryStr = "SELECT SpeName,FirstYear,LastYear,NumSizeCats FROM OtherPredSpecies";
+    queryStr = "SELECT SpeName,FirstYear,LastYear,NumSizeCats FROM " +
+                nmfConstantsMSVPA::TableOtherPredSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     NumSpecies = dataMap["SpeName"].size();
     for (int i=0; i<NumSpecies; ++i) {
@@ -2263,7 +2271,7 @@ nmfSetup_Tab3::buildCSVFile(std::string &csvPathFileName,
 {
     // No need to load Application table.  It's used just to filter
     // the available database names in Setup Tab #2.
-    if (tableName == "Application") {
+    if (tableName == nmfConstantsMSVPA::TableApplication) {
         return;
     }
     if (FunctionMap.find(tableName) == FunctionMap.end()) {

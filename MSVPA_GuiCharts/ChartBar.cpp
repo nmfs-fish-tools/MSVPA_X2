@@ -37,7 +37,9 @@ ChartBar::getMaturityData(
     fields = {"PMature"};
 
     if (ModelName == "MSVPA") {
-        queryStr = "SELECT PMature from SpeMaturity where SpeName='" + SpeName +
+        queryStr = "SELECT PMature FROM " +
+                    nmfConstantsMSVPA::TableSpeMaturity +
+                   " WHERE SpeName='" + SpeName +
                    "' and Year >= " + std::to_string(FirstYear) +
                    "  and Year <= " + std::to_string(LastYear) +
                    "  ORDER By Age,Year";
@@ -48,7 +50,8 @@ ChartBar::getMaturityData(
             }
         }
     } else if (ModelName == "Forecast") {
-        queryStr = "SELECT PMature from SpeMaturity where SpeName='" + SpeName +
+        queryStr = "SELECT PMature FROM " + nmfConstantsMSVPA::TableSpeMaturity +
+                   " WHERE SpeName='" + SpeName +
                    "' and Year = " + std::to_string(FirstYear) +
                    "  ORDER By Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -125,10 +128,12 @@ ChartBar::getSpawningStockBiomassDataAndLoadChart(
         nmfUtils::initialize(GridData,  NYears, 1);
 
         fields = {"Year", "Age", "Biomass"};
-        queryStr = "SELECT Year, Age, Sum(" + field + ") as Biomass from MSVPASeasBiomass WHERE MSVPAname='" + MSVPAName +
-                "' and SpeName='" + SelectedSpecies +
-                "' and Season="   + std::to_string(season) +
-                "  GROUP BY Age,Year ";
+        queryStr = "SELECT Year, Age, Sum(" + field + ") as Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname='" + MSVPAName +
+                   "' and SpeName='" + SelectedSpecies +
+                   "' and Season="   + std::to_string(season) +
+                   "  GROUP BY Age,Year ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         SSBNumYears  = NYears;
         SSBFirstYear = FirstYear;
@@ -138,8 +143,10 @@ ChartBar::getSpawningStockBiomassDataAndLoadChart(
 
         // Find number of Forecast years
         fields    = {"InitYear","NYears"};
-        queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
-                    MSVPAName + "' AND ForeName = '" + ForecastName + "'";
+        queryStr  = "SELECT InitYear,NYears FROM " +
+                     nmfConstantsMSVPA::TableForecasts +
+                    " WHERE MSVPAName = '" + MSVPAName +
+                    "' AND ForeName = '" + ForecastName + "'";
         dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["NYears"].size() > 0) {
             Forecast_FirstYear = std::stoi(dataMap["InitYear"][0]);
@@ -154,12 +161,14 @@ ChartBar::getSpawningStockBiomassDataAndLoadChart(
 
         // Get annual biomass by age class
         fields = {"Year", "Age", "Biomass"};
-        queryStr = "SELECT Year, Age, Sum(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                        " AND ForeName = '" + ForecastName + "'" +
-                        " AND Scenario = '" + ScenarioName + "'" +
-                        " AND SpeName = '" + SelectedSpecies + "'" +
-                        " AND Season = " + std::to_string(season) +
-                        " GROUP By Age,Year";
+        queryStr = "SELECT Year, Age, Sum(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" + SelectedSpecies + "'" +
+                   " AND Season = " + std::to_string(season) +
+                   " GROUP By Age,Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         SSBNumYears  = Forecast_NYears+1;
         SSBFirstYear = Forecast_FirstYear;
@@ -428,14 +437,18 @@ void ChartBar::getChartDataMSVPA(
     double WtConversion   = 1.0;
     double SizeConversion = 1.0;
     fields = {"WtUnits","SizeUnits"};
-    queryStr = "SELECT WtUnits,SizeUnits FROM Species WHERE SpeName = '" + selectedSpecies + "'";
+    queryStr = "SELECT WtUnits,SizeUnits FROM " +
+                nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName = '" + selectedSpecies + "'";
     dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["WtUnits"].size() != 0) {
         WtConversion   = std::stod(dataMap["WtUnits"][0]);
         SizeConversion = std::stod(dataMap["SizeUnits"][0]);
     } else {
         fields = {"WtUnits","SizeUnits"};
-        queryStr = "SELECT WtUnits,SizeUnits FROM OtherPredSpecies WHERE SpeName = '" + selectedSpecies + "'";
+        queryStr = "SELECT WtUnits,SizeUnits FROM " +
+                    nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName = '" + selectedSpecies + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["WtUnits"].size() != 0) {
             WtConversion   = std::stod(dataMap["WtUnits"][0]);
@@ -484,7 +497,9 @@ void ChartBar::getChartDataMSVPA(
         if (found != std::string::npos) { // then Recruit was found...
             field.erase(0,field.find("_")+1);
         }
-        queryStr = "SELECT Year, Sum(" + field + ") as SumField from MSVPASeasBiomass WHERE MSVPAname='" + MSVPAName + "'"
+        queryStr = "SELECT Year, Sum(" + field + ") as SumField FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname='" + MSVPAName + "'"
                    " and SpeName='" + selectedSpecies + "' " +
                    ageStr + seasonStr + " GROUP BY YEAR ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -502,7 +517,9 @@ void ChartBar::getChartDataMSVPA(
         nmfUtils::initialize(ChartData, NYears, 1);
 
         fields = {"Year","TotFA"};
-        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND PredName = '" + selectedSpecies + "'" +
                      ageStr + seasonStr +
                    " GROUP By Year";
@@ -531,15 +548,19 @@ void ChartBar::getChartDataMSVPA(
         int PredAgeVal = (! newAgeStr.empty()) ? std::stoi(newAgeStr.erase(0,newAgeStr.find("=")+1)) : 0;
         fields  = {"Year","Biomass"};
         fields2 = {"Year","TotFA"};
-        queryStr = "SELECT Year, Avg(Biomass) AS Biomass FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND SpeName = '"  + selectedSpecies + "'" +
-                " AND Age = " + std::to_string(PredAgeVal) +
-                  seasonStr +
-                " GROUP By Year";
-        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                  ageStr + seasonStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Avg(Biomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND SpeName = '"  + selectedSpecies + "'" +
+                   " AND Age = " + std::to_string(PredAgeVal) +
+                    seasonStr +
+                   " GROUP By Year";
+        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                     nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                     ageStr + seasonStr +
+                    " GROUP By Year";
 
         nmfUtils::initialize(tempData,  NYears);
         nmfUtils::initialize(ChartData, NYears, 1);
@@ -579,9 +600,11 @@ void ChartBar::getChartDataMSVPA(
         nmfUtils::initialize(GridData,  NYears, 1);
 
         fields = {"Year","Stom"};
-        queryStr = "SELECT Year, Avg(StomCont) as Stom FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Avg(StomCont) as Stom FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND SpeName = '"  + selectedSpecies + "'" +
-                   ageStr + seasonStr +
+                    ageStr + seasonStr +
                    " Group By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
@@ -612,24 +635,29 @@ void ChartBar::getChartDataMSVPA(
             firstYear = FirstYear;
 
             // First get a list of ages for the prey species...might only be one if it's another prey...
-            queryStr = "SELECT DISTINCT PreyAge FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND PredName = '" + selectedSpecies + "'" +
-                    PredAgeStr + seasonStr +
-                    " AND PreyName = '" + PreyName + "'" +
-                    " ORDER By PreyAge";
+            queryStr = "SELECT DISTINCT PreyAge FROM " +
+                        nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND PredName = '" + selectedSpecies + "'" +
+                        PredAgeStr + seasonStr +
+                       " AND PreyName = '" + PreyName + "'" +
+                       " ORDER By PreyAge";
 
             // Then want to get total suitable biomass and calculate average as previously
-            queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND PredName = '" + selectedSpecies + "'" +
-                    PredAgeStr + seasonStr +
-                    " GROUP By Year";
+            queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                         nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
+                        " AND PredName = '" + selectedSpecies + "'" +
+                         PredAgeStr + seasonStr +
+                        " GROUP By Year";
             // Then want to get suitable prey biomass by prey age class
-            queryStr3 = "SELECT Year, PreyAge, Sum(SuitPreyBiomass) AS SBM FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND PredName = '" + selectedSpecies + "'" +
-                    PredAgeStr + seasonStr +
-                    " AND PreyName = '" + PreyName + "'" +
-                    " GROUP By Year, PreyAge";
-
+            queryStr3 = "SELECT Year, PreyAge, Sum(SuitPreyBiomass) AS SBM FROM " +
+                         nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
+                        " AND PredName = '" + selectedSpecies + "'" +
+                         PredAgeStr + seasonStr +
+                        " AND PreyName = '" + PreyName + "'" +
+                        " GROUP By Year, PreyAge";
 
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
@@ -675,10 +703,12 @@ void ChartBar::getChartDataMSVPA(
 
             nYears = NYears;
             firstYear = FirstYear;
-            queryStr = "SELECT Year, Sum(BMConsumed) AS TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND PredName = '" +  selectedSpecies + "'" +
-                      seasonStr + ageStr +
-                    " GROUP By Year";
+            queryStr = "SELECT Year, Sum(BMConsumed) AS TotCons FROM " +
+                        nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND PredName = '" +  selectedSpecies + "'" +
+                        seasonStr + ageStr +
+                       " GROUP By Year";
         nmfUtils::initialize(ChartData, nYears, 1);
 
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -697,11 +727,13 @@ void ChartBar::getChartDataMSVPA(
 
             nYears    = NYears;
             firstYear = FirstYear;
-            queryStr = "SELECT Year, Sum(BMConsumed) AS TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND PredName = '" +  selectedSpecies + "'" +
-                      seasonStr +
-                    " AND PredAge = " + std::to_string(SpeAge) +
-                    " GROUP By Year";
+            queryStr = "SELECT Year, Sum(BMConsumed) AS TotCons FROM " +
+                        nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'" +
+                       " AND PredName = '" +  selectedSpecies + "'" +
+                        seasonStr +
+                       " AND PredAge = " + std::to_string(SpeAge) +
+                       " GROUP By Year";
 
         nmfUtils::initialize(ChartData, nYears, 1);
 
@@ -724,11 +756,13 @@ void ChartBar::getChartDataMSVPA(
         m = 0;
         fields = {"Year", "TotCons"};
 //        if (theModelName == "MSVPA") {
-            queryStr = "Select Year, Sum(BMConsumed) As TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'"
+            queryStr = "Select Year, Sum(BMConsumed) As TotCons FROM " +
+                        nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                       " WHERE MSVPAname = '" + MSVPAName + "'"
                        " AND PredName = '" + selectedSpecies + "'" +
-                       seasonStr + " GROUP BY Year,PredAge";
+                        seasonStr + " GROUP BY Year,PredAge";
 //        } else if (theModelName == "Forecast") {
-//            queryStr = "Select Year, Sum(TotalBMConsumed) As TotCons FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'"
+//            queryStr = "Select Year, Sum(TotalBMConsumed) As TotCons FROM " + nmfConstantsMSVPA::TableForeOutput + " WHERE MSVPAname = '" + MSVPAName + "'"
 //                       " AND ForeName = '" + ForecastName + "'" +
 //                       " AND Scenario = '" + ScenarioName + "'" +
 //                       " AND SpeName = '" + selectedSpecies + "'" +
@@ -755,13 +789,17 @@ void ChartBar::getChartDataMSVPA(
         nYears    = NYears;
         firstYear = FirstYear;
         // First need to get a list of prey names and a count of prey for the predator.
-        databasePtr->nmfQueryMsvpaPreyList( "", selectedSpecies, MSVPAName, predAgeStr,
-                                            NPrey, PreyList, false);
+        std::string selectedSpeciesAgeSizeClass = "";
+        databasePtr->nmfQueryMsvpaPreyList(selectedSpecies, MSVPAName, false,
+                                           selectedSpeciesAgeSizeClass,
+                                           predAgeStr,  NPrey, PreyList);
 
-        queryStr = "SELECT Year, PreyName, Sum(BMConsumed) as TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                seasonStr + predAgeStr +
-                " GROUP BY Year, PreyName";
+        queryStr = "SELECT Year, PreyName, Sum(BMConsumed) as TotCons FROM " +
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                    seasonStr + predAgeStr +
+                   " GROUP BY Year, PreyName";
 
         NPrey = PreyList.size();
         nmfUtils::initialize(ChartData, nYears, NPrey);
@@ -800,17 +838,21 @@ void ChartBar::getChartDataMSVPA(
 
         nYears    = NYears;
         firstYear = FirstYear;
-        queryStr = "SELECT DISTINCT(PreyAge) FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                " AND PredAge = "   + std::to_string(PredAgeVal) +
-                " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
-                " ORDER BY PreyAge";
+        queryStr = "SELECT DISTINCT(PreyAge) FROM " +
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                   " AND PredAge = "   + std::to_string(PredAgeVal) +
+                   " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
+                   " ORDER BY PreyAge";
         // Then select the biomass consumed of that prey age by predator age across the byvar
-        queryStr2 = "SELECT Year, PreyAge, Sum(BMConsumed) as TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                " AND PredAge = "   + std::to_string(PredAgeVal) +
-                " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
-                " GROUP By Year, PreyAge";
+        queryStr2 = "SELECT Year, PreyAge, Sum(BMConsumed) as TotCons FROM " +
+                     nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                    " AND PredAge = "   + std::to_string(PredAgeVal) +
+                    " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
+                    " GROUP By Year, PreyAge";
 
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
@@ -859,10 +901,11 @@ void ChartBar::getChartDataMSVPA(
          nYears    = NYears;
          firstYear = FirstYear;
 
-         queryStr2 = "SELECT Year, Age, StomCont FROM MSVPASeasBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                 " AND SpeName = '"  + selectedSpecies +  "'" +
-                 seasonStr +
-                 " ORDER By Year, Age";
+         queryStr2 = "SELECT Year, Age, StomCont FROM " + nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                     " WHERE MSVPAname = '" + MSVPAName + "'" +
+                     " AND SpeName = '"  + selectedSpecies +  "'" +
+                     seasonStr +
+                    " ORDER By Year, Age";
 
          nmfUtils::initialize(AgeStomCont, nYears, Nage+1);
          nmfUtils::initialize(AgeConsump,  Nage+1,  2);
@@ -874,7 +917,8 @@ void ChartBar::getChartDataMSVPA(
          // Load predator name and age lists for use later
          QStringList PredType0;
          fields = {"SpeName"};
-         queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName +
+         queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                    " WHERE MSVPAname = '" + MSVPAName +
                     "' AND Type = 0";
          dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
          if (dataMap.size() == 0) {
@@ -888,7 +932,7 @@ void ChartBar::getChartDataMSVPA(
 
 //         // Load Other Predator Names and Ages
 //         fields = {"SpeName"};
-//         queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
+//         queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies + " WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
 //         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 //         int NOthPreds = dataMap["SpeName"].size();
 //         for (int i = 0; i < NOthPreds; ++i) {
@@ -910,7 +954,9 @@ void ChartBar::getChartDataMSVPA(
          //if (PredType(selectedSpeciesNum) == 0) {
          if (PredType0.contains(QString::fromStdString(selectedSpecies))) {
              fields = {"Age","EvacAlpha","EvacBeta"};
-             queryStr = "SELECT Age, EvacAlpha, EvacBeta FROM MSVPASizePref WHERE MSVPAname = '" + MSVPAName + "'" +
+             queryStr = "SELECT Age, EvacAlpha, EvacBeta FROM " +
+                         nmfConstantsMSVPA::TableMSVPASizePref +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
                         " AND SpeName = '" + selectedSpecies + "'" +
                         " ORDER By Age";
              dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -923,7 +969,9 @@ void ChartBar::getChartDataMSVPA(
              }
          } else {
              fields = {"SizeCat","ConsAlpha","ConsBeta"};
-             queryStr = "SELECT SizeCat, ConsAlpha, ConsBeta FROM OthPredSizeData WHERE SpeName = '" + selectedSpecies + "'" +
+             queryStr = "SELECT SizeCat, ConsAlpha, ConsBeta FROM " +
+                         nmfConstantsMSVPA::TableOthPredSizeData +
+                        " WHERE SpeName = '" + selectedSpecies + "'" +
                         " ORDER BY SizeCat";
              dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
              if (dataMap.size() == 0) {
@@ -938,7 +986,9 @@ void ChartBar::getChartDataMSVPA(
          fields = {"Year","Season","Value"};
          std::string newSeasonStr = seasonStr;
          int SeasonVal = (! newSeasonStr.empty()) ? std::stoi(newSeasonStr.erase(0,newSeasonStr.find("=")+1))+1 : 0;
-         queryStr = "SELECT Year, Season, Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "'" +
+         queryStr = "SELECT Year, Season, Value FROM " +
+                     nmfConstantsMSVPA::TableMSVPASeasInfo +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
                     " AND Season = " + std::to_string(SeasonVal) +
                     " AND Variable = 'SeasTemp' ORDER by Year"; // AND Year = " + std::to_string(FirstYear);
          dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -977,7 +1027,8 @@ void ChartBar::getChartDataMSVPA(
 
         // Need the catch data
         fields = {"MinCatAge","MaxCatAge"};
-        queryStr = "SELECT MinCatAge,MaxCatAge from Species WHERE SpeName = '" + selectedSpecies + "' ";
+        queryStr = "SELECT MinCatAge,MaxCatAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE SpeName = '" + selectedSpecies + "' ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
             return;
@@ -985,10 +1036,11 @@ void ChartBar::getChartDataMSVPA(
         int FirstCatchAge = std::stoi(dataMap["MinCatAge"][0]);
         int LastCatchAge  = std::stoi(dataMap["MaxCatAge"][0]);
         fields = {"Catch"};
-        queryStr = "SELECT Catch from SpeCatch WHERE SpeName = '" + selectedSpecies + "' " +
-                " AND (Year >= " + std::to_string(FirstYear) +
-                " AND  Year <= " + std::to_string(LastYear)  + ") " +
-                " ORDER by Year, Age";
+        queryStr = "SELECT Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+                   " WHERE SpeName = '" + selectedSpecies + "' " +
+                   " AND (Year >= " + std::to_string(FirstYear) +
+                   " AND  Year <= " + std::to_string(LastYear)  + ") " +
+                   " ORDER by Year, Age";
 
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
@@ -1003,8 +1055,10 @@ void ChartBar::getChartDataMSVPA(
 
         // Get the species data
         fields = {"Year","Age","SumField"};
-        queryStr = "SELECT Year, Age, Sum(SeasF) as SumField from MSVPASeasBiomass WHERE MSVPAname='" + MSVPAName + "' "                                                                                                                                     " and SpeName='" + selectedSpecies + "' " +
-                ageStr + seasonStr + " GROUP BY YEAR, Age ";
+        queryStr = "SELECT Year, Age, Sum(SeasF) as SumField FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname='" + MSVPAName + "' "                                                                                                                                     " and SpeName='" + selectedSpecies + "' " +
+                    ageStr + seasonStr + " GROUP BY YEAR, Age ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap.size() == 0) {
             return;
@@ -1032,22 +1086,22 @@ void ChartBar::getChartDataMSVPA(
     } else if (selectedVariable == "Predation Mortality by Predator") {
 
         getChartDataOfPredationMortalityByPredator(
-              databasePtr,
-               MSVPAName,
-              "MSVPA",
-              "",
-              "",
-              "MSVPASuitPreyBiomass",
-              "MSVPASeasBiomass",
-               ageStr,
-               seasonStr,
-               FirstYear,
-               NYears,
-               selectedSpecies,
-               SpeAge,
-               ColumnLabels,
-               RowLabels,
-               ChartData);
+                    databasePtr,
+                    MSVPAName,
+                    "MSVPA",
+                    "",
+                    "",
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass,
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass,
+                    ageStr,
+                    seasonStr,
+                    FirstYear,
+                    NYears,
+                    selectedSpecies,
+                    SpeAge,
+                    ColumnLabels,
+                    RowLabels,
+                    ChartData);
     }
 
 }
@@ -1107,14 +1161,16 @@ void ChartBar::getChartDataForecast(
     double WtConversion = 1.0;
     double SizeConversion = 1.0;
     fields   = {"WtUnits","SizeUnits"};
-    queryStr = "SELECT WtUnits,SizeUnits FROM Species WHERE SpeName = '" + selectedSpecies + "'";
+    queryStr = "SELECT WtUnits,SizeUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName = '" + selectedSpecies + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["WtUnits"].size() != 0) {
         WtConversion   = std::stod(dataMap["WtUnits"][0]);
         SizeConversion = std::stod(dataMap["SizeUnits"][0]);
     } else {
         fields = {"WtUnits","SizeUnits"};
-        queryStr = "SELECT WtUnits,SizeUnits FROM OtherPredSpecies WHERE SpeName = '" + selectedSpecies + "'";
+        queryStr = "SELECT WtUnits,SizeUnits FROM " + nmfConstantsMSVPA::TableOtherPredSpecies +
+                   " WHERE SpeName = '" + selectedSpecies + "'";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["WtUnits"].size() != 0) {
             WtConversion   = std::stod(dataMap["WtUnits"][0]);
@@ -1140,7 +1196,8 @@ void ChartBar::getChartDataForecast(
 
     // Find number of Forecast years
     fields    = {"InitYear","NYears"};
-    queryStr  = "SELECT InitYear,NYears FROM Forecasts WHERE MSVPAName = '" +
+    queryStr  = "SELECT InitYear,NYears FROM " + nmfConstantsMSVPA::TableForecasts +
+                " WHERE MSVPAName = '" +
                 MSVPAName + "' AND ForeName = '" + ForecastName + "'";
     dataMap   = databasePtr->nmfQueryDatabase(queryStr, fields);
     if (dataMap["NYears"].size() > 0) {
@@ -1163,12 +1220,14 @@ void ChartBar::getChartDataForecast(
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","Biomass"};
-        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                        " AND ForeName = '" + ForecastName + "'" +
-                        " AND Scenario = '" + ScenarioName + "'" +
-                        " AND SpeName = '" + selectedSpecies + "' " +
-                        ageStr + seasonStr +
-                        "  GROUP By Year";
+        queryStr = "SELECT Year, Sum(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" + selectedSpecies + "' " +
+                    ageStr + seasonStr +
+                   "  GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i<Forecast_NYears; ++i) {
@@ -1182,12 +1241,14 @@ void ChartBar::getChartDataForecast(
         nmfUtils::initialize(GridData,  Forecast_NYears, 1);
 
         fields = {"Year","Catch"};
-        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                    seasonStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         for (int i = 0; i < Forecast_NYears; ++i) {
             RowLabels << QString::number(Forecast_FirstYear + i);
@@ -1201,12 +1262,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","Catch"};
-        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + ageStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                    seasonStr + ageStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1216,7 +1279,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         m = 0;
         fields = {"Year","Age","SumField"};
-        queryStr = "SELECT Year, Age, Sum(SeasCatch) as SumField FROM ForeOutput WHERE MSVPAName = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Age, Sum(SeasCatch) as SumField FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAName = '" + MSVPAName + "'" +
                    " AND ForeName = '" + ForecastName + "'" +
                    " AND Scenario = '" + ScenarioName + "'" +
                    " AND SpeName  = '" + selectedSpecies + "'" +
@@ -1240,12 +1305,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","Yield"};
-        queryStr = "SELECT Year, Sum(SeasYield) AS Yield FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasYield) AS Yield FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                     seasonStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1257,11 +1324,13 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         RowLabels.clear();
         ColumnLabels.clear();
         fields = {"Year", "SumField"};
-        queryStr = "Select Year, Sum(SeasYield) As SumField FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'"
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName  = '" + selectedSpecies + "'" +
-                seasonStr + " GROUP BY Year, Age";
+        queryStr = "Select Year, Sum(SeasYield) As SumField FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'"
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName  = '" + selectedSpecies + "'" +
+                   seasonStr + " GROUP BY Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         nmfUtils::initialize(GridData, Forecast_NYears, Nage);
         for (int i=0; i<Forecast_NYears; ++i) {
@@ -1278,11 +1347,13 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","Yield"};
-        queryStr = "SELECT Year, Sum(SeasYield) AS Yield FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + ageStr + " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasYield) AS Yield FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                     seasonStr + ageStr + " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1294,11 +1365,13 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         RowLabels.clear();
         ColumnLabels.clear();
         fields = {"Year", "SumField"};
-        queryStr = "Select Year, Sum(SeasYield) As SumField FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'"
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName  = '" + selectedSpecies + "'" +
-                seasonStr + " GROUP BY Year, Age";
+        queryStr = "Select Year, Sum(SeasYield) As SumField FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'"
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName  = '" + selectedSpecies + "'" +
+                   seasonStr + " GROUP BY Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         RowLabels.clear();
         nmfUtils::initialize(GridData, Forecast_NYears, Nage);
@@ -1317,12 +1390,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","F"};
-        queryStr = "SELECT Year, Sum(SeasF) AS F FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + ageStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasF) AS F FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                     seasonStr + ageStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1334,11 +1409,13 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         RowLabels.clear();
         ColumnLabels.clear();
         fields = {"Year", "SumField"};
-        queryStr = "Select Year, Sum(SeasF) As SumField FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'"
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName  = '" + selectedSpecies + "'" +
-                seasonStr + " GROUP BY Year, Age";
+        queryStr = "Select Year, Sum(SeasF) As SumField FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'"
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName  = '" + selectedSpecies + "'" +
+                   seasonStr + " GROUP BY Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         RowLabels.clear();
         nmfUtils::initialize(GridData, Forecast_NYears, Nage);
@@ -1362,12 +1439,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // Go Ahead and get the annual catch data...fill with zeros where appropriate
         fields = {"Year","Catch"};
-        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                seasonStr +
-                " GROUP By Year,Age";
+        queryStr = "SELECT Year, Sum(SeasCatch) AS Catch FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                   seasonStr +
+                   " GROUP By Year,Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1376,12 +1455,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
             }
         }
         fields = {"Year","Age","F"};
-        queryStr = "SELECT Year,Age,Sum(SeasF) AS F FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                seasonStr + ageStr +
-                " GROUP By Year,Age";
+        queryStr = "SELECT Year,Age,Sum(SeasF) AS F FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                   seasonStr + ageStr +
+                   " GROUP By Year,Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1414,12 +1495,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, Forecast_NYears, 1);
 
         fields = {"Year","M2"};
-        queryStr = "SELECT Year, Sum(SeasM2) AS M2 FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + ageStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(SeasM2) AS M2 FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                     seasonStr + ageStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < Forecast_NYears; ++i) {
@@ -1447,7 +1530,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // First select total amount of prey type/age consumed by all predators
         fields = {"Year","TotCons"};
-        queryStr = "SELECT Year, Sum(BMConsumed) as TotCons from ForeSuitPreyBiomass WHERE MSVPAname='" + MSVPAName + "' "
+        queryStr = "SELECT Year, Sum(BMConsumed) as TotCons FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname='" + MSVPAName + "' "
                    " and PreyName='" + selectedSpecies + "' " +
                    " and PreyAge = " + std::to_string(SpeAge) +
                    seasonStr + " GROUP BY YEAR ";
@@ -1464,9 +1549,11 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // Next get the list of unique predators for your prey type and age class
         fields = {"PredName"};
-        queryStr = "SELECT DISTINCT(PredName) from ForeSuitPreyBiomass WHERE MSVPAname='" + MSVPAName + "' " +
-                   forecastNameStr +
-                   scenarioNameStr +
+        queryStr = "SELECT DISTINCT(PredName) FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname='" + MSVPAName + "' " +
+                    forecastNameStr +
+                    scenarioNameStr +
                    " and PreyName='" + selectedSpecies + "' " +
                    " and PreyAge = " + std::to_string(SpeAge) +
                    seasonStr + " ORDER BY PredName ";
@@ -1483,7 +1570,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         // Then get BM consumed by predator and calculate proportaion of mortality = bm pred / tot bm
         for (int i=0; i<NumPredators; ++i) {
             fields = {"Year","TotCons"};
-            queryStr = "SELECT Year, Sum(BMConsumed) as TotCons from ForeSuitPreyBiomass WHERE MSVPAname='" + MSVPAName + "' "
+            queryStr = "SELECT Year, Sum(BMConsumed) as TotCons FROM " +
+                        nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                       " WHERE MSVPAname='" + MSVPAName + "' "
                        " and PreyName='" + selectedSpecies + "' " +
                        " and PreyAge = " + std::to_string(SpeAge) +
                        " and PredName = '" + PdList(i) + "' " +
@@ -1502,11 +1591,13 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // Last get annual M2...then multiply
         fields = {"Year","M2"};
-        queryStr = "SELECT Year, Sum(SeasM2) as M2 from ForeOutput WHERE MSVPAname='" + MSVPAName + "' " +
-                   forecastNameStr +
-                   scenarioNameStr +
+        queryStr = "SELECT Year, Sum(SeasM2) as M2 FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname='" + MSVPAName + "' " +
+                    forecastNameStr +
+                    scenarioNameStr +
                    " and SpeName = '" + selectedSpecies + "' " +
-                   ageStr + seasonStr + " GROUP BY YEAR ";
+                    ageStr + seasonStr + " GROUP BY YEAR ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i=0; i<Forecast_NYears; ++i) {
@@ -1532,7 +1623,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(GridData,  nYears, 1);
 
         fields = {"Year","TotFA"};
-        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
+        queryStr = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
                    " AND ForeName = '" + ForecastName + "'" +
                    " AND Scenario = '" + ScenarioName + "'" +
                    " AND PredName = '" + selectedSpecies + "'" +
@@ -1567,19 +1660,23 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         firstYear = Forecast_FirstYear;
         nYears    = Forecast_NYears;
 
-        queryStr = "SELECT Year, Avg(InitBiomass) AS Biomass FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + selectedSpecies + "'" +
-                " AND Age = " + std::to_string(PredAgeVal) +
-                  seasonStr +
-                " GROUP By Year";
-        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                  ageStr + seasonStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Avg(InitBiomass) AS Biomass FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + selectedSpecies + "'" +
+                   " AND Age = " + std::to_string(PredAgeVal) +
+                     seasonStr +
+                   " GROUP By Year";
+        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND ForeName = '" + ForecastName + "'" +
+                    " AND Scenario = '" + ScenarioName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                     ageStr + seasonStr +
+                    " GROUP By Year";
 
         nmfUtils::initialize(tempData,  nYears);
         nmfUtils::initialize(ChartData, nYears, 1);
@@ -1617,12 +1714,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(GridData,  nYears, 1);
 
         fields = {"Year","Stom"};
-        queryStr = "SELECT Year, Avg(StomCont) as Stom FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '"  + selectedSpecies + "'" +
-                ageStr + seasonStr +
-                " Group By Year";
+        queryStr = "SELECT Year, Avg(StomCont) as Stom FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '"  + selectedSpecies + "'" +
+                    ageStr + seasonStr +
+                   " Group By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         for (int i = 0; i < nYears; ++i) {
@@ -1688,28 +1787,34 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         firstYear = Forecast_FirstYear;
 
         // First get a list of ages for the prey species...might only be one if it's another prey...
-        queryStr = "SELECT DISTINCT PreyAge FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                PredAgeStr + seasonStr +
-                " AND PreyName = '" + PreyName + "'" +
-                " ORDER By PreyAge";
+        queryStr = "SELECT DISTINCT PreyAge FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                   PredAgeStr + seasonStr +
+                   " AND PreyName = '" + PreyName + "'" +
+                   " ORDER By PreyAge";
         // Then want to get total suitable biomass and calculate average as previously
-        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                PredAgeStr + seasonStr +
-                " GROUP By Year";
+        queryStr2 = "SELECT Year, Sum(SuitPreyBiomass) AS TotFA FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND ForeName = '" + ForecastName + "'" +
+                    " AND Scenario = '" + ScenarioName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                     PredAgeStr + seasonStr +
+                    " GROUP By Year";
         // Then want to get suitable prey biomass by prey age class
-        queryStr3 = "SELECT Year, PreyAge, Sum(SuitPreyBiomass) AS SBM FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                PredAgeStr + seasonStr +
-                " AND PreyName = '" + PreyName + "'" +
-                " GROUP By Year, PreyAge";
+        queryStr3 = "SELECT Year, PreyAge, Sum(SuitPreyBiomass) AS SBM FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND ForeName = '" + ForecastName + "'" +
+                    " AND Scenario = '" + ScenarioName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                     PredAgeStr + seasonStr +
+                    " AND PreyName = '" + PreyName + "'" +
+                    " GROUP By Year, PreyAge";
 
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         NPreyAge = dataMap["PreyAge"].size();
@@ -1750,12 +1855,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, nYears, 1);
 
         fields = {"Year","TotCons"};
-        queryStr = "SELECT Year, Sum(TotalBMConsumed) AS TotCons FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + ageStr +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(TotalBMConsumed) AS TotCons FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                     seasonStr + ageStr +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         RowLabels.clear();
         for (int i = 0; i < nYears; ++i) {
@@ -1779,12 +1886,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nmfUtils::initialize(ChartData, nYears, 1);
 
         fields = {"Year","TotCons"};
-        queryStr = "SELECT Year, Sum(TotalBMConsumed) AS TotCons FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND SpeName = '" +  selectedSpecies + "'" +
-                  seasonStr + " and Age = " + std::to_string(ageDiff) +
-                " GROUP By Year";
+        queryStr = "SELECT Year, Sum(TotalBMConsumed) AS TotCons FROM " +
+                    nmfConstantsMSVPA::TableForeOutput +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND SpeName = '" +  selectedSpecies + "'" +
+                    seasonStr + " and Age = " + std::to_string(ageDiff) +
+                   " GROUP By Year";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 
         RowLabels.clear();
@@ -1801,7 +1910,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         }
         m = 0;
         fields = {"Year", "TotCons"};
-        queryStr = "Select Year, Sum(BMConsumed) As TotCons FROM MSVPASuitPreyBiomass WHERE MSVPAname = '" + MSVPAName +
+        queryStr = "Select Year, Sum(BMConsumed) As TotCons FROM " +
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName +
                    "' AND PredName = '" + selectedSpecies + "'" +
                    seasonStr + " GROUP BY Year,PredAge";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -1825,12 +1936,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         // First need to get a list of prey names and a count of prey for the predator.
         databasePtr->nmfQueryForecastPreyList(MSVPAName, ForecastName, ScenarioName,
                                               selectedSpecies, inclPredAge, ageStr, "", PreyList);
-        queryStr = "SELECT Year, PreyName, Sum(BMConsumed) as TotCons FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                seasonStr + predAgeStr +
-                " GROUP BY Year, PreyName";
+        queryStr = "SELECT Year, PreyName, Sum(BMConsumed) as TotCons FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                   seasonStr + predAgeStr +
+                   " GROUP BY Year, PreyName";
 
         NPrey = PreyList.size();
         nmfUtils::initialize(ChartData, nYears, NPrey);
@@ -1867,21 +1980,25 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
         nYears    = Forecast_NYears;
         firstYear = Forecast_FirstYear;
 
-        queryStr = "SELECT DISTINCT(PreyAge) FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                " AND PredAge = "   + std::to_string(PredAgeVal) +
-                " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
-                " ORDER BY PreyAge";
+        queryStr = "SELECT DISTINCT(PreyAge) FROM " +
+                    nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                   " WHERE MSVPAname = '" + MSVPAName + "'" +
+                   " AND ForeName = '" + ForecastName + "'" +
+                   " AND Scenario = '" + ScenarioName + "'" +
+                   " AND PredName = '" + selectedSpecies + "'" +
+                   " AND PredAge = "   + std::to_string(PredAgeVal) +
+                   " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
+                   " ORDER BY PreyAge";
         // Then select the biomass consumed of that prey age by predator age across the byvar
-        queryStr2 = "SELECT Year, PreyAge, Sum(BMConsumed) as TotCons FROM ForeSuitPreyBiomass WHERE MSVPAname = '" + MSVPAName + "'" +
-                " AND ForeName = '" + ForecastName + "'" +
-                " AND Scenario = '" + ScenarioName + "'" +
-                " AND PredName = '" + selectedSpecies + "'" +
-                " AND PredAge = "   + std::to_string(PredAgeVal) +
-                " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
-                " GROUP By Year, PreyAge";
+        queryStr2 = "SELECT Year, PreyAge, Sum(BMConsumed) as TotCons FROM " +
+                     nmfConstantsMSVPA::TableForeSuitPreyBiomass +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
+                    " AND ForeName = '" + ForecastName + "'" +
+                    " AND Scenario = '" + ScenarioName + "'" +
+                    " AND PredName = '" + selectedSpecies + "'" +
+                    " AND PredAge = "   + std::to_string(PredAgeVal) +
+                    " AND PreyName = '" + selectedPreyName + "'" + seasonStr +
+                    " GROUP By Year, PreyAge";
 
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         NPreyAge = dataMap["PreyAge"].size();
@@ -1937,12 +2054,14 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
          nYears    = Forecast_NYears;
          firstYear = Forecast_FirstYear;
 
-         queryStr2 = "SELECT Year, Age, StomCont FROM ForeOutput WHERE MSVPAname = '" + MSVPAName + "'" +
-                    " AND ForeName = '" + ForecastName + "'" +
-                    " AND Scenario = '" + ScenarioName + "'" +
-                    " AND SpeName = '"  + selectedSpecies +  "'" +
-                      seasonStr +
-                    " ORDER By Year, Age";
+         queryStr2 = "SELECT Year, Age, StomCont FROM " +
+                      nmfConstantsMSVPA::TableForeOutput +
+                     " WHERE MSVPAname = '" + MSVPAName + "'" +
+                     " AND ForeName = '" + ForecastName + "'" +
+                     " AND Scenario = '" + ScenarioName + "'" +
+                     " AND SpeName = '"  + selectedSpecies +  "'" +
+                       seasonStr +
+                     " ORDER By Year, Age";
 
          nmfUtils::initialize(AgeStomCont, nYears, Nage+1);
          nmfUtils::initialize(AgeConsump,  Nage+1,  2);
@@ -1954,7 +2073,8 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
          // Load predator name and age lists for use later
          QStringList PredType0;
          fields = {"SpeName"};
-         queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "' AND Type = 0";
+         queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies +
+                    " WHERE MSVPAname = '" + MSVPAName + "' AND Type = 0";
          dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
          int NPreds = dataMap["SpeName"].size();
          for (int i = 0; i < NPreds; ++i) {
@@ -1964,7 +2084,7 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
 //         // Load Other Predator Names and Ages
 //         fields = {"SpeName"};
-//         queryStr = "SELECT SpeName FROM MSVPAspecies WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
+//         queryStr = "SELECT SpeName FROM " + nmfConstantsMSVPA::TableMSVPAspecies + " WHERE MSVPAname = '" + MSVPAName + "' AND Type = 3";
 //         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
 //         int NOthPreds = dataMap["SpeName"].size();
 //         for (int i = 0; i < NOthPreds; ++i) {
@@ -1983,7 +2103,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
          //if (PredType(selectedSpeciesNum) == 0) {
          if (PredType0.contains(QString::fromStdString(selectedSpecies))) {
              fields = {"Age","EvacAlpha","EvacBeta"};
-             queryStr = "SELECT Age, EvacAlpha, EvacBeta FROM MSVPASizePref WHERE MSVPAname = '" + MSVPAName + "'" +
+             queryStr = "SELECT Age, EvacAlpha, EvacBeta FROM " +
+                         nmfConstantsMSVPA::TableMSVPASizePref +
+                        " WHERE MSVPAname = '" + MSVPAName + "'" +
                         " AND SpeName = '" + selectedSpecies + "'" +
                         " ORDER By Age";
              dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -1993,7 +2115,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
              }
          } else {
              fields = {"SizeCat","ConsAlpha","ConsBeta"};
-             queryStr = "SELECT SizeCat, ConsAlpha, ConsBeta FROM OthPredSizeData WHERE SpeName = '" + selectedSpecies + "'" +
+             queryStr = "SELECT SizeCat, ConsAlpha, ConsBeta FROM " +
+                         nmfConstantsMSVPA::TableOthPredSizeData +
+                        " WHERE SpeName = '" + selectedSpecies + "'" +
                         " ORDER BY SizeCat";
              dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
              for (int j = 0; j < Nage; ++j) {
@@ -2005,7 +2129,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
          fields = {"Year","Season","Value"};
          std::string newSeasonStr = seasonStr;
          int SeasonVal = (! newSeasonStr.empty()) ? std::stoi(newSeasonStr.erase(0,newSeasonStr.find("=")+1))+1 : 0;
-         queryStr = "SELECT Year, Season, Value FROM MSVPASeasInfo WHERE MSVPAname = '" + MSVPAName + "'" +
+         queryStr = "SELECT Year, Season, Value FROM " +
+                     nmfConstantsMSVPA::TableMSVPASeasInfo +
+                    " WHERE MSVPAname = '" + MSVPAName + "'" +
                     " AND Season = " + std::to_string(SeasonVal) +
                     " AND Variable = 'SeasTemp' AND Year = " + std::to_string(FirstYear);
          dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
@@ -2038,15 +2164,17 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // Need the catch data
         fields = {"MinCatAge","MaxCatAge"};
-        queryStr = "SELECT MinCatAge,MaxCatAge from Species WHERE SpeName = '" + selectedSpecies + "' ";
+        queryStr = "SELECT MinCatAge,MaxCatAge FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE SpeName = '" + selectedSpecies + "' ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         int FirstCatchAge = std::stoi(dataMap["MinCatAge"][0]);
         int LastCatchAge  = std::stoi(dataMap["MaxCatAge"][0]);
         fields = {"Catch"};
-        queryStr = "SELECT Catch from SpeCatch WHERE SpeName = '" + selectedSpecies + "' " +
-                " AND (Year >= " + std::to_string(FirstYear) +
-                " AND  Year <= " + std::to_string(LastYear)  + ") " +
-                " ORDER by Year, Age";
+        queryStr = "SELECT Catch FROM " + nmfConstantsMSVPA::TableSpeCatch +
+                   " WHERE SpeName = '" + selectedSpecies + "' " +
+                   " AND (Year >= " + std::to_string(FirstYear) +
+                   " AND  Year <= " + std::to_string(LastYear)  + ") " +
+                   " ORDER by Year, Age";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
         for (int i=0; i<NYears; ++i) {
@@ -2057,7 +2185,9 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
 
         // Get the species data
         fields = {"Year","Age","SumField"};
-        queryStr = "SELECT Year, Age, Sum(SeasF) as SumField from MSVPASeasBiomass WHERE MSVPAname='" + MSVPAName + "' "                                                                                                                                     " and SpeName='" + selectedSpecies + "' " +
+        queryStr = "SELECT Year, Age, Sum(SeasF) as SumField FROM " +
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass +
+                   " WHERE MSVPAname='" + MSVPAName + "' "                                                                                                                                     " and SpeName='" + selectedSpecies + "' " +
                 ageStr + seasonStr + " GROUP BY YEAR, Age ";
         dataMap = databasePtr->nmfQueryDatabase(queryStr, fields);
         m = 0;
@@ -2083,22 +2213,22 @@ std::cout << "*** NConversion: " << NConversion << std::endl;
     } else if (selectedVariable == "Predation Mortality by Predator") {
 
         getChartDataOfPredationMortalityByPredator(
-              databasePtr,
-               MSVPAName,
-              "MSVPA",
-              "",
-              "",
-              "MSVPASuitPreyBiomass",
-              "MSVPASeasBiomass",
-               ageStr,
-               seasonStr,
-               FirstYear,
-               NYears,
-               selectedSpecies,
-               SpeAge,
-               ColumnLabels,
-               RowLabels,
-               ChartData);
+                    databasePtr,
+                    MSVPAName,
+                    "MSVPA",
+                    "",
+                    "",
+                    nmfConstantsMSVPA::TableMSVPASuitPreyBiomass,
+                    nmfConstantsMSVPA::TableMSVPASeasBiomass,
+                    ageStr,
+                    seasonStr,
+                    FirstYear,
+                    NYears,
+                    selectedSpecies,
+                    SpeAge,
+                    ColumnLabels,
+                    RowLabels,
+                    ChartData);
     }
 
 }
@@ -2143,7 +2273,8 @@ ChartBar::getChartDataOfPredationMortalityByPredator(
 
     // First select total amount of prey type/age consumed by all predators
     fields = {"Year","TotCons"};
-    queryStr = "SELECT Year, Sum(BMConsumed) as TotCons from " + SuitPreyBiomassTable + " WHERE MSVPAname='" + MSVPAName + "' "
+    queryStr = "SELECT Year, Sum(BMConsumed) as TotCons FROM " + SuitPreyBiomassTable +
+               " WHERE MSVPAname='" + MSVPAName + "' "
                " and PreyName='" + species + "' " +
                " and PreyAge = " + std::to_string(speciesAge) +
                seasonStr + " GROUP BY YEAR ";
@@ -2163,7 +2294,8 @@ ChartBar::getChartDataOfPredationMortalityByPredator(
 
     // Next get the list of unique predators for your prey type and age class
     fields = {"PredName"};
-    queryStr = "SELECT DISTINCT(PredName) from " + SuitPreyBiomassTable + " WHERE MSVPAname='" + MSVPAName + "' " +
+    queryStr = "SELECT DISTINCT(PredName) FROM " + SuitPreyBiomassTable +
+               " WHERE MSVPAname='" + MSVPAName + "' " +
                forecastNameStr +
                scenarioNameStr +
                " and PreyName='" + species + "' " +
@@ -2185,7 +2317,8 @@ ChartBar::getChartDataOfPredationMortalityByPredator(
     // Then get BM consumed by predator and calculate proportaion of mortality = bm pred / tot bm
     for (int i=0; i<NumPredators; ++i) {
         fields = {"Year","TotCons"};
-        queryStr = "SELECT Year, Sum(BMConsumed) as TotCons from " + SuitPreyBiomassTable + " WHERE MSVPAname='" + MSVPAName + "' "
+        queryStr = "SELECT Year, Sum(BMConsumed) as TotCons FROM " + SuitPreyBiomassTable +
+                   " WHERE MSVPAname='" + MSVPAName + "' "
                    " and PreyName='" + species + "' " +
                    " and PreyAge = " + std::to_string(speciesAge) +
                    " and PredName = '" + PdList(i) + "' " +
@@ -2206,7 +2339,8 @@ ChartBar::getChartDataOfPredationMortalityByPredator(
 
     // Last get annual M2...then multiply
     fields = {"Year","M2"};
-    queryStr = "SELECT Year, Sum(SeasM2) as M2 from  " + outputTable + " WHERE MSVPAname='" + MSVPAName + "' " +
+    queryStr = "SELECT Year, Sum(SeasM2) as M2 FROM  " + outputTable +
+               " WHERE MSVPAname='" + MSVPAName + "' " +
                forecastNameStr +
                scenarioNameStr +
                " and SpeName = '" + species + "' " +

@@ -141,7 +141,7 @@ nmfSSVPATab3::callback_LoadPB(bool unused)
 
     // Setup Load dialog
     fileDlg.setDirectory(path);
-    fileDlg.selectFile("SpeSize.csv");
+    fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableSpeSize)+".csv");
     NameFilters << "*.csv" << "*.*";
     fileDlg.setNameFilters(NameFilters);
     fileDlg.setWindowTitle("Load Size at Age CSV File");
@@ -189,7 +189,9 @@ nmfSSVPATab3::loadSpeciesFromFile(QTextStream &inStream,
 
     // Get SpeciesIndex of passed in Species name
     fields2  = {"SpeIndex","SpeName"};
-    queryStr = "SELECT SpeIndex,SpeName FROM Species WHERE SpeName = '" + Species.toStdString() + "'";
+    queryStr = "SELECT SpeIndex,SpeName FROM " +
+                nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName = '" + Species.toStdString() + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields2);
     if (dataMap["SpeIndex"].size() == 0)
         return;
@@ -249,7 +251,7 @@ nmfSSVPATab3::restoreCSVFromDatabase()
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
     QString firstLine;
-    QString TableName = "SpeSize";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableSpeSize);
     QString msg;
 
     QString path = QDir(QString::fromStdString(ProjectDir)).filePath("inputData");
@@ -345,7 +347,7 @@ nmfSSVPATab3::callback_SaveAllPB(bool unused)
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
     std::string queryStr;
-    QString TableName = "SpeSize";
+    QString TableName = QString::fromStdString(nmfConstantsMSVPA::TableSpeSize);
 
     logger->logMsg(nmfConstants::Normal,"nmfSSVPATab3::callback_SaveAllPB");
 
@@ -357,7 +359,7 @@ nmfSSVPATab3::callback_SaveAllPB(bool unused)
     std::map<std::string,int> SpeciesIndexMap;
     std::map<std::string,int> SpeciesMinCatchAgeMap;
     fields   = {"SpeIndex", "SpeName", "MinCatAge"};
-    queryStr = "SELECT SpeIndex,SpeName,MinCatAge FROM Species";
+    queryStr = "SELECT SpeIndex,SpeName,MinCatAge FROM " + nmfConstantsMSVPA::TableSpecies;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     for (unsigned int i=0; i<dataMap["SpeIndex"].size(); ++i) {
         SpeciesIndexMap[dataMap["SpeName"][i]]       = std::stoi(dataMap["SpeIndex"][i]);
@@ -367,7 +369,7 @@ nmfSSVPATab3::callback_SaveAllPB(bool unused)
     // Save back to csv file in case user changed anything inline.
     // Find filename for .csv file and for the temp file you'll write to for updating.
     if (SpeSizeCSVFile.isEmpty()) {
-        SpeSizeCSVFile = "SpeSize.csv";
+        SpeSizeCSVFile = QString::fromStdString(nmfConstantsMSVPA::TableSpeSize)+".csv";
         filePath = QDir(QString::fromStdString(ProjectDir)).filePath(QString::fromStdString(nmfConstantsMSVPA::InputDataDir));
         fileNameWithPath    = QDir(filePath).filePath(SpeSizeCSVFile);
         tmpFileNameWithPath = QDir(filePath).filePath("."+SpeSizeCSVFile);
@@ -421,7 +423,8 @@ nmfSSVPATab3::callback_SaveAllPB(bool unused)
 
                 // Get SpeciesIndex of passed in Species name
                 fields   = {"SpeIndex","SpeName"};
-                queryStr = "SELECT SpeIndex,SpeName FROM Species WHERE SpeName = '" + Species.toStdString() + "'";
+                queryStr = "SELECT SpeIndex,SpeName FROM " + nmfConstantsMSVPA::TableSpecies +
+                           " WHERE SpeName = '" + Species.toStdString() + "'";
                 dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
                 if (dataMap["SpeIndex"].size() > 0) {
                     SpeciesIndex = std::stoi(dataMap["SpeIndex"][0]);
@@ -551,7 +554,7 @@ nmfSSVPATab3::callback_ItemChanged(QStandardItem *item)
     item->setTextAlignment(Qt::AlignRight|Qt::AlignCenter);
     smodel[SpeciesIndex]->setItem(item->row(), item->column(), item);
 
-    MarkAsDirty("SpeSize");
+    MarkAsDirty(nmfConstantsMSVPA::TableSpeSize);
 
     SSVPA_Tab3_SaveAllPB->setEnabled(true);
     SSVPA_Tab3_NextPB->setEnabled(false);
@@ -604,7 +607,7 @@ nmfSSVPATab3::loadAllSpeciesFromTableOrFile(nmfDatabase *theDatabasePtr,
     if (FromTableOrFile == "FromFile") {
         // Setup Load dialog
         fileDlg.setDirectory(path);
-        fileDlg.selectFile("SpeSize.csv");
+        fileDlg.selectFile(QString::fromStdString(nmfConstantsMSVPA::TableSpeSize)+".csv");
         NameFilters << "*.csv" << "*.*";
         fileDlg.setNameFilters(NameFilters);
         fileDlg.setWindowTitle("Load Size at Age CSV File");
@@ -620,7 +623,8 @@ nmfSSVPATab3::loadAllSpeciesFromTableOrFile(nmfDatabase *theDatabasePtr,
         Species = AllSpecies[i];
 
         fields   = {"SpeIndex"};
-        queryStr = "SELECT SpeIndex FROM Species WHERE SpeName = '" + Species.toStdString() + "'";
+        queryStr = "SELECT SpeIndex FROM " + nmfConstantsMSVPA::TableSpecies +
+                   " WHERE SpeName = '" + Species.toStdString() + "'";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
         if (dataMap["SpeIndex"].size() != 0) {
             SpeciesIndex = dataMap["SpeIndex"][0];
@@ -668,7 +672,8 @@ nmfSSVPATab3::loadSpecies(int theSpeciesIndex)
 
     // Update main label
     fields   = {"SpeName","SizeUnits"};
-    queryStr = "SELECT SpeName,SizeUnits FROM Species WHERE SpeIndex='"+ std::to_string(theSpeciesIndex) + "'";
+    queryStr = "SELECT SpeName,SizeUnits FROM " + nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeIndex='"+ std::to_string(theSpeciesIndex) + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     if (dataMap["SpeName"].size() > 0) {
         SizeUnits = std::stod(dataMap["SizeUnits"][0]);
@@ -730,7 +735,9 @@ nmfSSVPATab3::loadWidgets(nmfDatabase *theDatabasePtr,
 
     // Get initial data from Species table
     fields   = {"SpeIndex", "SpeName","MinCatAge","MaxCatAge","FirstYear","LastYear","MaxAge"};
-    queryStr = "SELECT SpeIndex,SpeName,MinCatAge,MaxCatAge,FirstYear,LastYear,MaxAge FROM Species WHERE SpeIndex=" + theSpeciesIndex;
+    queryStr = "SELECT SpeIndex,SpeName,MinCatAge,MaxCatAge,FirstYear,LastYear,MaxAge FROM " +
+                nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeIndex=" + theSpeciesIndex;
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     //MinCatchAge = std::stoi(dataMap["MinCatAge"][0]);
     MaxCatchAge = std::stoi(dataMap["MaxCatAge"][0]);
@@ -759,7 +766,9 @@ nmfSSVPATab3::loadWidgets(nmfDatabase *theDatabasePtr,
 
         // If you find data....load it.
         fields     = {"SpeIndex", "SpeName","Year","Age","Variable","Value"};
-        queryStr   = "SELECT SpeIndex,SpeName,Year,Age,Variable,Value FROM SpeSize WHERE SpeName='" + Species + "'";
+        queryStr   = "SELECT SpeIndex,SpeName,Year,Age,Variable,Value FROM " +
+                      nmfConstantsMSVPA::TableSpeSize +
+                     " WHERE SpeName='" + Species + "'";
         dataMap    = databasePtr->nmfQueryDatabase(queryStr,fields);
         NumRecords = dataMap["SpeIndex"].size();
 
@@ -852,7 +861,9 @@ nmfSSVPATab3::updateMainLabel(std::string Species)
 
     // Update main label
     fields   = {"SpeName","SizeUnits"};
-    queryStr = "SELECT SpeName,SizeUnits FROM Species WHERE SpeName='"+ Species + "'";
+    queryStr = "SELECT SpeName,SizeUnits FROM " +
+                nmfConstantsMSVPA::TableSpecies +
+               " WHERE SpeName='"+ Species + "'";
     dataMap  = databasePtr->nmfQueryDatabase(queryStr,fields);
     if (nmfUtils::checkForError(logger,"Species","SpeName",dataMap,queryStr))
         return; // false;
