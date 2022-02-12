@@ -156,7 +156,8 @@ private:
     QProgressDialog*   m_ForecastProgressDlg;
     QDialog*           m_TableNamesDlg;
     QWidget*           m_TableNamesWidget;
-
+    QDateTime          m_AppStartTime;
+    int                m_DBTimeout;
 
     int timerVal;
     int MSVPALoopsBeforeChecking;
@@ -368,6 +369,7 @@ private:
     void loadDatabase();
     bool queryUserPreviousDatabase();
     void setDefaultDockWidgetsVisibility();
+    void setDatabaseWaitTime();
 
 public:
     bool SSVPAWidgetsLoaded;

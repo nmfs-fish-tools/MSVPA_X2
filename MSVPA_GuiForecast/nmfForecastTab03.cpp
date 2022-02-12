@@ -946,8 +946,9 @@ nmfForecastTab3::loadSRTable() // aka Get_SRData() from frmStockRec2.bas
                    " AND SpeName = '" + SpeName + "'" +
                    " AND Age = 0 AND Season = 0 GROUP BY Year";
         dataMap  = databasePtr->nmfQueryDatabase(queryStr, fields);
-        if (int(dataMap["Abundance"].size()) != NYears) {
-            logger->logMsg(nmfConstants::Error,"nmfForecastTab3::loadSRTable Missing Abundance data from MSVPASeasBiomass");
+        if (int(dataMap["Abundance"].size()) != NYears+1) {
+            logger->logMsg(nmfConstants::Error,"nmfForecastTab3::loadSRTable Missing Abundance data from " + nmfConstantsMSVPA::TableMSVPASeasBiomass);
+            logger->logMsg(nmfConstants::Error,queryStr);
             return;
         }
         for (int i = 0; i<NYears; ++i) {

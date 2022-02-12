@@ -132,6 +132,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     m_isStartUpOK = true;
     m_TableNamesWidget = nullptr;
     m_TableNamesDlg    = new QDialog(this);
+    m_DBTimeout = nmfConstantsMSSPM::DefaultDBTimeoutDays;
 
     m_ProjectDir.clear();
     ProjectDatabase.clear();
@@ -924,6 +925,8 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
         m_isStartUpOK = false;
         return;
     }
+    m_AppStartTime = QDateTime::currentDateTime();
+
     if (loadLastProject) {
         loadDatabase();
     } else {
@@ -7626,6 +7629,8 @@ void nmfMainWindow::menu_about()
     std::map<std::string, std::vector<std::string> > dataMap;
     std::string queryStr;
     QString os = QString::fromStdString(nmfUtils::getOS());
+    QDateTime currentAppTime = QDateTime::currentDateTime();
+    int upTimeSeconds = m_AppStartTime.secsTo(currentAppTime);
 
     // Define Qt link
     qtLink = QString("<a href='https://www.qt.io'>https://www.qt.io</a>");
@@ -7671,7 +7676,7 @@ void nmfMainWindow::menu_about()
     // Show the message
 //   QMessageBox::about(this,tr("About MSVPA_X2"),tr(msg.toLatin1()));
 
-    nmfUtilsQt::showAboutWidget(this,name,os,version,specialAcknowledgement,msg);
+    nmfUtilsQt::showAboutWidget(this,name,os,upTimeSeconds,version,specialAcknowledgement,msg);
 
 }
 
@@ -8997,6 +9002,19 @@ nmfMainWindow::getCurrentStyle()
         return "Dark";
 }
 
+void
+nmfMainWindow::setDatabaseWaitTime()
+{
+    int timeoutSeconds   = m_DBTimeout * nmfConstants::SecondsPerDay;
+    std::string cmd      = "SET GLOBAL wait_timeout=" + std::to_string(timeoutSeconds);
+    std::string errorMsg = m_databasePtr->nmfUpdateDatabase(cmd);
+
+    if (nmfUtilsQt::isAnError(errorMsg)) {
+        m_logger->logMsg(nmfConstants::Error,"[Error 1] setDatabaseWaitTime: set global error: " + errorMsg);
+        m_logger->logMsg(nmfConstants::Error,"cmd: " + cmd);
+        return;
+    }
+}
 
 void
 nmfMainWindow::setDefaultDockWidgetsVisibility()
