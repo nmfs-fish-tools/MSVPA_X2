@@ -7614,7 +7614,7 @@ void nmfMainWindow::callback_schemeLight() {
 void nmfMainWindow::menu_about()
 {
     QString name = "Multi-Species Virtual Population Analysis 2nd Version";
-    QString version = QString("MSVPA_X2 v0.9.5 (beta)"); // + "&alpha;";
+    QString version = QString("MSVPA_X2 v0.9.6 (beta)"); // + "&alpha;";
     QString specialAcknowledgement = "<br><br>This code is a C++ implementation of the Visual Basic code written by Dr. Lance Garrison.";
     QString msg = "";
     QString cppVersion = "C++??";
